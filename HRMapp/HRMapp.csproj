@@ -70,4 +70,8 @@
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\HRMapp.Data\HRMapp.Data.csproj" />
+	</ItemGroup>
+
 </Project>

@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HRMapp.Data.Model
+{
+    class Contract
+    {
+        [Key]
+        [Required]
+        public int contract_id { get; set; }
+
+        [Required]
+        public DateOnly contract_date { get; set; }
+
+        [Required]
+        public DateOnly hire_date { get; set; }
+
+        [Required]
+        public DateOnly end_date { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string contract_duration { get; set; }
+    
+        
+    }
+}
