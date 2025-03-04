@@ -52,5 +52,24 @@ namespace HRMapp.Data.Model
         [Required]
         [MaxLength(15)]
         public string employee_status { get; set; }
+
+        // Foreign Keys
+        public int job_id { get; set; }
+        public Job Job { get; set; }
+
+        public int department_id { get; set; }
+        public Department Department { get; set; }
+
+        public int city_id { get; set; }
+        public Education Education { get; set; }
+
+        public int city_id { get; set; }
+        public City City { get; set; }
+
+        public int religion_id { get; set; }
+        public Religion Religion { get; set; }
+
+        public ICollection<Contract> Contracts { get; set; }
+        public ICollection<LogEmployee> LogEmployees { get; set; }
     }
 }

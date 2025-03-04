@@ -19,7 +19,9 @@ namespace HRMapp.Data.Model
 
         //FK
         public int factory_id { get; set; }
-        
+        public Factory Factory { get; set; }
+
+        public ICollection<Job> Jobs { get; set; }
 
     }
 }

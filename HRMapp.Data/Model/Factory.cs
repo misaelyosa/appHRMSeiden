@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace HRMapp.Data.Model
 {
-    public class City
+    public class Factory
     {
         [Key]
         [Required]
-        public int city_id { get; set; }
+        public int factory_id { get; set; }
 
         [Required]
         [MaxLength(30)]
-        public string city_name { get; set; }
+        public string name { get; set; }
 
-        //FK
-        public int province_id { get; set; }
-        public Province Province { get; set; }
+        [Required]
+        public string address { get; set; }
 
+        public int? personnel_capacity { get; set; }
     }
 }

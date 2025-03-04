@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HRMapp.Data.Model
 {
-    class Contract
+    public class Contract
     {
         [Key]
         [Required]
@@ -25,7 +25,12 @@ namespace HRMapp.Data.Model
         [Required]
         [MaxLength(30)]
         public string contract_duration { get; set; }
-    
-        
+
+        public DateTime updated_at { get; set; }
+        public DateTime created_at { get; set; }
+
+        //FK
+        public int employee_id { get; set; }
+        public Employee Employee { get; set; }
     }
 }

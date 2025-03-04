@@ -10,7 +10,16 @@ namespace HRMapp.Data.Database
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Employee> Employee { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Contract> Contracts { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Education> Educations { get; set; }
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Province> Provinces { get; set; }
+        public DbSet<Religion> Religions { get; set; }
+        public DbSet<Factory> Factories { get; set; }
+        public DbSet<LogEmployee> LogEmployees { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = "server=localhost;user=root;password=;database=hrmseiden";
