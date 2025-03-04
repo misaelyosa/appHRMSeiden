@@ -60,7 +60,7 @@ namespace HRMapp.Data.Model
         public int department_id { get; set; }
         public Department Department { get; set; }
 
-        public int city_id { get; set; }
+        public int education_id { get; set; }
         public Education Education { get; set; }
 
         public int city_id { get; set; }
