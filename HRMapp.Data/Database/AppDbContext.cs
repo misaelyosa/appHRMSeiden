@@ -30,29 +30,47 @@ namespace HRMapp.Data.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //One to many Employee-Contract
             modelBuilder.Entity<Employee>()
-            .HasMany(e => e.Contracts)
-            .WithOne(c => c.Employee)
-            .HasForeignKey(c => c.employee_id);
+                .HasMany(e => e.Contracts)
+                .WithOne(c => c.Employee)
+                .HasForeignKey(c => c.employee_id);
 
+            //1 : N employee-log 
             modelBuilder.Entity<Employee>()
                 .HasMany(e => e.LogEmployees)
                 .WithOne(c => c.Employee)
                 .HasForeignKey(c => c.employee_id);
 
-            modelBuilder.Entity<City>()
-                .HasOne(c => c.Province)
-                .WithMany()
-                .HasForeignKey(c => c.province_id);
-
             modelBuilder.Entity<Employee>()
-                .HasOne(e => e.Job)
+                .HasOne(c => c.Religion)
                 .WithMany()
-                .HasForeignKey(e => e.job_id);
+                .HasForeignKey(c => c.religion_id);
 
             modelBuilder.Entity<Employee>()
                 .HasOne(e => e.Department)
                 .WithMany()
+                .HasForeignKey(e => e.department_id);
+
+            //1:N Province-City
+            modelBuilder.Entity<City>()
+                .HasOne(c => c.Provinces)
+                .WithMany()
+                .HasForeignKey(c => c.province_id);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(c => c.Education)
+                .WithMany()
+                .HasForeignKey(c => c.education_id);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(c => c.City)
+                .WithMany()
+                .HasForeignKey(c => c.city_id);
+
+            modelBuilder.Entity<Job>()
+                .HasOne(e => e.Department)
+                .WithMany(c => c.Jobs)
                 .HasForeignKey(e => e.department_id);
 
             modelBuilder.Entity<Department>()

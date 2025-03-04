@@ -54,9 +54,6 @@ namespace HRMapp.Data.Model
         public string employee_status { get; set; }
 
         // Foreign Keys
-        public int job_id { get; set; }
-        public Job Job { get; set; }
-
         public int department_id { get; set; }
         public Department Department { get; set; }
 

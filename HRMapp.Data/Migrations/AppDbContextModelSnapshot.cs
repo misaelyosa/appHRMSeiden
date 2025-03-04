@@ -155,16 +155,10 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("city_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("city_id1")
-                        .HasColumnType("int");
-
                     b.Property<int>("department_id")
                         .HasColumnType("int");
 
                     b.Property<int>("education_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("education_id1")
                         .HasColumnType("int");
 
                     b.Property<string>("employee_status")
@@ -176,9 +170,6 @@ namespace HRMapp.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
-
-                    b.Property<int>("job_id")
-                        .HasColumnType("int");
 
                     b.Property<string>("marital_status")
                         .IsRequired()
@@ -205,20 +196,15 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("religion_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("religion_id1")
-                        .HasColumnType("int");
-
                     b.HasKey("employee_id");
 
-                    b.HasIndex("city_id1");
+                    b.HasIndex("city_id");
 
                     b.HasIndex("department_id");
 
-                    b.HasIndex("education_id1");
+                    b.HasIndex("education_id");
 
-                    b.HasIndex("job_id");
-
-                    b.HasIndex("religion_id1");
+                    b.HasIndex("religion_id");
 
                     b.ToTable("Employees");
                 });
@@ -259,16 +245,13 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("department_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("department_id1")
-                        .HasColumnType("int");
-
                     b.Property<string>("job_name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("job_id");
 
-                    b.HasIndex("department_id1");
+                    b.HasIndex("department_id");
 
                     b.ToTable("Jobs");
                 });
@@ -338,13 +321,13 @@ namespace HRMapp.Data.Migrations
 
             modelBuilder.Entity("HRMapp.Data.Model.City", b =>
                 {
-                    b.HasOne("HRMapp.Data.Model.Province", "Province")
+                    b.HasOne("HRMapp.Data.Model.Province", "Provinces")
                         .WithMany()
                         .HasForeignKey("province_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Province");
+                    b.Navigation("Provinces");
                 });
 
             modelBuilder.Entity("HRMapp.Data.Model.Contract", b =>
@@ -373,7 +356,7 @@ namespace HRMapp.Data.Migrations
                 {
                     b.HasOne("HRMapp.Data.Model.City", "City")
                         .WithMany()
-                        .HasForeignKey("city_id1")
+                        .HasForeignKey("city_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -385,19 +368,13 @@ namespace HRMapp.Data.Migrations
 
                     b.HasOne("HRMapp.Data.Model.Education", "Education")
                         .WithMany()
-                        .HasForeignKey("education_id1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HRMapp.Data.Model.Job", "Job")
-                        .WithMany()
-                        .HasForeignKey("job_id")
+                        .HasForeignKey("education_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HRMapp.Data.Model.Religion", "Religion")
                         .WithMany()
-                        .HasForeignKey("religion_id1")
+                        .HasForeignKey("religion_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -407,8 +384,6 @@ namespace HRMapp.Data.Migrations
 
                     b.Navigation("Education");
 
-                    b.Navigation("Job");
-
                     b.Navigation("Religion");
                 });
 
@@ -416,7 +391,7 @@ namespace HRMapp.Data.Migrations
                 {
                     b.HasOne("HRMapp.Data.Model.Department", "Department")
                         .WithMany("Jobs")
-                        .HasForeignKey("department_id1")
+                        .HasForeignKey("department_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

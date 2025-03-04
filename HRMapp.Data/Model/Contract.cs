@@ -29,7 +29,7 @@ namespace HRMapp.Data.Model
         public DateTime updated_at { get; set; }
         public DateTime created_at { get; set; }
 
-        //FK
+        ////FK
         public int employee_id { get; set; }
         public Employee Employee { get; set; }
     }

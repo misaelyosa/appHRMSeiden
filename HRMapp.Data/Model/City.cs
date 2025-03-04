@@ -19,7 +19,7 @@ namespace HRMapp.Data.Model
 
         //FK
         public int province_id { get; set; }
-        public Province Province { get; set; }
+        public Province Provinces { get; set; }
 
     }
 }

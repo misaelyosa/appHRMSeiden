@@ -133,15 +133,14 @@ namespace HRMapp.Data.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     job_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    department_id = table.Column<int>(type: "int", nullable: false),
-                    department_id1 = table.Column<int>(type: "int", nullable: false)
+                    department_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.job_id);
                     table.ForeignKey(
-                        name: "FK_Jobs_Departments_department_id1",
-                        column: x => x.department_id1,
+                        name: "FK_Jobs_Departments_department_id",
+                        column: x => x.department_id,
                         principalTable: "Departments",
                         principalColumn: "department_id",
                         onDelete: ReferentialAction.Cascade);
@@ -173,21 +172,17 @@ namespace HRMapp.Data.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     employee_status = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    job_id = table.Column<int>(type: "int", nullable: false),
                     department_id = table.Column<int>(type: "int", nullable: false),
                     education_id = table.Column<int>(type: "int", nullable: false),
-                    education_id1 = table.Column<int>(type: "int", nullable: false),
                     city_id = table.Column<int>(type: "int", nullable: false),
-                    city_id1 = table.Column<int>(type: "int", nullable: false),
-                    religion_id = table.Column<int>(type: "int", nullable: false),
-                    religion_id1 = table.Column<int>(type: "int", nullable: false)
+                    religion_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.employee_id);
                     table.ForeignKey(
-                        name: "FK_Employees_Cities_city_id1",
-                        column: x => x.city_id1,
+                        name: "FK_Employees_Cities_city_id",
+                        column: x => x.city_id,
                         principalTable: "Cities",
                         principalColumn: "city_id",
                         onDelete: ReferentialAction.Cascade);
@@ -198,20 +193,14 @@ namespace HRMapp.Data.Migrations
                         principalColumn: "department_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employees_Educations_education_id1",
-                        column: x => x.education_id1,
+                        name: "FK_Employees_Educations_education_id",
+                        column: x => x.education_id,
                         principalTable: "Educations",
                         principalColumn: "education_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employees_Jobs_job_id",
-                        column: x => x.job_id,
-                        principalTable: "Jobs",
-                        principalColumn: "job_id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Employees_Religions_religion_id1",
-                        column: x => x.religion_id1,
+                        name: "FK_Employees_Religions_religion_id",
+                        column: x => x.religion_id,
                         principalTable: "Religions",
                         principalColumn: "religion_id",
                         onDelete: ReferentialAction.Cascade);
@@ -285,9 +274,9 @@ namespace HRMapp.Data.Migrations
                 column: "factory_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_city_id1",
+                name: "IX_Employees_city_id",
                 table: "Employees",
-                column: "city_id1");
+                column: "city_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_department_id",
@@ -295,24 +284,19 @@ namespace HRMapp.Data.Migrations
                 column: "department_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_education_id1",
+                name: "IX_Employees_education_id",
                 table: "Employees",
-                column: "education_id1");
+                column: "education_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_job_id",
+                name: "IX_Employees_religion_id",
                 table: "Employees",
-                column: "job_id");
+                column: "religion_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_religion_id1",
-                table: "Employees",
-                column: "religion_id1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Jobs_department_id1",
+                name: "IX_Jobs_department_id",
                 table: "Jobs",
-                column: "department_id1");
+                column: "department_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LogEmployees_employee_id",
@@ -327,6 +311,9 @@ namespace HRMapp.Data.Migrations
                 name: "Contracts");
 
             migrationBuilder.DropTable(
+                name: "Jobs");
+
+            migrationBuilder.DropTable(
                 name: "LogEmployees");
 
             migrationBuilder.DropTable(
@@ -336,19 +323,16 @@ namespace HRMapp.Data.Migrations
                 name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Educations");
+                name: "Departments");
 
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "Educations");
 
             migrationBuilder.DropTable(
                 name: "Religions");
 
             migrationBuilder.DropTable(
                 name: "Provinces");
-
-            migrationBuilder.DropTable(
-                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "Factories");
