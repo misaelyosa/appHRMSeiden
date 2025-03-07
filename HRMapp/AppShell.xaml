@@ -3,13 +3,53 @@
     x:Class="HRMapp.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:HRMapp"
+    xmlns:local="clr-namespace:HRMapp.Pages"
     Shell.FlyoutBehavior="Flyout"
+    BackgroundColor="DarkSlateGray"
     Title="HRMapp">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <Shell.TitleView>
+        <Grid Padding="10,20,10,10">
+            <Label Text="Welcome, !"
+                   FontSize="20"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"/>
+        </Grid>
+    </Shell.TitleView>
 
+    <Shell.FlyoutHeader>
+        <Grid BackgroundColor="Black" Padding="20">
+            <Label Text="Seidensticker HRMapp"
+                   FontSize="24"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <FlyoutItem Title="Home">
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+    </FlyoutItem>
+    <FlyoutItem Title="Manage Karyawan">
+        <ShellContent
+            Title="Manage Data Karyawan"
+            ContentTemplate="{DataTemplate local:ManageEmployee}"
+            Route="ManageEmployee"/>
+    </FlyoutItem>
+
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="10">
+                <Label Text="{Binding Title}" 
+                   TextColor="White" 
+                   FontSize="18"/>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
 </Shell>

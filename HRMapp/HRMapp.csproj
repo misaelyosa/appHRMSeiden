@@ -74,4 +74,10 @@
 	  <ProjectReference Include="..\HRMapp.Data\HRMapp.Data.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="Pages\ManageEmployee.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>
