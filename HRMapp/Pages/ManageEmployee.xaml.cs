@@ -1,11 +1,11 @@
 namespace HRMapp.Pages;
-using HRMapp.ViewModels;
+//using HRMapp.ViewModels;
 
 public partial class ManageEmployee : ContentPage
 {
 	public ManageEmployee()
 	{
 		InitializeComponent();
-		BindingContext = new EmployeeViewModel();
+		//BindingContext = new EmployeeViewModel();
 	}
 }

@@ -14,7 +14,7 @@ namespace HRMapp.Data.Model
         public int department_id { get; set; }
 
         [Required]
-        [MaxLength(255)]
+        [MaxLength(40)]
         public string name { get; set; }
 
         //FK

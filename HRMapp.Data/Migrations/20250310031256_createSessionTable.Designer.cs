@@ -4,6 +4,7 @@ using HRMapp.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250310031256_createSessionTable")]
+    partial class createSessionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,31 +84,6 @@ namespace HRMapp.Data.Migrations
                     b.HasIndex("employee_id");
 
                     b.ToTable("Contracts");
-                });
-
-            modelBuilder.Entity("HRMapp.Data.Model.Course", b =>
-                {
-                    b.Property<int>("course_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("course_id"));
-
-                    b.Property<DateOnly>("course_graduation_date")
-                        .HasColumnType("date");
-
-                    b.Property<string>("course_name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("employee_id")
-                        .HasColumnType("int");
-
-                    b.HasKey("course_id");
-
-                    b.HasIndex("employee_id");
-
-                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("HRMapp.Data.Model.Department", b =>
@@ -183,10 +161,6 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("education_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("email")
-                        .HasMaxLength(60)
-                        .HasColumnType("varchar(60)");
-
                     b.Property<string>("employee_status")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -230,9 +204,6 @@ namespace HRMapp.Data.Migrations
 
                     b.Property<int>("religion_id")
                         .HasColumnType("int");
-
-                    b.Property<string>("skill")
-                        .HasColumnType("longtext");
 
                     b.HasKey("employee_id");
 
@@ -415,17 +386,6 @@ namespace HRMapp.Data.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("HRMapp.Data.Model.Course", b =>
-                {
-                    b.HasOne("HRMapp.Data.Model.Employee", "Employee")
-                        .WithMany("Courses")
-                        .HasForeignKey("employee_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("HRMapp.Data.Model.Department", b =>
                 {
                     b.HasOne("HRMapp.Data.Model.Factory", "Factory")
@@ -510,8 +470,6 @@ namespace HRMapp.Data.Migrations
             modelBuilder.Entity("HRMapp.Data.Model.Employee", b =>
                 {
                     b.Navigation("Contracts");
-
-                    b.Navigation("Courses");
 
                     b.Navigation("LogEmployees");
                 });

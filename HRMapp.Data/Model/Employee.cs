@@ -26,6 +26,9 @@ namespace HRMapp.Data.Model
         [Column(TypeName = "varchar(16)")]
         public string nik { get; set; }
 
+        [MaxLength(60)]
+        public string? email { get; set; }
+
         [Required]
         [Column(TypeName = "varchar(15)")]
         public string phone_number { get; set; }
@@ -53,6 +56,13 @@ namespace HRMapp.Data.Model
         [MaxLength(15)]
         public string employee_status { get; set; }
 
+        [Required]
+        public DateOnly graduation_date { get; set; }
+
+        public string? skill { get; set; }
+
+        public string? pic_path { get; set; }
+
         // Foreign Keys
         public int department_id { get; set; }
         public Department Department { get; set; }
@@ -66,6 +76,10 @@ namespace HRMapp.Data.Model
         public int religion_id { get; set; }
         public Religion Religion { get; set; }
 
+        public int job_id { get; set; }
+        public Job Job { get; set; }
+
+        public ICollection<Course> Courses { get; set; }
         public ICollection<Contract> Contracts { get; set; }
         public ICollection<LogEmployee> LogEmployees { get; set; }
     }

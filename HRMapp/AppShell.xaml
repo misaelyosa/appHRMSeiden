@@ -5,14 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:HRMapp.Pages"
     Shell.FlyoutBehavior="Flyout"
-    BackgroundColor="DarkSlateGray"
+    BackgroundColor="White"
     Title="HRMapp">
 
     <Shell.TitleView>
-        <Grid Padding="10,20,10,10">
+        <Grid Padding="20,20,10,10">
             <Label Text="Welcome, !"
                    FontSize="20"
-                   TextColor="White"
+                   TextColor="Black"
                    FontAttributes="Bold"
                    HorizontalOptions="Start"
                    VerticalOptions="Center"/>

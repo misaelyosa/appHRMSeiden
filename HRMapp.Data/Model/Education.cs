@@ -19,8 +19,5 @@ namespace HRMapp.Data.Model
 
         [MaxLength(30)]
         public string? major { get; set; }
-
-        [Required]
-        public DateOnly graduation_date { get; set; }
     }
 }

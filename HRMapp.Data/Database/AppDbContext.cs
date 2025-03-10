@@ -20,6 +20,8 @@ namespace HRMapp.Data.Database
         public DbSet<Religion> Religions { get; set; }
         public DbSet<Factory> Factories { get; set; }
         public DbSet<LogEmployee> LogEmployees { get; set; }
+        public DbSet<Session> Session { get; set; }
+        public DbSet<Course> Course { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,6 +30,7 @@ namespace HRMapp.Data.Database
             optionsBuilder.UseMySql(connectionString, serverVersion);
         }
 
+        //Define table relationship
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //One to many Employee-Contract
@@ -68,6 +71,11 @@ namespace HRMapp.Data.Database
                 .WithMany()
                 .HasForeignKey(c => c.city_id);
 
+            modelBuilder.Entity<Employee>()
+                .HasOne(c => c.Job)
+                .WithMany()
+                .HasForeignKey(c => c.job_id);
+
             modelBuilder.Entity<Job>()
                 .HasOne(e => e.Department)
                 .WithMany(c => c.Jobs)
@@ -77,6 +85,11 @@ namespace HRMapp.Data.Database
                 .HasOne(d => d.Factory)
                 .WithMany()
                 .HasForeignKey(d => d.factory_id);
+
+            modelBuilder.Entity<Course>()
+                .HasOne(c => c.Employee)
+                .WithMany(e => e.Courses)
+                .HasForeignKey(c => c.employee_id);
         }
     }
 }
