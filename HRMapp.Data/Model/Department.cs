@@ -18,10 +18,10 @@ namespace HRMapp.Data.Model
         public string name { get; set; }
 
         //FK
-        public int factory_id { get; set; }
-        public Factory Factory { get; set; }
+        //public int factory_id { get; set; }
+        //public Factory Factory { get; set; }
 
-        public ICollection<Job> Jobs { get; set; }
+        //public ICollection<Job> Jobs { get; set; }
 
     }
 }

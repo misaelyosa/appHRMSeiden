@@ -76,15 +76,20 @@ namespace HRMapp.Data.Database
                 .WithMany()
                 .HasForeignKey(c => c.job_id);
 
-            modelBuilder.Entity<Job>()
-                .HasOne(e => e.Department)
-                .WithMany(c => c.Jobs)
-                .HasForeignKey(e => e.department_id);
+            //modelBuilder.Entity<Job>()
+            //    .HasOne(e => e.Department)
+            //    .WithMany(c => c.Jobs)
+            //    .HasForeignKey(e => e.department_id);
 
-            modelBuilder.Entity<Department>()
-                .HasOne(d => d.Factory)
+            //modelBuilder.Entity<Department>()
+            //    .HasOne(d => d.Factory)
+            //    .WithMany()
+            //    .HasForeignKey(d => d.factory_id);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(c => c.Factory)
                 .WithMany()
-                .HasForeignKey(d => d.factory_id);
+                .HasForeignKey(c => c.factory_id);
 
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.Employee)

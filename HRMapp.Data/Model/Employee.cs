@@ -48,16 +48,14 @@ namespace HRMapp.Data.Model
         [MaxLength(255)]
         public string address { get; set; }
 
-        [Required]
         [MaxLength(20)]
-        public string marital_status { get; set; }
+        public string? marital_status { get; set; }
 
         [Required]
         [MaxLength(15)]
         public string employee_status { get; set; }
 
-        [Required]
-        public DateOnly graduation_date { get; set; }
+        public DateOnly? graduation_date { get; set; }
 
         public string? skill { get; set; }
 
@@ -78,6 +76,9 @@ namespace HRMapp.Data.Model
 
         public int job_id { get; set; }
         public Job Job { get; set; }
+
+        public int factory_id { get; set; }
+        public Factory Factory { get; set; }
 
         public ICollection<Course> Courses { get; set; }
         public ICollection<Contract> Contracts { get; set; }

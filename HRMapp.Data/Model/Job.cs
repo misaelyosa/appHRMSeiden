@@ -16,9 +16,9 @@ namespace HRMapp.Data.Model
         [Required]
         public string job_name { get; set; }
 
-        //FK
-        public int department_id { get; set; }
-        public Department Department { get; set; }
+        ////FK
+        //public int department_id { get; set; }
+        //public Department Department { get; set; }
 
     }
 }
