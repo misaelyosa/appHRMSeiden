@@ -20,8 +20,8 @@ public static class MauiProgram
 			});
 
         // Register AppDbContext with MySQL
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseMySql("server=localhost;user=root;password=;database=hrmseiden",
+        builder.Services.AddDbContextFactory<AppDbContext>(options =>
+            options.UseMySql("server=localhost;user=root;password=;database=hrmseiden;AllowZeroDateTime=True;ConvertZeroDateTime=True",
                              new MySqlServerVersion(new Version(10, 4, 28))));
 
         // Register ViewModels

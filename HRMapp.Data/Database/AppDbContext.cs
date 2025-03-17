@@ -10,6 +10,9 @@ namespace HRMapp.Data.Database
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -25,7 +28,7 @@ namespace HRMapp.Data.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "server=localhost;user=root;password=;database=hrmseiden";
+            var connectionString = "server=localhost;user=root;password=;database=hrmseiden;AllowZeroDateTime=True;ConvertZeroDateTime=True";
             var serverVersion = new MySqlServerVersion(new Version(10, 4, 28));
             optionsBuilder.UseMySql(connectionString, serverVersion);
         }
