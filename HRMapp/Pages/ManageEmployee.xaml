@@ -8,10 +8,13 @@
     <ContentPage.Content>
         <ScrollView>
             <VerticalStackLayout>
-                <Button Text="Reload Data"
-                    Command="{Binding LoadEmployeeCommand}" />
+                <SearchBar Placeholder="Search employees..."
+                   Text="{Binding SearchText, Mode=TwoWay}"
+                   SearchCommand="{Binding SearchCommand}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
+                   x:Name="searchBar" />
 
-                <CollectionView ItemsSource="{Binding Employees}">
+                <CollectionView ItemsSource="{Binding FilteredEmployees}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Padding="10" Margin="5" BackgroundColor="DarkSlateGrey">
@@ -47,6 +50,10 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
+                <Button Text="Load More"
+                    Command="{Binding LoadMoreCommand}"
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}" />
             </VerticalStackLayout>
         </ScrollView>
     </ContentPage.Content>
