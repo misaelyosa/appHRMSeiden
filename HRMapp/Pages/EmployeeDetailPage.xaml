@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HRMapp.Pages.EmployeeDetailPage"
+             Title="EmployeeDetailPage">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid ColumnDefinitions="Auto, *"
+      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+
+                <Label Text="{Binding Employee.name}" FontSize="24" FontAttributes="Bold" 
+           Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Start" />
+
+                <Label Text="NIP:" Grid.Row="1" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.nip}" Grid.Row="1" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Phone:" Grid.Row="2" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.phone_number}" Grid.Row="2" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Gender:" Grid.Row="3" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.gender}" Grid.Row="3" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Birthdate:" Grid.Row="4" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.birthdate}" Grid.Row="4" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Birthplace:" Grid.Row="5" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.birthplace}" Grid.Row="5" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Address:" Grid.Row="6" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.address}" Grid.Row="6" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Marital Status:" Grid.Row="7" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.marital_status}" Grid.Row="7" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Religion:" Grid.Row="8" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.Religion.religion_name}" Grid.Row="8" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Education:" Grid.Row="9" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.Education.education_type}" Grid.Row="9" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="Skills:" Grid.Row="10" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.skill}" Grid.Row="10" Grid.Column="1" VerticalOptions="Start"/>
+
+                <Label Text="City:" Grid.Row="11" Grid.Column="0" VerticalOptions="Start"/>
+                <Label Text="{Binding Employee.City.city_name}" Grid.Row="11" Grid.Column="1" VerticalOptions="Start"/>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

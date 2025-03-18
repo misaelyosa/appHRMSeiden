@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
+using HRMapp.Pages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,14 +28,19 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private string searchText = string.Empty;
 
+        [ObservableProperty]
+        private Employee selectedEmployee;
+
         public ICommand LoadMoreCommand { get; }
         public ICommand SearchCommand { get; }
+        public ICommand EmployeeSelectedCommand { get; }
 
         public EmployeeListViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
             LoadMoreCommand = new AsyncRelayCommand(LoadEmployeeAsync);
             SearchCommand = new RelayCommand(FilterEmployees);
+            EmployeeSelectedCommand = new AsyncRelayCommand(NavigateToEmployeeDetail);
         }
 
         private int _pageSize = 20;
@@ -105,6 +111,16 @@ namespace HRMapp.ViewModels
                     )
                 );
             }
+
+        }
+
+        private async Task NavigateToEmployeeDetail()
+        {
+            if (SelectedEmployee == null) return;
+
+            Debug.WriteLine($"Navigating to EmployeeDetailPage with ID: {SelectedEmployee.employee_id}");
+
+            await Shell.Current.GoToAsync($"/{nameof(EmployeeDetailPage)}?employeeId={SelectedEmployee.employee_id}");
 
         }
     }

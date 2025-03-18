@@ -14,7 +14,10 @@
                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
                    x:Name="searchBar" />
 
-                <CollectionView ItemsSource="{Binding FilteredEmployees}">
+                <CollectionView ItemsSource="{Binding FilteredEmployees}"
+                    SelectionMode="Single"
+                    SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
+                    SelectionChangedCommand="{Binding EmployeeSelectedCommand}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame Padding="10" Margin="5" BackgroundColor="DarkSlateGrey">
