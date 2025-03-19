@@ -1,63 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
              x:Class="HRMapp.Pages.ManageEmployee"
-             
              Title="ManageEmployee">
 
     <ContentPage.Content>
-        <ScrollView>
-            <VerticalStackLayout>
-                <SearchBar Placeholder="Search employees..."
-                   Text="{Binding SearchText, Mode=TwoWay}"
-                   SearchCommand="{Binding SearchCommand}"
-                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
-                   x:Name="searchBar" />
+        <dg:DataGrid x:Name="employeeListDg"
+                     ItemsSource="{Binding Employees}"
+                     HeaderBackground="LightGray"
+                     BorderColor="Black"
+                     BorderThickness="1"
+                     RowHeight="40"
+                     SelectionEnabled="True"
+                     SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}">
 
-                <CollectionView ItemsSource="{Binding FilteredEmployees}"
-                    SelectionMode="Single"
-                    SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
-                    SelectionChangedCommand="{Binding EmployeeSelectedCommand}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Frame Padding="10" Margin="5" BackgroundColor="DarkSlateGrey">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding name}" 
-                                            FontAttributes="Bold" 
-                                            FontSize="18"
-                                            LineBreakMode="WordWrap"
-                                            HorizontalOptions="Start" />
-
-                                    <Grid ColumnDefinitions="Auto, *"
-                                         RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
-                                        <Label Text="NIP :" Grid.Row="0" Grid.Column="0" VerticalOptions="Start"/>
-                                        <Label Text="{Binding nip}" Grid.Row="0" Grid.Column="1" VerticalOptions="Start"/>
-
-                                        <Label Text="NIK :" Grid.Row="1" Grid.Column="0" VerticalOptions="Start"/>
-                                        <Label Text="{Binding nik}" Grid.Row="1" Grid.Column="1" VerticalOptions="Start"/>
-
-                                        <Label Text="Dept. :" Grid.Row="2" Grid.Column="0" VerticalOptions="Start"/>
-                                        <Label Text="{Binding Department.name}" Grid.Row="2" Grid.Column="1" VerticalOptions="Start"/>
-
-                                        <Label Text="Jabatan :" Grid.Row="3" Grid.Column="0" VerticalOptions="Start"/>
-                                        <Label Text="{Binding Job.job_name}" Grid.Row="3" Grid.Column="1" VerticalOptions="Start"/>
-
-                                        <Label Text="Pabrik :" Grid.Row="4" Grid.Column="0" VerticalOptions="Start"/>
-                                        <Label Text="{Binding Factory.name}" Grid.Row="4" Grid.Column="1" VerticalOptions="Start"/>
-
-                                        <Label Text="Status :" Grid.Row="5" Grid.Column="0" VerticalOptions="Start"/>
-                                        <Label Text="{Binding employee_status}" Grid.Row="5" Grid.Column="1" VerticalOptions="Start"/>
-                                    </Grid>
-                                </VerticalStackLayout>
-                            </Frame>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-
-                <Button Text="Load More"
-                    Command="{Binding LoadMoreCommand}"
-                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBooleanConverter}}" />
-            </VerticalStackLayout>
-        </ScrollView>
+            <!-- Define the main columns -->
+            <dg:DataGrid.Columns>
+                <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
+                <dg:DataGridColumn Title="Nama" PropertyName="name"/>
+                <dg:DataGridColumn Title="NIK" PropertyName="nik"/>
+                <dg:DataGridColumn Title="Department" PropertyName="Department.name"/>
+                <dg:DataGridColumn Title="Job Title" PropertyName="Job.job_name"/>
+                <dg:DataGridColumn Title="Factory" PropertyName="Factory.name"/>
+                <dg:DataGridColumn Title="Status" PropertyName="employee_status"/>
+            </dg:DataGrid.Columns>
+        </dg:DataGrid>
     </ContentPage.Content>
 </ContentPage>
