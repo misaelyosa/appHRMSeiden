@@ -12,17 +12,19 @@
                 <Picker Title="Select Department"
                         TextColor="Black"
                         TitleColor="Black"                     
-                        ItemsSource="{Binding Departments}"
-                        ItemDisplayBinding="{Binding name}"
+                        ItemsSource="{Binding DepartmentsName}"
                         BackgroundColor="LightGray"
+                        SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"
                         />
                 <Picker Title="Select Jabatan" 
                         TextColor="Black"
                         TitleColor="Black"
                         ItemsSource="{Binding JobsName}"
                         BackgroundColor="LightGray"
+                        SelectedItem="{Binding SelectedJob, Mode=TwoWay}"
                         />
-                <Button Text="Apply Filter" FontAttributes="Bold" Margin="0,15,0,10" BackgroundColor="DodgerBlue" />
+                <Button Text="Apply Filter" FontAttributes="Bold" TextColor="WhiteSmoke" Margin="0,15,0,10" BackgroundColor="DodgerBlue" 
+                        Command="{Binding ApplyFilterCommand}"/>
             </VerticalStackLayout>
 
             <dg:DataGrid x:Name="employeeListDg"

@@ -17,16 +17,25 @@ namespace HRMapp.ViewModels
         private ObservableCollection<Employee> employees = new();
 
         [ObservableProperty]
-        private ObservableCollection<Department> departments = new();
+        private ObservableCollection<Employee> filteredEmployees = new();
 
         [ObservableProperty]
-        private ObservableCollection<String> jobsName = new();
+        private ObservableCollection<string> departmentsName = new();
+
+        [ObservableProperty]
+        private ObservableCollection<string> jobsName = new();
 
         [ObservableProperty]
         private string searchText = string.Empty;
 
         [ObservableProperty]
         private Employee selectedEmployee;
+
+        [ObservableProperty]
+        private string selectedDepartment;
+
+        [ObservableProperty]
+        private string selectedJob;
 
         [ObservableProperty]
         private bool isRefreshing;
@@ -40,6 +49,8 @@ namespace HRMapp.ViewModels
             LoadEmployeeAsync();
             OnSelectedEmployeeChanged(SelectedEmployee);
             RefreshData();
+
+            ApplyFilter();
         }
 
         [RelayCommand]
@@ -93,12 +104,15 @@ namespace HRMapp.ViewModels
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
-            var department = await dbContext.Departments
+            var departments = await dbContext.Departments
+                .Select(c => c.name)
                 .ToListAsync();
+            departments.Insert(0, "none");
 
-            Departments = new ObservableCollection<Department>(department);
-            OnPropertyChanged(nameof(Departments));
+            DepartmentsName = new ObservableCollection<string>(departments);
+            OnPropertyChanged(nameof(DepartmentsName));
 
+            SelectedDepartment = DepartmentsName.FirstOrDefault();
         }
 
         [RelayCommand]
@@ -109,9 +123,42 @@ namespace HRMapp.ViewModels
             var jobsName = await dbContext.Jobs
                 .Select(c => c.job_name)
                 .ToListAsync();
+            jobsName.Insert(0, "none");
 
             JobsName = new ObservableCollection<string>(jobsName);
             OnPropertyChanged(nameof(JobsName));
+
+            SelectedJob = JobsName.FirstOrDefault();
         }
+
+        //Filter Command
+        [RelayCommand]
+        private async Task ApplyFilter()
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            var query = dbContext.Employees
+                .AsNoTracking()
+                .Include(e => e.Department)
+                .Include(e => e.Job)
+                .Include(e => e.Factory)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(SelectedDepartment) && SelectedDepartment != "none")
+            {
+                query = query.Where(e => e.Department != null && e.Department.name == selectedDepartment);
+            }
+
+            if (!string.IsNullOrEmpty(selectedJob) && selectedJob != "none")
+            {
+                query = query.Where(e => e.Job != null && e.Job.job_name == selectedJob);
+            }
+
+            var filteredEmployees = await query.OrderBy(e => e.employee_id).ToListAsync();
+
+            Employees = new ObservableCollection<Employee>(filteredEmployees);
+            OnPropertyChanged(nameof(Employees));
+        }
+        
     }
 }
