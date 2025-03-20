@@ -13,9 +13,10 @@
                      BorderThickness="1"
                      RowHeight="40"
                      SelectionEnabled="True"
-                     SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}">
+                     SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single"
+                     PullToRefreshCommand="{Binding RefreshDataCommand}"
+                     IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
 
-            <!-- Define the main columns -->
             <dg:DataGrid.Columns>
                 <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
                 <dg:DataGridColumn Title="Nama" PropertyName="name"/>

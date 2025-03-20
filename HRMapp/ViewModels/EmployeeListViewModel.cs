@@ -4,14 +4,8 @@ using HRMapp.Data.Database;
 using HRMapp.Data.Model;
 using HRMapp.Pages;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace HRMapp.ViewModels
 {
@@ -29,14 +23,16 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private Employee selectedEmployee;
 
-        
-        public ICommand EmployeeSelectedCommand { get; }
+        [ObservableProperty]
+        private bool isRefreshing;
+
 
         public EmployeeListViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
             LoadEmployeeAsync();
-            EmployeeSelectedCommand = new AsyncRelayCommand(NavigateToEmployeeDetail);
+            OnSelectedEmployeeChanged(selectedEmployee);
+            RefreshData();
         }
 
         [RelayCommand]
@@ -57,6 +53,15 @@ namespace HRMapp.ViewModels
 
         }
 
+        [RelayCommand]
+        private async Task RefreshData()
+        {
+            IsRefreshing = true;
+            await LoadEmployeeAsync();
+            await Task.Delay(100);
+            IsRefreshing = false;
+        }
+
         private async Task NavigateToEmployeeDetail()
         {
             if (SelectedEmployee == null) return;
@@ -65,6 +70,14 @@ namespace HRMapp.ViewModels
 
             await Shell.Current.GoToAsync($"/{nameof(EmployeeDetailPage)}?employeeId={SelectedEmployee.employee_id}");
 
+        }
+
+        partial void OnSelectedEmployeeChanged(Employee value)
+        {
+            if (value != null)
+            {
+                NavigateToEmployeeDetail();
+            }
         }
     }
 }

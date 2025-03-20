@@ -8,6 +8,7 @@ namespace HRMapp
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
+            Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
         }
     }
 }

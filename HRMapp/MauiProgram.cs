@@ -27,10 +27,12 @@ public static class MauiProgram
         // Register ViewModels
         builder.Services.AddSingleton<EmployeeListViewModel>();
         builder.Services.AddTransient<EmployeeDetailViewModel>();
+		builder.Services.AddSingleton<MainPageViewModel>();
 
         // Register Pages
         builder.Services.AddSingleton<ManageEmployee>();
         builder.Services.AddTransient<EmployeeDetailPage>();
+		builder.Services.AddSingleton<MainPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -10,7 +10,7 @@
             Spacing="25">
 
             <Label Text="Lihat data karyawan :" FontSize="Medium" FontAttributes="Bold" TextColor="black" HorizontalTextAlignment="Start"/>
-            <Button Text="Manage Karyawan" FontSize="16" FontAttributes="Bold" x:Name="btnManageEmployeePage"/>
+            <Button Text="Manage Karyawan" FontSize="16" FontAttributes="Bold" Command="{Binding NavigateToManageEmployeeCommand}"/>
 
         </VerticalStackLayout>
     </ScrollView>
