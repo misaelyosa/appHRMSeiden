@@ -6,26 +6,47 @@
              Title="ManageEmployee">
 
     <ContentPage.Content>
-        <dg:DataGrid x:Name="employeeListDg"
-                     ItemsSource="{Binding Employees}"
-                     HeaderBackground="LightGray"
-                     BorderColor="Black"
-                     BorderThickness="1"
-                     RowHeight="40"
-                     SelectionEnabled="True"
-                     SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single"
-                     PullToRefreshCommand="{Binding RefreshDataCommand}"
-                     IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+        <Grid RowDefinitions="Auto, *">
+            <VerticalStackLayout BackgroundColor="White"  Grid.Row="0" Padding="20, 5, 10, 10"  >
+                <Label Text="Filter Data :" Padding="0,10,0,5" FontSize="Subtitle" FontAttributes="Bold" TextColor="Black"/>
+                <Picker Title="Select Department"
+                        TextColor="Black"
+                        TitleColor="Black"                     
+                        ItemsSource="{Binding Departments}"
+                        ItemDisplayBinding="{Binding name}"
+                        BackgroundColor="LightGray"
+                        />
+                <Picker Title="Select Jabatan" 
+                        TextColor="Black"
+                        TitleColor="Black"
+                        ItemsSource="{Binding JobsName}"
+                        BackgroundColor="LightGray"
+                        />
+                <Button Text="Apply Filter" FontAttributes="Bold" Margin="0,15,0,10" BackgroundColor="DodgerBlue" />
+            </VerticalStackLayout>
 
-            <dg:DataGrid.Columns>
-                <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
-                <dg:DataGridColumn Title="Nama" PropertyName="name"/>
-                <dg:DataGridColumn Title="NIK" PropertyName="nik"/>
-                <dg:DataGridColumn Title="Department" PropertyName="Department.name"/>
-                <dg:DataGridColumn Title="Job Title" PropertyName="Job.job_name"/>
-                <dg:DataGridColumn Title="Factory" PropertyName="Factory.name"/>
-                <dg:DataGridColumn Title="Status" PropertyName="employee_status"/>
-            </dg:DataGrid.Columns>
-        </dg:DataGrid>
+            <dg:DataGrid x:Name="employeeListDg"
+                            Grid.Row="1"
+                            ItemsSource="{Binding Employees}"
+                            HeaderBackground="LightGray"
+                            BorderColor="Black"
+                            BorderThickness="1"
+                            RowHeight="40"
+                            SelectionEnabled="True"
+                            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single"
+                            PullToRefreshCommand="{Binding RefreshDataCommand}"
+                            IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+
+                <dg:DataGrid.Columns>
+                    <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
+                    <dg:DataGridColumn Title="Nama" PropertyName="name"/>
+                    <dg:DataGridColumn Title="NIK" PropertyName="nik"/>
+                    <dg:DataGridColumn Title="Department" PropertyName="Department.name"/>
+                    <dg:DataGridColumn Title="Job Title" PropertyName="Job.job_name"/>
+                    <dg:DataGridColumn Title="Factory" PropertyName="Factory.name"/>
+                    <dg:DataGridColumn Title="Status" PropertyName="employee_status"/>
+                </dg:DataGrid.Columns>
+            </dg:DataGrid>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

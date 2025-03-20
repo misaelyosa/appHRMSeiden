@@ -8,7 +8,5 @@ public partial class ManageEmployee : ContentPage
 		InitializeComponent();
 
 		BindingContext = viewModel;
-
-		viewModel.LoadEmployeeCommand.Execute(null);
-	}
+    }
 }

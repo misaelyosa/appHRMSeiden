@@ -30,7 +30,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MainPageViewModel>();
 
         // Register Pages
-        builder.Services.AddSingleton<ManageEmployee>();
+        builder.Services.AddTransient<ManageEmployee>();
         builder.Services.AddTransient<EmployeeDetailPage>();
 		builder.Services.AddSingleton<MainPage>();
 

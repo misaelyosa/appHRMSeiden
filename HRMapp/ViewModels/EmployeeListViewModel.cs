@@ -16,6 +16,11 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private ObservableCollection<Employee> employees = new();
 
+        [ObservableProperty]
+        private ObservableCollection<Department> departments = new();
+
+        [ObservableProperty]
+        private ObservableCollection<String> jobsName = new();
 
         [ObservableProperty]
         private string searchText = string.Empty;
@@ -30,8 +35,10 @@ namespace HRMapp.ViewModels
         public EmployeeListViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
+            LoadDepartmentAsync();
+            LoadJobsAsync();
             LoadEmployeeAsync();
-            OnSelectedEmployeeChanged(selectedEmployee);
+            OnSelectedEmployeeChanged(SelectedEmployee);
             RefreshData();
         }
 
@@ -78,6 +85,33 @@ namespace HRMapp.ViewModels
             {
                 NavigateToEmployeeDetail();
             }
+        }
+
+        //PICKER DATA
+        [RelayCommand]
+        public async Task LoadDepartmentAsync()
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            var department = await dbContext.Departments
+                .ToListAsync();
+
+            Departments = new ObservableCollection<Department>(department);
+            OnPropertyChanged(nameof(Departments));
+
+        }
+
+        [RelayCommand]
+        private async Task LoadJobsAsync()
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            var jobsName = await dbContext.Jobs
+                .Select(c => c.job_name)
+                .ToListAsync();
+
+            JobsName = new ObservableCollection<string>(jobsName);
+            OnPropertyChanged(nameof(JobsName));
         }
     }
 }
