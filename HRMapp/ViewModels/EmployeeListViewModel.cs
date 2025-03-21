@@ -40,6 +40,10 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private bool isRefreshing;
 
+        [ObservableProperty]
+        private bool isFilterVisible;
+        public string FilterToggleText => IsFilterVisible ? "▲ Hide" : "▼ Show";
+
 
         public EmployeeListViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
         {
@@ -50,6 +54,7 @@ namespace HRMapp.ViewModels
             OnSelectedEmployeeChanged(SelectedEmployee);
             RefreshData();
 
+            ToggleFilter();
             ApplyFilter();
         }
 
@@ -159,6 +164,12 @@ namespace HRMapp.ViewModels
             Employees = new ObservableCollection<Employee>(filteredEmployees);
             OnPropertyChanged(nameof(Employees));
         }
-        
+
+        [RelayCommand]        
+        private void ToggleFilter()
+        {
+            IsFilterVisible = !IsFilterVisible;
+            OnPropertyChanged(nameof(FilterToggleText));
+        }
     }
 }

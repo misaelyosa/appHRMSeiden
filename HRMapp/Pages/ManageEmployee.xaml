@@ -6,9 +6,44 @@
              Title="ManageEmployee">
 
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, *">
-            <VerticalStackLayout BackgroundColor="White"  Grid.Row="0" Padding="20, 5, 10, 10"  >
-                <Label Text="Filter Data :" Padding="0,10,0,5" FontSize="Subtitle" FontAttributes="Bold" TextColor="Black"/>
+        <Grid RowDefinitions="Auto, Auto, Auto, *">
+            <VerticalStackLayout BackgroundColor="White">
+                <SearchBar Grid.Row="0"
+                           Placeholder="Search anything"
+                           Margin="20,10,20,10"
+                           BackgroundColor="LightGray"/>
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="Auto, *" BackgroundColor="White" Grid.Row="1" Padding="20, 5, 20, 10">
+                <Label Text="Filter Data :"
+                       Grid.Column="0"
+                       Padding="0,10,0,5" 
+                       FontSize="Subtitle" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       TextColor="Black"/>
+                <Frame BackgroundColor="Transparent"
+                       CornerRadius="5"
+                       Padding="5"
+                       Margin="10,0,0,0"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Center"
+                       Grid.Column="1">
+                        <Label Text="{Binding FilterToggleText}" 
+                            FontSize="Body"
+                            TextColor="Black"
+                            HorizontalTextAlignment="End"
+                            VerticalTextAlignment="Center"/>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleFilterCommand}"/>
+                    </Frame.GestureRecognizers>
+                </Frame>
+            </Grid>
+            
+            <VerticalStackLayout BackgroundColor="White"  Grid.Row="2" Padding="20, 5, 20, 10" 
+                                 IsVisible="{Binding IsFilterVisible}">
+                
                 <Picker Title="Select Department"
                         TextColor="Black"
                         TitleColor="Black"                     
@@ -19,6 +54,7 @@
                 <Picker Title="Select Jabatan" 
                         TextColor="Black"
                         TitleColor="Black"
+                        Margin="0,5,0,0"
                         ItemsSource="{Binding JobsName}"
                         BackgroundColor="LightGray"
                         SelectedItem="{Binding SelectedJob, Mode=TwoWay}"
@@ -28,7 +64,7 @@
             </VerticalStackLayout>
 
             <dg:DataGrid x:Name="employeeListDg"
-                            Grid.Row="1"
+                            Grid.Row="3"
                             ItemsSource="{Binding Employees}"
                             HeaderBackground="LightGray"
                             BorderColor="Black"
