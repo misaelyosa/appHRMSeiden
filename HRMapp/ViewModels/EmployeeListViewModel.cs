@@ -51,6 +51,7 @@ namespace HRMapp.ViewModels
             LoadDepartmentAsync();
             LoadJobsAsync();
             LoadEmployeeAsync();
+            SearchFilter();
             OnSelectedEmployeeChanged(SelectedEmployee);
             RefreshData();
 
@@ -138,6 +139,38 @@ namespace HRMapp.ViewModels
         }
 
         //Filter Command
+        [RelayCommand]
+        private async Task SearchFilter()
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                LoadEmployeeAsync();
+            }
+            else
+            {
+                var lowerText = SearchText.ToLower();
+
+                var filteredEmployeeList = await dbContext.Employees
+                    .AsNoTracking()
+                    .Include(e => e.Department)
+                    .Include(e => e.Job)
+                    .Include(e => e.Factory)
+                    .Where(e =>
+                        e.name.ToLower().Contains(lowerText) ||
+                        e.nip.ToLower().Contains(lowerText) ||
+                        e.nik.ToLower().Contains(lowerText) ||
+                        (e.Department != null && e.Department.name.ToLower().Contains(lowerText)) ||
+                        (e.Job != null && e.Job.job_name.ToLower().Contains(lowerText))
+                    )
+                    .ToListAsync();
+
+                Employees = new ObservableCollection<Employee>(filteredEmployeeList);
+                OnPropertyChanged(nameof(Employees));
+            }
+        }
+
         [RelayCommand]
         private async Task ApplyFilter()
         {
