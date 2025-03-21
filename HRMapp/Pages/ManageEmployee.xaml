@@ -23,8 +23,7 @@
                        HorizontalOptions="Start"
                        VerticalOptions="Center"
                        TextColor="Black"/>
-                <Frame BackgroundColor="Transparent"
-                       CornerRadius="5"
+                <Border BackgroundColor="Transparent"
                        Padding="5"
                        Margin="10,0,0,0"
                        HorizontalOptions="Fill"
@@ -35,10 +34,10 @@
                             TextColor="Black"
                             HorizontalTextAlignment="End"
                             VerticalTextAlignment="Center"/>
-                    <Frame.GestureRecognizers>
+                    <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ToggleFilterCommand}"/>
-                    </Frame.GestureRecognizers>
-                </Frame>
+                    </Border.GestureRecognizers>
+                </Border>
             </Grid>
             
             <VerticalStackLayout BackgroundColor="White"  Grid.Row="2" Padding="20, 5, 20, 10" 

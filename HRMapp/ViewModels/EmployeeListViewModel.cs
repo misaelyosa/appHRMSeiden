@@ -54,6 +54,7 @@ namespace HRMapp.ViewModels
             OnSelectedEmployeeChanged(SelectedEmployee);
             RefreshData();
 
+            IsFilterVisible = true; 
             ToggleFilter();
             ApplyFilter();
         }
@@ -85,13 +86,11 @@ namespace HRMapp.ViewModels
             IsRefreshing = false;
         }
 
-        private async Task NavigateToEmployeeDetail()
+        private async Task NavigateToEmployeeDetail(int employeeId)
         {
-            if (SelectedEmployee == null) return;
+            Debug.WriteLine($"Navigating to EmployeeDetailPage with ID: {employeeId}");
 
-            Debug.WriteLine($"Navigating to EmployeeDetailPage with ID: {SelectedEmployee.employee_id}");
-
-            await Shell.Current.GoToAsync($"/{nameof(EmployeeDetailPage)}?employeeId={SelectedEmployee.employee_id}");
+            await Shell.Current.GoToAsync($"/{nameof(EmployeeDetailPage)}?employeeId={employeeId}");
 
         }
 
@@ -99,7 +98,9 @@ namespace HRMapp.ViewModels
         {
             if (value != null)
             {
-                NavigateToEmployeeDetail();
+                var selectedEmpId = value.employee_id;
+
+                NavigateToEmployeeDetail(selectedEmpId);
             }
         }
 
