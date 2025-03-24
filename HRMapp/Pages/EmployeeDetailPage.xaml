@@ -1,49 +1,266 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              x:Class="HRMapp.Pages.EmployeeDetailPage"
+             BackgroundColor="White"
              Title="EmployeeDetailPage">
-    <ScrollView>
-        <VerticalStackLayout>
-            <Grid ColumnDefinitions="Auto, *"
-      RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
 
-                <Label Text="{Binding Employee.name}" FontSize="24" FontAttributes="Bold" 
-           Grid.Row="0" Grid.ColumnSpan="2" HorizontalOptions="Start" />
+    <ContentPage.Content>
+        <ScrollView>
+            <uranium:GridLayout Margin="20"
+                                RowCount="5"
+                                ColumnCount="5"
+                                ColumnSpacing="16"
+                                RowSpacing="16"
+                                ColumnGridLength="*"
+                                RowGridLength="160">
+                <Border Grid.RowSpan="2"
+                        BackgroundColor="LightGrey">
+                    <Image Source="profile_pic_dummy.png"/>
+                </Border>
+                <Grid Grid.RowSpan="3" Grid.ColumnSpan="4"
+                      RowDefinitions="Auto, *">
+                    <Grid Grid.Row="0"
+                        ColumnDefinitions="Auto, *"
+                        RowDefinitions="Auto, Auto, Auto">
 
-                <Label Text="NIP:" Grid.Row="1" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.nip}" Grid.Row="1" Grid.Column="1" VerticalOptions="Start"/>
+                    <Label Text="{Binding Employee.name}"
+                        Grid.ColumnSpan="3"
+                        Grid.Row="0"
+                        FontSize="Large"
+                        FontAttributes="Bold"
+                        TextColor="Black"/>
 
-                <Label Text="Phone:" Grid.Row="2" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.phone_number}" Grid.Row="2" Grid.Column="1" VerticalOptions="Start"/>
+                    <HorizontalStackLayout Grid.Row="1"
+                                        Margin="0,0,0,5">
+                        <Label Text="{Binding Employee.Department.name}"
+                            FontSize="Medium" 
+                            TextColor="Black"
+                            FontAttributes="Bold"/>
+                        <Label Text=","
+                            FontSize="Medium"
+                            TextColor="Black"
+                            Margin="3,0,3,0"/>
+                        <Label Text="{Binding Employee.Job.job_name}"
+                            FontSize="Medium"
+                            TextColor="Black"
+                            FontAttributes="Bold"/>
+                    </HorizontalStackLayout>
 
-                <Label Text="Gender:" Grid.Row="3" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.gender}" Grid.Row="3" Grid.Column="1" VerticalOptions="Start"/>
+                        <HorizontalStackLayout Grid.Row="2"
+                                        Margin="0,0,0,3">
+                            <Label Text="{Binding Employee.nip}"
+                            FontSize="Micro"
+                            FontAttributes="Bold"
+                            TextColor="Black"/>
+                            <Label Text="-"
+                            Margin="5,0,0,0"
+                            FontAttributes="Bold"
+                            FontSize="Micro"
+                            TextColor="Black"/>
+                            <Label 
+                        Text="{Binding Employee.Factory.name}" 
+                        Margin="5, 0, 0, 0"  
+                        FontSize="Micro"
+                        FontAttributes="Bold"
+                        TextColor="Black"/>
+                        </HorizontalStackLayout>
+                    </Grid>
 
-                <Label Text="Birthdate:" Grid.Row="4" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.birthdate}" Grid.Row="4" Grid.Column="1" VerticalOptions="Start"/>
+                    <Grid Grid.Row="1"
+                         ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto,
+                          Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                        <Label Text="NIK : "                       
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            FontSize="Micro"
+                            TextColor="Black"/>
+                        <Label Text="{Binding Employee.nik}"   
+                            Margin="8,0 ,0, 0"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontSize="Micro"
+                            TextColor="Black"/>
 
-                <Label Text="Birthplace:" Grid.Row="5" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.birthplace}" Grid.Row="5" Grid.Column="1" VerticalOptions="Start"/>
+                        <Label 
+                            Text="No HP : " 
+                            Grid.Row="1" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
 
-                <Label Text="Address:" Grid.Row="6" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.address}" Grid.Row="6" Grid.Column="1" VerticalOptions="Start"/>
+                        <Label 
+                            Text="{Binding Employee.phone_number}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="1" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
 
-                <Label Text="Marital Status:" Grid.Row="7" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.marital_status}" Grid.Row="7" Grid.Column="1" VerticalOptions="Start"/>
+                        <Label 
+                            Text="Email : " 
+                            Grid.Row="2" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <Label 
+                            Text="{Binding Employee.email}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="2" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
 
-                <Label Text="Religion:" Grid.Row="8" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.Religion.religion_name}" Grid.Row="8" Grid.Column="1" VerticalOptions="Start"/>
+                        <Label 
+                            Text="Gender : " 
+                            Grid.Row="3" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <Label 
+                            Text="{Binding Employee.gender}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="3" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
 
-                <Label Text="Education:" Grid.Row="9" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.Education.education_type}" Grid.Row="9" Grid.Column="1" VerticalOptions="Start"/>
+                        <Label 
+                            Text="Tempat, Tanggal Lahir : " 
+                            Grid.Row="4" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <HorizontalStackLayout Grid.Row="4"
+                            Grid.Column="1">
+                            <Label 
+                                Text="{Binding Employee.birthdate}" 
+                                Margin="8, 0, 0, 0" 
+                                FontSize="Micro" 
+                                TextColor="Black"/>
+                            <Label Text="," 
+                                Margin="3,0,0,0"
+                                FontSize="Micro"
+                                TextColor="Black"/>
+                            <Label Text="{Binding Employee.birthplace}" 
+                                Margin="5, 0, 0, 0" 
+                                FontSize="Micro" 
+                                TextColor="Black"/>
+                        </HorizontalStackLayout>
 
-                <Label Text="Skills:" Grid.Row="10" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.skill}" Grid.Row="10" Grid.Column="1" VerticalOptions="Start"/>
+                        <Label 
+                            Text="Alamat : " 
+                            Grid.Row="5" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <Label 
+                            Text="{Binding Employee.address}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="5" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
 
-                <Label Text="City:" Grid.Row="11" Grid.Column="0" VerticalOptions="Start"/>
-                <Label Text="{Binding Employee.City.city_name}" Grid.Row="11" Grid.Column="1" VerticalOptions="Start"/>
-            </Grid>
-        </VerticalStackLayout>
-    </ScrollView>
+                        <Label 
+                            Text="Kota, Provinsi : " 
+                            Grid.Row="6" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <HorizontalStackLayout Grid.Row="6" 
+                                Grid.Column="1">
+                            <Label 
+                                Text="{Binding Employee.City.city_name}" 
+                                Margin="8, 0, 0, 0" 
+                                FontSize="Micro" 
+                                TextColor="Black"/>
+                            <Label Text="," 
+                                Margin="3,0,0,0"
+                                FontSize="Micro"
+                                TextColor="Black"/>
+                            <Label Text="{Binding Employee.City.Provinces.province_name}"
+                                TextColor="Black"
+                                FontSize="Micro"
+                                Margin="5,0,0,0"/>
+                        </HorizontalStackLayout>
+
+                        <Label 
+                            Text="Status Kawin : " 
+                            Grid.Row="7" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <Label 
+                            Text="{Binding Employee.marital_status}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="7" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+
+                        <Label 
+                            Text="Edukasi : " 
+                            Grid.Row="8"
+                            Grid.Column="0"
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <HorizontalStackLayout Grid.Row="8"
+                        Grid.Column="1">
+                            <Label 
+                                Text="{Binding Employee.Education.education_type}" 
+                                Margin="8, 0, 0, 0" 
+                                FontSize="Micro" 
+                                TextColor="Black"/>
+                            <Label Text="{Binding Employee.Education.major}"
+                                Margin="4,0,0,0"
+                                FontSize="Micro"
+                                TextColor="Black"/>
+                        </HorizontalStackLayout>
+
+                        <Label 
+                            Text="Skill : " 
+                            Grid.Row="9" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <Label 
+                            Text="{Binding Employee.skill}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="9" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+    
+                        <Label 
+                            Text="Status Karyawan : " 
+                            Grid.Row="10" 
+                            Grid.Column="0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        <Label 
+                            Text="{Binding Employee.employee_status}" 
+                            Margin="8, 0, 0, 0" 
+                            Grid.Row="10" 
+                            Grid.Column="1" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                    </Grid>
+                </Grid>
+
+                <BoxView Color="Transparent"/>
+
+                <BoxView Color="Beige" 
+                    Grid.ColumnSpan="4"/>
+                <BoxView Color="Azure"/>
+            
+                <BoxView Color="Blue" 
+                            Grid.ColumnSpan="4"/>
+                <BoxView Color="Black"/>
+
+            </uranium:GridLayout>
+        </ScrollView>
+            
+    </ContentPage.Content>
 </ContentPage>

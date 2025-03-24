@@ -17,9 +17,6 @@ namespace HRMapp.ViewModels
         private ObservableCollection<Employee> employees = new();
 
         [ObservableProperty]
-        private ObservableCollection<Employee> filteredEmployees = new();
-
-        [ObservableProperty]
         private ObservableCollection<string> departmentsName = new();
 
         [ObservableProperty]

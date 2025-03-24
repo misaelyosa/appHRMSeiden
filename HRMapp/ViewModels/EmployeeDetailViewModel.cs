@@ -17,7 +17,7 @@ public partial class EmployeeDetailViewModel : ObservableObject
     public EmployeeDetailViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
     {
         _dbContextFactory = dbContextFactory;
-    }
+    }   
 
     public async Task LoadEmployeeDetails()
     {
@@ -28,6 +28,7 @@ public partial class EmployeeDetailViewModel : ObservableObject
             .Include(e => e.Factory)
             .Include(e => e.Education)
             .Include(e => e.City)
+                .ThenInclude(City => City.Provinces)
             .Include(e => e.Religion)
             .FirstOrDefaultAsync(e => e.employee_id == EmployeeId);
     }
