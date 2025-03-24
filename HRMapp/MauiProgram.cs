@@ -3,6 +3,7 @@ using HRMapp.Pages;
 using HRMapp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using UraniumUI;
 
 namespace HRMapp;
 
@@ -17,7 +18,9 @@ public static class MauiProgram
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-			});
+			})
+			.UseUraniumUI()
+			.UseUraniumUIMaterial();
 
         // Register AppDbContext with MySQL
         builder.Services.AddDbContextFactory<AppDbContext>(options =>
