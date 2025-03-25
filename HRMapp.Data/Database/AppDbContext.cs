@@ -26,6 +26,8 @@ namespace HRMapp.Data.Database
         public DbSet<Session> Session { get; set; }
         public DbSet<Course> Course { get; set; }
 
+        public DbSet<Tunjangan> Tunjangan { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var connectionString = "server=localhost;user=root;password=;database=hrmseiden;AllowZeroDateTime=True;ConvertZeroDateTime=True";
@@ -98,6 +100,11 @@ namespace HRMapp.Data.Database
                 .HasOne(c => c.Employee)
                 .WithMany(e => e.Courses)
                 .HasForeignKey(c => c.employee_id);
+
+            modelBuilder.Entity<Tunjangan>()
+                .HasOne(c => c.Contract)
+                .WithMany()
+                .HasForeignKey(c => c.contract_id);
         }
     }
 }
