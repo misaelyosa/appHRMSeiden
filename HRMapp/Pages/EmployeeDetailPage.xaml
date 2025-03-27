@@ -2,51 +2,68 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:viewModels="clr-namespace:HRMapp.ViewModels"
              x:Class="HRMapp.Pages.EmployeeDetailPage"
-             BackgroundColor="White"
+             BackgroundColor="Beige"
              Title="EmployeeDetailPage">
 
     <ContentPage.Content>
         <ScrollView>
-            <uranium:GridLayout Margin="20"
-                                RowCount="5"
+            <uranium:GridLayout Padding="20"
+                                RowCount="7"
                                 ColumnCount="5"
-                                ColumnSpacing="16"
-                                RowSpacing="16"
                                 ColumnGridLength="*"
-                                RowGridLength="160">
-                <Border Grid.RowSpan="2"
-                        BackgroundColor="LightGrey">
-                    <Image Source="profile_pic_dummy.png"/>
-                </Border>
+                                RowGridLength="175">
+                <VerticalStackLayout Grid.RowSpan="3"
+                                     BackgroundColor="Transparent"
+                                     Padding="16,16,0,0">
+                    <Border BackgroundColor="LightGrey">
+                        <Image Source="profile_pic_dummy.png"/>
+                    </Border>
+                    <Button BackgroundColor="DarkOrange"
+                            Text="Edit Data Karyawan"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Start"
+                            Margin="0,25,0,0"/>                    
+                    
+                    <Button BackgroundColor="Red"  
+                            Text="Hapus Data Karyawan"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Start"
+                            Margin="0,8,0,0"/>
+                   
+                </VerticalStackLayout>
+
                 <Grid Grid.RowSpan="3" Grid.ColumnSpan="4"
+                      Padding="25,12,0,0"
+                      BackgroundColor="Transparent"
                       RowDefinitions="Auto, *">
                     <Grid Grid.Row="0"
                         ColumnDefinitions="Auto, *"
                         RowDefinitions="Auto, Auto, Auto">
+                        <Label Text="{Binding Employee.name}"
+                                Grid.ColumnSpan="3"
+                                Grid.Row="0"
+                                FontSize="Large"
+                                FontAttributes="Bold"
+                                TextColor="Black"/>
 
-                    <Label Text="{Binding Employee.name}"
-                        Grid.ColumnSpan="3"
-                        Grid.Row="0"
-                        FontSize="Large"
-                        FontAttributes="Bold"
-                        TextColor="Black"/>
-
-                    <HorizontalStackLayout Grid.Row="1"
+                        <HorizontalStackLayout Grid.Row="1"
                                         Margin="0,0,0,5">
-                        <Label Text="{Binding Employee.Department.name}"
-                            FontSize="Medium" 
-                            TextColor="Black"
-                            FontAttributes="Bold"/>
-                        <Label Text=","
-                            FontSize="Medium"
-                            TextColor="Black"
-                            Margin="3,0,3,0"/>
-                        <Label Text="{Binding Employee.Job.job_name}"
-                            FontSize="Medium"
-                            TextColor="Black"
-                            FontAttributes="Bold"/>
-                    </HorizontalStackLayout>
+                            <Label Text="{Binding Employee.Department.name}"
+                                FontSize="Medium" 
+                                TextColor="Black"
+                                FontAttributes="Bold"/>
+                            <Label Text=","
+                                FontSize="Medium"
+                                TextColor="Black"
+                                Margin="3,0,3,0"/>
+                            <Label Text="{Binding Employee.Job.job_name}"
+                                FontSize="Medium"
+                                TextColor="Black"
+                                FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
 
                         <HorizontalStackLayout Grid.Row="2"
                                         Margin="0,0,0,3">
@@ -70,7 +87,8 @@
 
                     <Grid Grid.Row="1"
                          ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto,
-                          Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto">
+                          Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                          RowSpacing="3">
                         <Label Text="NIK : "                       
                             Grid.Row="0"
                             Grid.Column="0"
@@ -100,14 +118,14 @@
 
                         <Label 
                             Text="Email : " 
-                            Grid.Row="2" 
+                            Grid.Row="11" 
                             Grid.Column="0" 
                             FontSize="Micro" 
                             TextColor="Black"/>
                         <Label 
                             Text="{Binding Employee.email}" 
                             Margin="8, 0, 0, 0" 
-                            Grid.Row="2" 
+                            Grid.Row="11" 
                             Grid.Column="1" 
                             FontSize="Micro" 
                             TextColor="Black"/>
@@ -135,7 +153,7 @@
                         <HorizontalStackLayout Grid.Row="4"
                             Grid.Column="1">
                             <Label 
-                                Text="{Binding Employee.birthdate}" 
+                                Text="{Binding Employee.birthdate, Converter={StaticResource DateToStringConverter}}" 
                                 Margin="8, 0, 0, 0" 
                                 FontSize="Micro" 
                                 TextColor="Black"/>
@@ -232,7 +250,7 @@
                             Grid.Column="1" 
                             FontSize="Micro" 
                             TextColor="Black"/>
-    
+
                         <Label 
                             Text="Status Karyawan : " 
                             Grid.Row="10" 
@@ -246,18 +264,48 @@
                             Grid.Column="1" 
                             FontSize="Micro" 
                             TextColor="Black"/>
+
+                        <Label Text="Agama : "
+                               Grid.Row="2"
+                               Grid.Column="0"
+                               FontSize="Micro"
+                               TextColor="Black"/>
+                        <Label Text="{Binding Employee.Religion.religion_name}"
+                               Margin="8,0,0,0"
+                               Grid.Row="2"
+                               Grid.Column="1"
+                               FontSize="Micro"
+                               TextColor="Black"/>
                     </Grid>
                 </Grid>
 
-                <BoxView Color="Transparent"/>
+                <VerticalStackLayout Grid.RowSpan="2" Grid.ColumnSpan="5" Margin="16,0,16,0">
+                    <Label Text="Contracts" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,5,0,16"/>
+                    
+                    <CollectionView ItemsSource="{Binding Contractz}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="Gray" BackgroundColor="GhostWhite" Padding="10" Margin="5" >
+                                    <uranium:GridLayout RowCount="6" ColumnCount="3" ColumnGridLength="*" RowSpacing="5">
+                                        <Label TextColor="Black" Text="{Binding contract_nip, StringFormat='NIP Kontrak : {0}'}" FontSize="14" Grid.ColumnSpan="2"/>
+                                            <Label TextColor="Black" Text="{Binding author, StringFormat='Created by : {0}'}" FontSize="14"/>
+                                        <Label TextColor="Black" Text="{Binding contract_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak : {0}'}" FontSize="14" Grid.ColumnSpan="2"/>
+                                            <Label TextColor="Black" Text="{Binding author, StringFormat='Created at : {0}'}" FontSize="14"/>
+                                        <Label TextColor="Black" Text="{Binding hire_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Bergabung : {0}'}" FontSize="14" Grid.ColumnSpan="2"/>
+                                            <Label TextColor="Black" Text="{Binding author, StringFormat='Updated at : {0}'}" FontSize="14"/>
+                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="14" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="14" Grid.ColumnSpan="3" />
+                                    </uranium:GridLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
 
-                <BoxView Color="Beige" 
-                    Grid.ColumnSpan="4"/>
-                <BoxView Color="Azure"/>
-            
-                <BoxView Color="Blue" 
-                            Grid.ColumnSpan="4"/>
-                <BoxView Color="Black"/>
+                <VerticalStackLayout Grid.RowSpan="2" Grid.ColumnSpan="5" Margin="16,8,16,0">
+                    <Label Text="Log Data Karyawan" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,0,0,16"/>
+                </VerticalStackLayout>
 
             </uranium:GridLayout>
         </ScrollView>
