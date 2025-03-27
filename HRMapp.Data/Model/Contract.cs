@@ -14,6 +14,10 @@ namespace HRMapp.Data.Model
         public int contract_id { get; set; }
 
         [Required]
+        [MaxLength(6)]
+        public string contract_nip { get; set; }
+
+        [Required]
         public DateOnly contract_date { get; set; }
 
         [Required]
@@ -23,11 +27,15 @@ namespace HRMapp.Data.Model
         public DateOnly end_date { get; set; }
 
         [Required]
-        [MaxLength(30)]
-        public string contract_duration { get; set; }
+        public int contract_duration { get; set; }
+
+        [Required]
+        public int gaji_pokok { get; set; } = 2751000;
 
         public DateTime updated_at { get; set; }
         public DateTime created_at { get; set; }
+
+        public string? author { get; set; }
 
         //FK
         public int employee_id { get; set; }

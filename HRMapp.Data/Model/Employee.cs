@@ -57,8 +57,10 @@ namespace HRMapp.Data.Model
 
         public DateOnly? graduation_date { get; set; }
 
+        [MaxLength(255)]
         public string? skill { get; set; }
 
+        [MaxLength(30)]
         public string? pic_path { get; set; }
 
         // Foreign Keys
