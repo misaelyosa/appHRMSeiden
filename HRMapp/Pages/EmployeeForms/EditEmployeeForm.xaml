@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+                xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+                xmlns:viewModels="clr-namespace:HRMapp.ViewModels.EmployeeFormViewModel"
+                x:Class="HRMapp.Pages.EmployeeForms.EditEmployeeForm"
+                BackgroundColor="Beige"
+                Title="EditEmployeeForm">
+    <ScrollView>
+        <input:FormView Padding="20" Spacing="16"
+                        SubmitCommand="{Binding SaveCommand}">
+
+            <input:AdvancedEntry Title="Full Name"                                 
+                                    TitleColor="Black"
+                                    MaxLength="255"
+                                    Text="{Binding Employee.name}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:LettersOnlyValidation/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="NIP"                                 
+                                    TitleColor="Black"
+                                    MaxLength="6"
+                                    Text="{Binding Employee.nip}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MinLengthValidation MinLength="5"/>
+                    <validation:MaxLengthValidation MaxLength="6"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="Nomor Induk Kependudukan (NIK)"                                 
+                                    TitleColor="Black"
+                                    MaxLength="16"
+                                    Text="{Binding Employee.nik}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:DigitsOnlyValidation/>
+                    <validation:MaxLengthValidation MaxLength="16"/>
+                    <validation:MinLengthValidation MinLength="16"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="Nomor Telepon"                                 
+                                    TitleColor="Black"
+                                    MaxLength="15"
+                                    Text="{Binding Employee.phone_number}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:DigitsOnlyValidation/>
+                    <validation:MaxLengthValidation MaxLength="15"/>
+                    <validation:MinLengthValidation MinLength="12"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <Label Text="Jenis Kelamin" Margin="8,0,0,0" TextColor="Black"/>
+            <Frame CornerRadius="20" Padding="32,0,0,0">
+                <Picker
+                        BackgroundColor="Black"
+                        ItemsSource="{Binding Genders}"
+                        SelectedItem="{Binding SelectedGender}"/>
+            </Frame>
+
+            <Grid RowDefinitions="auto" ColumnDefinitions="*,auto" ColumnSpacing="8">
+                <input:AdvancedEntry Title="Tempat Lahir"    
+                                    TitleColor="Black"
+                                    MaxLength="50"
+                                    Text="{Binding Employee.birthplace}"
+                                    Grid.Row="0"
+                                     Grid.Column="0">
+                    <input:AdvancedEntry.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:MaxLengthValidation MaxLength="50"/>
+                        <validation:MinLengthValidation MinLength="5"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <Frame CornerRadius="20" BackgroundColor="Black"
+                        Grid.Column="1"
+                        Grid.Row="0">
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Lahir" TextColor="White"/>
+                        <DatePicker MinimumDate="01/01/1945"
+                                    Date="{Binding SelectedBirthdateDateTime, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <input:AdvancedEntry Title="Alamat"                                 
+                                    TitleColor="Black"
+                                    MaxLength="255"
+                                    Text="{Binding Employee.address}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MaxLengthValidation MaxLength="255"/>
+                    <validation:MinLengthValidation MinLength="10"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+
+            <Grid RowDefinitions="auto" ColumnDefinitions="*, *, *" ColumnSpacing="8">
+                <Button Grid.Row="0"
+                        Grid.Column="2"
+                        Text="Save"
+                        BackgroundColor="ForestGreen"
+                        TextColor="White"
+                        HorizontalOptions="FillAndExpand"
+                        input:FormView.IsSubmitButton="True" />
+
+                <Button Text="Reset"
+                        Grid.Row="0"
+                        BackgroundColor="DarkOrange"
+                        Grid.Column="1"
+                        HorizontalOptions="FillAndExpand"
+                        input:FormView.IsResetButton="True"/>
+
+                <Button Text="Cancel"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding BackCommand}"
+                        BackgroundColor="Red" />
+            </Grid>
+
+        </input:FormView>
+    </ScrollView>
+
+</ContentPage>

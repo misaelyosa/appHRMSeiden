@@ -78,5 +78,11 @@ public partial class EmployeeDetailViewModel : ObservableObject
         await Task.Delay(100);
         IsRefreshing = false;
     }
+
+    [RelayCommand]
+    private async Task EditEmployee()
+    {
+        await Shell.Current.GoToAsync($"EmployeeForms/Edit?employeeId={Employee.employee_id}");
+    }
 }
     
