@@ -1,4 +1,5 @@
 ﻿using HRMapp.Pages;
+using HRMapp.Pages.EmployeeForms;
 
 namespace HRMapp
 {
@@ -9,6 +10,8 @@ namespace HRMapp
             InitializeComponent();
             Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
             Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
+            Routing.RegisterRoute("EmployeeForms/Edit", typeof(EditEmployeeForm));
+
         }
     }
 }
