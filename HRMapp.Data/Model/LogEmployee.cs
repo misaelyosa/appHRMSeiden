@@ -14,7 +14,11 @@ namespace HRMapp.Data.Model
         public int log_id { get; set; }
 
         [Required]
-        public string data_changed { get; set; }
+        public string field_name { get; set; }
+        [Required]
+        public string old_value { get; set; }
+        [Required]
+        public string new_value { get; set; }
 
         [Required]
         public DateTime updated_at { get; set; }

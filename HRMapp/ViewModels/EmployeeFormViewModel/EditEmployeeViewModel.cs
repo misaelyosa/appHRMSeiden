@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Diagnostics;
+using System.Threading.Channels;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel
 {
@@ -174,6 +175,46 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             }
         }
 
+        //LOG EMPLOYEE
+        private List<string> GetChanges()
+        {
+            var changes = new List<string>();
+
+            if (Employee.name != Employee.name) changes.Add($"Full Name: {Employee.name} → {Employee.name}");
+            if (Employee.email != Employee.email) changes.Add($"Email: {Employee.email} → {Employee.email}");
+            if (Employee.phone_number != Employee.phone_number) changes.Add($"Phone: {Employee.phone_number} → {Employee.phone_number}");
+
+            if (Employee.gender != SelectedGender)
+                changes.Add($"Gender: {Employee.gender} → {SelectedGender}");
+
+            if (Employee.City?.city_name != SelectedCity?.city_name)
+                changes.Add($"City: {Employee.City?.city_name} → {SelectedCity?.city_name}");
+
+            if (Employee.Department?.name != SelectedDepartment?.name)
+                changes.Add($"Department: {Employee.Department?.name} → {SelectedDepartment?.name}");
+
+            if (Employee.Job?.job_name != SelectedJob?.job_name)
+                changes.Add($"Job: {Employee.Job?.job_name} → {SelectedJob?.job_name}");
+
+            if (Employee.Factory?.name != SelectedFactory?.name)
+                changes.Add($"Factory: {Employee.Factory?.name} → {SelectedFactory?.name}");
+
+            if (Employee.Education?.education_type != SelectedEducation?.education_type ||
+                Employee.Education?.major != SelectedEducation?.major)
+                changes.Add($"Education: {Employee.Education?.education_type} {Employee.Education?.major} → {SelectedEducation?.education_type} {SelectedEducation?.major}");
+
+            if (Employee.Religion?.religion_name != SelectedReligion?.religion_name)
+                changes.Add($"Religion: {Employee.Religion?.religion_name} → {SelectedReligion?.religion_name}");
+
+            if (Employee.birthdate != SelectedBirthdate)
+                changes.Add($"Birthdate: {Employee.birthdate} → {SelectedBirthdate}");
+
+            if (Employee.graduation_date != SelectedGraduationDate)
+                changes.Add($"Graduation Date: {Employee.graduation_date} → {SelectedGraduationDate}");
+
+            return changes;
+        }
+
 
         [RelayCommand]
         public async Task SaveAsync()
@@ -189,6 +230,24 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 Employee.gender = SelectedGender;
                 Employee.birthdate = SelectedBirthdate;
                 Employee.employee_status = SelectedEmployeeStatus;
+                Employee.graduation_date = SelectedGraduationDate;
+
+                var changes = GetChanges();
+                if (changes.Count > 0)
+                {
+                    var log = new LogEmployee
+                    {
+                        employee_id = Employee.employee_id,
+                        data_changed = string.Join(", ", changes),
+                        updated_by = "admin",
+                        updated_at = DateTime.Now,
+                        deleted_at = DateTime.MinValue
+                    };
+
+                    using var context = await _contextFactory.CreateDbContextAsync();
+                    context.LogEmployees.Add(log);
+                    await context.SaveChangesAsync();
+                }
 
                 await _employeeService.UpdateEmployeeAsync(Employee);
                 await Shell.Current.GoToAsync("..");

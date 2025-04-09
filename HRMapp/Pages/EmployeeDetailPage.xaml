@@ -102,7 +102,7 @@
 
                     <Grid Grid.Row="1"
                      ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto,
-                      Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                      Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                       RowSpacing="3">
                         <Label Text="NIK : "                       
                         Grid.Row="0"
@@ -234,7 +234,7 @@
                         TextColor="Black"/>
 
                         <Label 
-                        Text="Edukasi : " 
+                        Text="Edukasi Terakhir: " 
                         Grid.Row="8"
                         Grid.Column="0"
                         FontSize="Micro" 
@@ -253,13 +253,13 @@
                         </HorizontalStackLayout>
 
                         <Label 
-                        Text="Skill : " 
+                        Text="Tahun Lulus : " 
                         Grid.Row="9" 
                         Grid.Column="0" 
                         FontSize="Micro" 
                         TextColor="Black"/>
                         <Label 
-                        Text="{Binding Employee.skill}" 
+                        Text="{Binding Employee.graduation_date, Converter={StaticResource DateToStringConverter}}" 
                         Margin="8, 0, 0, 0" 
                         Grid.Row="9" 
                         Grid.Column="1" 
@@ -267,15 +267,29 @@
                         TextColor="Black"/>
 
                         <Label 
-                        Text="Status Karyawan : " 
+                        Text="Skill : " 
                         Grid.Row="10" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.skill}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="10" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Status Karyawan : " 
+                        Grid.Row="12" 
                         Grid.Column="0" 
                         FontSize="Micro" 
                         TextColor="Black"/>
                         <Label 
                         Text="{Binding Employee.employee_status}" 
                         Margin="8, 0, 0, 0" 
-                        Grid.Row="10" 
+                        Grid.Row="12" 
                         Grid.Column="1" 
                         FontSize="Micro" 
                         TextColor="Black"/>
