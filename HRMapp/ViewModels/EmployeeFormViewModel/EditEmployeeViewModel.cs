@@ -135,9 +135,16 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 employee_id = Employee.employee_id,
                 name = Employee.name,
                 email = Employee.email,
+                address = Employee.address,
+                nip = Employee.nip,
+                nik = Employee.nik,
+                skill = Employee.skill,
+                birthplace = Employee.birthplace,
+                marital_status = Employee.marital_status,
                 phone_number = Employee.phone_number,
                 gender = Employee.gender,
                 birthdate = Employee.birthdate,
+                employee_status = Employee.employee_status,
                 graduation_date = Employee.graduation_date,
                 City = new City { city_id = Employee.City?.city_id ?? 0, city_name = Employee.City?.city_name },
                 Department = new Department { department_id = Employee.Department?.department_id ?? 0, name = Employee.Department?.name },
@@ -239,39 +246,57 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 if (!AreStringsEqual(initialEmployee.email, Employee.email))
                     AddChange("Email", initialEmployee.email, Employee.email);
 
+                if (!AreStringsEqual(initialEmployee.nip, Employee.nip))
+                    AddChange("NIP", initialEmployee.nip, Employee.nip);
+
+                if (!AreStringsEqual(initialEmployee.nik, Employee.nik))
+                    AddChange("Nomor Induk Kewarganegaraan", initialEmployee.nik, Employee.nik);
+
+                if (!AreStringsEqual(initialEmployee.birthplace, Employee.birthplace))
+                    AddChange("Tempat Lahir", initialEmployee.birthplace, Employee.birthplace);
+
                 if (!AreStringsEqual(initialEmployee.phone_number, Employee.phone_number))
                     AddChange("Phone", initialEmployee.phone_number, Employee.phone_number);
 
                 if (initialEmployee.gender != SelectedGender)
                     AddChange("Gender", initialEmployee.gender, SelectedGender);
 
-                if (initialEmployee.employee_status != SelectedEmployeeStatus)
+                if (!AreStringsEqual(initialEmployee.employee_status, SelectedEmployeeStatus))
                     AddChange("Employee Status", initialEmployee.employee_status, SelectedEmployeeStatus);
+
+                if (!AreStringsEqual(initialEmployee.marital_status, Employee.marital_status))
+                    AddChange("Status Kawin", initialEmployee.marital_status, Employee.marital_status);
+
+                if (!AreStringsEqual(initialEmployee.address, Employee.address))
+                    AddChange("Alamat", initialEmployee.address, Employee.address);
+
+                if (!AreStringsEqual(initialEmployee.skill, Employee.skill))
+                    AddChange("Skill", initialEmployee.skill, Employee.skill);
 
                 if (SelectedCity != null)
                     AddChange("City", initialEmployee.City?.city_name, SelectedCity?.city_name);
 
-                //if (initialEmployee.City.Provinces?.province_id != SelectedProvince?.province_id)
-                //    AddChange("Province", initialEmployee.City.Provinces?.province_name, SelectedProvince?.province_name);
+                if (SelectedCity != null && SelectedProvince.province_name != CurrentProvince)
+                    AddChange("Province", CurrentProvince, SelectedProvince?.province_name);
 
-                //if (initialEmployee.Department?.department_id != SelectedDepartment?.department_id)
-                //    AddChange("Department", initialEmployee.Department?.name, SelectedDepartment?.name);
+                if (SelectedDepartment != null && initialEmployee.Department?.department_id != SelectedDepartment?.department_id)
+                    AddChange("Department", initialEmployee.Department?.name, SelectedDepartment?.name);
 
-                //if (initialEmployee.Job?.job_id != SelectedJob?.job_id)
-                //    AddChange("Job", initialEmployee.Job?.job_name, SelectedJob?.job_name);
+                if (SelectedJob != null && initialEmployee.Job?.job_id != SelectedJob?.job_id)
+                    AddChange("Job", initialEmployee.Job?.job_name, SelectedJob?.job_name);
 
-                if (initialEmployee.Factory?.factory_id != SelectedFactory?.factory_id)
+                if (SelectedFactory != null && initialEmployee.Factory?.factory_id != SelectedFactory?.factory_id)
                     AddChange("Factory", initialEmployee.Factory?.name, SelectedFactory?.name);
 
-                //if (initialEmployee.Education?.education_id != SelectedEducation?.education_id)
-                //{
-                //    var oldEdu = $"{initialEmployee.Education?.education_type} - {initialEmployee.Education?.major}";
-                //    var newEdu = $"{SelectedEducation?.education_type} - {SelectedEducation?.major}";
-                //    AddChange("Education", oldEdu, newEdu);
-                //}
+                if (SelectedEducation != null && initialEmployee.Education?.education_id != SelectedEducation?.education_id)
+                {
+                    var oldEdu = $"{initialEmployee.Education?.education_type} - {initialEmployee.Education?.major}";
+                    var newEdu = $"{SelectedEducation?.education_type} - {SelectedEducation?.major}";
+                    AddChange("Education", oldEdu, newEdu);
+                }
 
-                //if (initialEmployee.Religion?.religion_id != SelectedReligion?.religion_id)
-                //    AddChange("Religion", initialEmployee.Religion?.religion_name, SelectedReligion?.religion_name);
+                if (SelectedReligion != null && initialEmployee.Religion?.religion_id != SelectedReligion?.religion_id)
+                    AddChange("Religion", initialEmployee.Religion?.religion_name, SelectedReligion?.religion_name);
 
                 if (initialEmployee.birthdate != SelectedBirthdate)
                     AddChange("Birthdate", initialEmployee.birthdate.ToString(), SelectedBirthdate.ToString());
