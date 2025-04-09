@@ -19,5 +19,15 @@ namespace HRMapp.Data.Model
 
         [MaxLength(30)]
         public string? major { get; set; }
+
+        public string DisplayName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(major))
+                    return education_type;
+                return $"{education_type} - {major}";
+            }
+        }
     }
 }

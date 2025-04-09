@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore.Internal;
+using System.Diagnostics;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel
 {
@@ -27,6 +28,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         public ObservableCollection<Education> Educations { get; set; } = new();
         public ObservableCollection<Religion> Religions { get; set; } = new();
         public ObservableCollection<String> Genders { get; set; } = new();
+        public ObservableCollection<String> EmployeeStatus { get; set; } = new();
 
         [ObservableProperty]
         private Department selectedDepartment;
@@ -52,11 +54,47 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [ObservableProperty]
         private DateOnly selectedBirthdate;
         
+        [ObservableProperty]
+        private DateOnly selectedGraduationDate;
+
+        [ObservableProperty]
+        private string currentCity;
+
+        [ObservableProperty]
+        private string currentProvince;
+
+        [ObservableProperty]
+        private string currentFactory;
+
+        [ObservableProperty]
+        private string currentJob;
+
+        [ObservableProperty]
+        private string currentDepartment;        
+        
+        [ObservableProperty]
+        private string currentReligion;
+
+        [ObservableProperty]
+        private Province selectedProvince;
+
+        [ObservableProperty]
+        private string selectedEmployeeStatus;
+
+        [ObservableProperty]
+        private string currentEducation;
+
         //proxy buat convert datetime (compatible with datepicker)
         public DateTime SelectedBirthdateDateTime
         {
             get => selectedBirthdate.ToDateTime(TimeOnly.MinValue);
             set => SelectedBirthdate = DateOnly.FromDateTime(value);
+        }
+
+        public DateTime SelectedGraduationDateTime
+        {
+            get => SelectedGraduationDate.ToDateTime(TimeOnly.MinValue);
+            set => SelectedGraduationDate = DateOnly.FromDateTime(value);
         }
 
         public EditEmployeeViewModel(IEmployeeService employeeService, IDbContextFactory<AppDbContext> contextFactory)
@@ -92,14 +130,28 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             if (Employee != null)
             {
-                SelectedDepartment = Departments.FirstOrDefault(d => d.department_id == Employee.Department?.department_id);
+                SelectedDepartment = Departments.FirstOrDefault(d => d.department_id == Employee.Department.department_id);
                 SelectedJob = Jobs.FirstOrDefault(j => j.job_id == Employee.Job?.job_id);
                 SelectedFactory = Factories.FirstOrDefault(f => f.factory_id == Employee.Factory?.factory_id);
                 SelectedCity = Cities.FirstOrDefault(c => c.city_id == Employee.City?.city_id);
                 SelectedEducation = Educations.FirstOrDefault(e => e.education_id == Employee.Education?.education_id);
-                SelectedReligion = Religions.FirstOrDefault(r => r.religion_id == Employee.Religion?.religion_id);
+                SelectedReligion = Religions.FirstOrDefault(r => r.religion_id == Employee.Religion.religion_id);
                 SelectedGender = Employee.gender.ToLower();
                 SelectedBirthdate = Employee.birthdate;
+                SelectedGraduationDate = Employee.graduation_date ?? DateOnly.FromDateTime(DateTime.Today);
+                SelectedEmployeeStatus = Employee.employee_status.ToUpper();
+
+                Debug.WriteLine($"Factory : " + SelectedFactory.name);
+                CurrentDepartment = SelectedDepartment.name;
+                CurrentJob = SelectedJob.job_name;
+                CurrentFactory = SelectedFactory.name;
+                CurrentCity = SelectedCity.city_name;
+                CurrentReligion = SelectedReligion.religion_name;
+                CurrentProvince = Provinces.FirstOrDefault(e => e.province_id == SelectedCity.province_id).province_name;
+
+                var edType = SelectedEducation.education_type;
+                var major = SelectedEducation.major;
+                currentEducation =edType + $" - " + major;
             }
 
             OnPropertyChanged(nameof(Departments));
@@ -109,7 +161,17 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             OnPropertyChanged(nameof(Provinces));
             OnPropertyChanged(nameof(Educations));
             OnPropertyChanged(nameof(Religions));
+            OnPropertyChanged(nameof(CurrentEducation));
             OnPropertyChanged(nameof(SelectedBirthdateDateTime));
+            OnPropertyChanged(nameof(SelectedGraduationDateTime));
+        }
+
+        partial void OnSelectedCityChanged(City value)
+        {
+            if (value != null)
+            {
+                SelectedProvince = Provinces.FirstOrDefault(p => p.province_id == value.province_id);
+            }
         }
 
 
@@ -126,6 +188,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 Employee.Religion = SelectedReligion;
                 Employee.gender = SelectedGender;
                 Employee.birthdate = SelectedBirthdate;
+                Employee.employee_status = SelectedEmployeeStatus;
 
                 await _employeeService.UpdateEmployeeAsync(Employee);
                 await Shell.Current.GoToAsync("..");
@@ -144,6 +207,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             Genders.Add("laki-laki");
             Genders.Add("perempuan");
 
+            EmployeeStatus.Add("ACTIVE");
+            EmployeeStatus.Add("NON ACTIVE");
         }
     }
 }

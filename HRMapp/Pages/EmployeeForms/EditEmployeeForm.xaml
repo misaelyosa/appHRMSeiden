@@ -8,7 +8,7 @@
                 BackgroundColor="Beige"
                 Title="EditEmployeeForm">
     <ScrollView>
-        <input:FormView Padding="20" Spacing="16"
+        <input:FormView Padding="20" Spacing="20"
                         SubmitCommand="{Binding SaveCommand}">
 
             <input:AdvancedEntry Title="Full Name"                                 
@@ -31,6 +31,38 @@
                     <validation:MaxLengthValidation MaxLength="6"/>
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
+
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, *" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Text="Department" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Grid RowDefinitions="auto" ColumnDefinitions="*, auto">
+                            <Label Grid.Column="1" Text="{Binding CurrentDepartment,StringFormat='Current Department : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Picker Grid.Column="0"
+                                BackgroundColor="Black"
+                                TextColor="White"
+                                ItemsSource="{Binding Departments}"
+                                ItemDisplayBinding="{Binding name}"
+                                SelectedItem="{Binding SelectedDepartment}" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                    <Label Text="Job" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0" HeightRequest="45">
+                        <Grid RowDefinitions="auto" ColumnDefinitions="*, auto">
+                            <Label Grid.Column="1" Text="{Binding CurrentJob,StringFormat='Current Job : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Picker
+                                BackgroundColor="Black"
+                                TextColor="White"
+                                ItemsSource="{Binding Jobs}"
+                                ItemDisplayBinding="{Binding job_name}"
+                                SelectedItem="{Binding SelectedJob}" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+            </Grid>
 
             <input:AdvancedEntry Title="Nomor Induk Kependudukan (NIK)"                                 
                                     TitleColor="Black"
@@ -56,37 +88,60 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <Label Text="Jenis Kelamin" Margin="8,0,0,0" TextColor="Black"/>
-            <Frame CornerRadius="20" Padding="32,0,0,0">
-                <Picker
-                        BackgroundColor="Black"
-                        ItemsSource="{Binding Genders}"
-                        SelectedItem="{Binding SelectedGender}"/>
-            </Frame>
-
-            <Grid RowDefinitions="auto" ColumnDefinitions="*,auto" ColumnSpacing="8">
-                <input:AdvancedEntry Title="Tempat Lahir"    
+            <input:AdvancedEntry Title="Email"                                 
                                     TitleColor="Black"
-                                    MaxLength="50"
-                                    Text="{Binding Employee.birthplace}"
-                                    Grid.Row="0"
-                                     Grid.Column="0">
-                    <input:AdvancedEntry.Validations>
-                        <validation:RequiredValidation/>
-                        <validation:MaxLengthValidation MaxLength="50"/>
-                        <validation:MinLengthValidation MinLength="5"/>
-                    </input:AdvancedEntry.Validations>
-                </input:AdvancedEntry>
+                                    MaxLength="60"
+                                    Text="{Binding Employee.email}">
+                <input:AdvancedEntry.Validations>
+                    <validation:MaxLengthValidation MaxLength="60"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
 
-                <Frame CornerRadius="20" BackgroundColor="Black"
-                        Grid.Column="1"
-                        Grid.Row="0">
+            <VerticalStackLayout>
+                <Label Text="Agama" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0">
+                    <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
+                        <Label Grid.Column="1" Text="{Binding CurrentReligion,StringFormat='Current Religion : {0}'}" TextColor="white" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker Grid.Column="0"
+                                BackgroundColor="Black"
+                                ItemsSource="{Binding Religions}"
+                                ItemDisplayBinding="{Binding religion_name}"
+                                SelectedItem="{Binding SelectedReligion}"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Jenis Kelamin" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0">
+                    <Picker
+                            BackgroundColor="Black"
+                            ItemsSource="{Binding Genders}"
+                            SelectedItem="{Binding SelectedGender}"/>
+                </Frame>
+            </VerticalStackLayout>
+
+            <Grid RowDefinitions="auto" ColumnDefinitions="*,auto" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                    <input:AdvancedEntry Title="Tempat Lahir"    
+                                        TitleColor="Black"
+                                        MaxLength="50"
+                                        Text="{Binding Employee.birthplace}">
+                        <input:AdvancedEntry.Validations>
+                            <validation:RequiredValidation/>
+                            <validation:MaxLengthValidation MaxLength="50"/>
+                            <validation:MinLengthValidation MinLength="5"/>
+                        </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+                </VerticalStackLayout>
+          
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0">
                     <VerticalStackLayout>
                         <Label Text="Tanggal Lahir" TextColor="White"/>
                         <DatePicker MinimumDate="01/01/1945"
                                     Date="{Binding SelectedBirthdateDateTime, Mode=TwoWay}"/>
                     </VerticalStackLayout>
-                </Frame>
+                </Frame>                             
             </Grid>
 
             <input:AdvancedEntry Title="Alamat"                                 
@@ -99,6 +154,104 @@
                     <validation:MinLengthValidation MinLength="10"/>
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
+
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, *" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Grid.Column="0" Text="Kota" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
+                            <Label Grid.Column="1" Text="{Binding CurrentCity,StringFormat='Current City : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Picker Grid.Column="0"
+                                BackgroundColor="Black"
+                                TextColor="White"
+                                ItemsSource="{Binding Cities}"
+                                ItemDisplayBinding="{Binding city_name}"
+                                SelectedItem="{Binding SelectedCity, Mode=TwoWay}" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                    <Grid RowDefinitions="auto" ColumnDefinitions="auto,*">
+                        <Label Grid.Column="0" Text="Provinsi" Margin="8,0,0,0" TextColor="Black"/>
+                        <Label Grid.Column="1" Text="{Binding CurrentProvince,StringFormat='Current Province : {0}'}" TextColor="Black" Margin="32,0,16,0" HorizontalOptions="End" FontAttributes="Bold"/>
+                    </Grid>
+                    <Frame CornerRadius="20" Padding="32,0,0,0" HeightRequest="45">
+                        <Label Text="{Binding SelectedProvince.province_name}" TextColor="White" VerticalOptions="Center"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </Grid>
+
+            <input:AdvancedEntry Title="Status Kawin"                                 
+                                  TitleColor="Black"
+                                  MaxLength="20"
+                                  Text="{Binding Employee.marital_status}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MaxLengthValidation MaxLength="20"/>
+                    <validation:MinLengthValidation MinLength="2"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <VerticalStackLayout>
+                <Label Text="Status Karyawan" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0">
+                    <Picker
+                            BackgroundColor="Black"
+                            ItemsSource="{Binding EmployeeStatus}"
+                            SelectedItem="{Binding SelectedEmployeeStatus}"/>
+                </Frame>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0">
+                    <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
+                        <Label Grid.Column="1" Text="{Binding CurrentFactory,StringFormat='Current Factory : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                        <Picker Grid.Column="0"
+                                BackgroundColor="Black"
+                                ItemsSource="{Binding Factories}"
+                                ItemDisplayBinding="{Binding name}"
+                                SelectedItem="{Binding SelectedFactory}"/>
+                    </Grid>
+                </Frame>
+            </VerticalStackLayout>
+
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*,auto" ColumnSpacing="16" RowSpacing="8">
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                    <Label Text="Edukasi Terakhir" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
+                            <Label Grid.Column="1" Text="{Binding CurrentEducation,StringFormat='Current Last Education : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Picker Grid.Column="0"
+                                    BackgroundColor="Black"
+                                    ItemsSource="{Binding Educations}"
+                                    ItemDisplayBinding="{Binding DisplayName}"
+                                    SelectedItem="{Binding SelectedEducation}"/>
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                    <input:AdvancedEntry Title="Skill"                                 
+                                      TitleColor="Black"
+                                      MaxLength="20"
+                                      Text="{Binding Employee.skill}">
+                        <input:AdvancedEntry.Validations>
+                            <validation:MaxLengthValidation MaxLength="255"/>
+                        </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+                </VerticalStackLayout>
+
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Lulus" TextColor="White"/>
+                        <DatePicker VerticalOptions="Center"
+                                    MinimumDate="01/01/1970"
+                                    Date="{Binding SelectedGraduationDateTime, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
 
 
             <Grid RowDefinitions="auto" ColumnDefinitions="*, *, *" ColumnSpacing="8">
