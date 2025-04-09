@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -29,10 +30,13 @@ public partial class EmployeeDetailViewModel : ObservableObject
     [ObservableProperty]
     private int contractCount;
 
+    [ObservableProperty]
+    private ObservableCollection<LogEmployee> logEntries = new();
+
     public EmployeeDetailViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
     {
         _dbContextFactory = dbContextFactory;
-    }   
+    }
 
     public async Task LoadEmployeeDetails()
     {
@@ -47,7 +51,8 @@ public partial class EmployeeDetailViewModel : ObservableObject
             .Include(e => e.Religion)
             .FirstOrDefaultAsync(e => e.employee_id == EmployeeId);
 
-            LoadContracts();
+        await LoadContracts();
+        await LoadLogsAsync();
     }
 
     public async Task LoadContracts()
@@ -68,6 +73,18 @@ public partial class EmployeeDetailViewModel : ObservableObject
             Tunjangan = await dbContext.Tunjangan
                 .FirstOrDefaultAsync(t => t.contract_id == firstContract.contract_id);
         }
+    }
+
+    public async Task LoadLogsAsync()
+    {
+        using var dbcontext = await _dbContextFactory.CreateDbContextAsync();
+        var logs = await dbcontext.LogEmployees
+            .Where(l => l.employee_id == EmployeeId)
+            .OrderByDescending(l => l.updated_at)
+            .ToListAsync();
+
+        LogEntries = new ObservableCollection<LogEmployee>(logs);
+        OnPropertyChanged(nameof(LogEntries));
     }
 
     [RelayCommand]

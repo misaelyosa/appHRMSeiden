@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:akgul="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
              xmlns:viewModels="clr-namespace:HRMapp.ViewModels"
              x:Class="HRMapp.Pages.EmployeeDetailPage"
              BackgroundColor="Beige"
@@ -352,6 +352,16 @@
                 <!-- Logs Section -->
                 <VerticalStackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="16,8,16,0">
                     <Label Text="Log Data Karyawan" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,0,0,16"/>
+                    <Label Text="{Binding LogEntries.Count, StringFormat='Logs Found: {0}'}" TextColor="Red" />
+                    <akgul:DataGrid ItemsSource="{Binding LogEntries}" HeightRequest="300" BorderColor="Gray">
+                        <akgul:DataGrid.Columns>
+                            <akgul:DataGridColumn Title="Field" PropertyName="field_name" />
+                            <akgul:DataGridColumn Title="Old Value" PropertyName="old_value" />
+                            <akgul:DataGridColumn Title="New Value" PropertyName="new_value" />
+                            <akgul:DataGridColumn Title="Changed By" PropertyName="updated_by" />
+                            <akgul:DataGridColumn Title="Changed At" PropertyName="updated_at"/>
+                        </akgul:DataGrid.Columns>
+                    </akgul:DataGrid>
                 </VerticalStackLayout>
 
             </Grid>

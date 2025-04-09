@@ -85,6 +85,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [ObservableProperty]
         private string currentEducation;
 
+        private Employee initialEmployee;
+
         //proxy buat convert datetime (compatible with datepicker)
         public DateTime SelectedBirthdateDateTime
         {
@@ -127,7 +129,28 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             Provinces = new(context.Provinces.ToList());
             Educations = new(context.Educations.ToList());
             Religions = new(context.Religions.ToList());
-            
+
+            initialEmployee = new Employee
+            {
+                employee_id = Employee.employee_id,
+                name = Employee.name,
+                email = Employee.email,
+                phone_number = Employee.phone_number,
+                gender = Employee.gender,
+                birthdate = Employee.birthdate,
+                graduation_date = Employee.graduation_date,
+                City = new City { city_id = Employee.City?.city_id ?? 0, city_name = Employee.City?.city_name },
+                Department = new Department { department_id = Employee.Department?.department_id ?? 0, name = Employee.Department?.name },
+                Job = new Job { job_id = Employee.Job?.job_id ?? 0, job_name = Employee.Job?.job_name },
+                Factory = new Factory { factory_id = Employee.Factory?.factory_id ?? 0, name = Employee.Factory?.name },
+                Education = new Education
+                {
+                    education_id = Employee.Education?.education_id ?? 0,
+                    education_type = Employee.Education?.education_type,
+                    major = Employee.Education?.major
+                },
+                Religion = new Religion { religion_id = Employee.Religion?.religion_id ?? 0, religion_name = Employee.Religion?.religion_name }
+            };
 
             if (Employee != null)
             {
@@ -142,7 +165,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 SelectedGraduationDate = Employee.graduation_date ?? DateOnly.FromDateTime(DateTime.Today);
                 SelectedEmployeeStatus = Employee.employee_status.ToUpper();
 
-                Debug.WriteLine($"Factory : " + SelectedFactory.name);
                 CurrentDepartment = SelectedDepartment.name;
                 CurrentJob = SelectedJob.job_name;
                 CurrentFactory = SelectedFactory.name;
@@ -175,47 +197,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             }
         }
 
-        //LOG EMPLOYEE
-        private List<string> GetChanges()
-        {
-            var changes = new List<string>();
-
-            if (Employee.name != Employee.name) changes.Add($"Full Name: {Employee.name} → {Employee.name}");
-            if (Employee.email != Employee.email) changes.Add($"Email: {Employee.email} → {Employee.email}");
-            if (Employee.phone_number != Employee.phone_number) changes.Add($"Phone: {Employee.phone_number} → {Employee.phone_number}");
-
-            if (Employee.gender != SelectedGender)
-                changes.Add($"Gender: {Employee.gender} → {SelectedGender}");
-
-            if (Employee.City?.city_name != SelectedCity?.city_name)
-                changes.Add($"City: {Employee.City?.city_name} → {SelectedCity?.city_name}");
-
-            if (Employee.Department?.name != SelectedDepartment?.name)
-                changes.Add($"Department: {Employee.Department?.name} → {SelectedDepartment?.name}");
-
-            if (Employee.Job?.job_name != SelectedJob?.job_name)
-                changes.Add($"Job: {Employee.Job?.job_name} → {SelectedJob?.job_name}");
-
-            if (Employee.Factory?.name != SelectedFactory?.name)
-                changes.Add($"Factory: {Employee.Factory?.name} → {SelectedFactory?.name}");
-
-            if (Employee.Education?.education_type != SelectedEducation?.education_type ||
-                Employee.Education?.major != SelectedEducation?.major)
-                changes.Add($"Education: {Employee.Education?.education_type} {Employee.Education?.major} → {SelectedEducation?.education_type} {SelectedEducation?.major}");
-
-            if (Employee.Religion?.religion_name != SelectedReligion?.religion_name)
-                changes.Add($"Religion: {Employee.Religion?.religion_name} → {SelectedReligion?.religion_name}");
-
-            if (Employee.birthdate != SelectedBirthdate)
-                changes.Add($"Birthdate: {Employee.birthdate} → {SelectedBirthdate}");
-
-            if (Employee.graduation_date != SelectedGraduationDate)
-                changes.Add($"Graduation Date: {Employee.graduation_date} → {SelectedGraduationDate}");
-
-            return changes;
-        }
-
-
         [RelayCommand]
         public async Task SaveAsync()
         {
@@ -232,22 +213,80 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 Employee.employee_status = SelectedEmployeeStatus;
                 Employee.graduation_date = SelectedGraduationDate;
 
-                var changes = GetChanges();
-                if (changes.Count > 0)
+                //Log Entries
+                var logs = new List<LogEmployee>();
+                
+                bool AreStringsEqual(string? a, string? b) =>
+                string.Equals(a?.Trim(), b?.Trim(), StringComparison.OrdinalIgnoreCase);
+
+                void AddChange(string field, string? oldVal, string? newVal)
                 {
-                    var log = new LogEmployee
+                    logs.Add(new LogEmployee
                     {
                         employee_id = Employee.employee_id,
-                        data_changed = string.Join(", ", changes),
+                        field_name = field,
+                        old_value = oldVal ?? "-",
+                        new_value = newVal ?? "-",
                         updated_by = "admin",
                         updated_at = DateTime.Now,
                         deleted_at = DateTime.MinValue
-                    };
+                    });
+                }
 
+                if (!AreStringsEqual(initialEmployee.name, Employee.name))
+                    AddChange("Name", initialEmployee.name, Employee.name);
+
+                if (!AreStringsEqual(initialEmployee.email, Employee.email))
+                    AddChange("Email", initialEmployee.email, Employee.email);
+
+                if (!AreStringsEqual(initialEmployee.phone_number, Employee.phone_number))
+                    AddChange("Phone", initialEmployee.phone_number, Employee.phone_number);
+
+                if (initialEmployee.gender != SelectedGender)
+                    AddChange("Gender", initialEmployee.gender, SelectedGender);
+
+                if (initialEmployee.employee_status != SelectedEmployeeStatus)
+                    AddChange("Employee Status", initialEmployee.employee_status, SelectedEmployeeStatus);
+
+                if (SelectedCity != null)
+                    AddChange("City", initialEmployee.City?.city_name, SelectedCity?.city_name);
+
+                //if (initialEmployee.City.Provinces?.province_id != SelectedProvince?.province_id)
+                //    AddChange("Province", initialEmployee.City.Provinces?.province_name, SelectedProvince?.province_name);
+
+                //if (initialEmployee.Department?.department_id != SelectedDepartment?.department_id)
+                //    AddChange("Department", initialEmployee.Department?.name, SelectedDepartment?.name);
+
+                //if (initialEmployee.Job?.job_id != SelectedJob?.job_id)
+                //    AddChange("Job", initialEmployee.Job?.job_name, SelectedJob?.job_name);
+
+                if (initialEmployee.Factory?.factory_id != SelectedFactory?.factory_id)
+                    AddChange("Factory", initialEmployee.Factory?.name, SelectedFactory?.name);
+
+                //if (initialEmployee.Education?.education_id != SelectedEducation?.education_id)
+                //{
+                //    var oldEdu = $"{initialEmployee.Education?.education_type} - {initialEmployee.Education?.major}";
+                //    var newEdu = $"{SelectedEducation?.education_type} - {SelectedEducation?.major}";
+                //    AddChange("Education", oldEdu, newEdu);
+                //}
+
+                //if (initialEmployee.Religion?.religion_id != SelectedReligion?.religion_id)
+                //    AddChange("Religion", initialEmployee.Religion?.religion_name, SelectedReligion?.religion_name);
+
+                if (initialEmployee.birthdate != SelectedBirthdate)
+                    AddChange("Birthdate", initialEmployee.birthdate.ToString(), SelectedBirthdate.ToString());
+
+                if (initialEmployee.graduation_date != SelectedGraduationDate)
+                    AddChange("Graduation Date", initialEmployee.graduation_date?.ToString(), SelectedGraduationDate.ToString());
+
+
+                if (logs.Count > 0)
+                {
                     using var context = await _contextFactory.CreateDbContextAsync();
-                    context.LogEmployees.Add(log);
+                    context.LogEmployees.AddRange(logs);
                     await context.SaveChangesAsync();
                 }
+
 
                 await _employeeService.UpdateEmployeeAsync(Employee);
                 await Shell.Current.GoToAsync("..");
