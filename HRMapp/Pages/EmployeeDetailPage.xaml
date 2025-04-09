@@ -45,7 +45,8 @@
                         Text="Hapus Data Karyawan"
                         HorizontalOptions="Fill"
                         VerticalOptions="Start"
-                        Margin="0,8,0,0"/>
+                        Margin="0,8,0,0"
+                        Command="{Binding DeleteEmployeeCommand}"/>
                 </VerticalStackLayout>
 
                 <!-- Employee Info Grid -->

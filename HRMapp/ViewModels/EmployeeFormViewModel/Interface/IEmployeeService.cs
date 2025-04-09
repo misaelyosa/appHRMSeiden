@@ -6,5 +6,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
     {
         Task<Employee> GetEmployeeByIdAsync(int id);
         Task UpdateEmployeeAsync(Employee employee);
+        Task DeleteEmployeeAsync(int id);
     }
 }

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
+using HRMapp.ViewModels.EmployeeFormViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ using System.Diagnostics;
 public partial class EmployeeDetailViewModel : ObservableObject
 {
     private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    private readonly IEmployeeService _employeeService;
 
     [ObservableProperty]
     private Employee employee;
@@ -33,9 +35,10 @@ public partial class EmployeeDetailViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<LogEmployee> logEntries = new();
 
-    public EmployeeDetailViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
+    public EmployeeDetailViewModel(IDbContextFactory<AppDbContext> dbContextFactory, IEmployeeService employeeService)
     {
         _dbContextFactory = dbContextFactory;
+        _employeeService = employeeService;
     }
 
     public async Task LoadEmployeeDetails()
@@ -100,6 +103,26 @@ public partial class EmployeeDetailViewModel : ObservableObject
     private async Task EditEmployee()
     {
         await Shell.Current.GoToAsync($"EmployeeForms/Edit?employeeId={Employee.employee_id}");
+    }
+
+    [RelayCommand]
+    private async Task DeleteEmployee()
+    {
+        bool confirm = await Shell.Current.DisplayAlert("Confirm Delete", $"Are you sure you want to delete {Employee?.name}?", "Yes", "Cancel");
+        if (!confirm || Employee == null)
+            return;
+
+        try
+        {
+            await _employeeService.DeleteEmployeeAsync(Employee.employee_id);
+            await Shell.Current.DisplayAlert("Success", "Employee deleted successfully.", "OK");
+            await Shell.Current.GoToAsync("..");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error deleting employee: {ex.Message}");
+            await Shell.Current.DisplayAlert("Error", "Failed to delete employee.", "OK");
+        }
     }
 }
     

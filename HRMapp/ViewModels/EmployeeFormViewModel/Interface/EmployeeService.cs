@@ -46,6 +46,18 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             context.Employees.Update(employee);
             await context.SaveChangesAsync();
         }
+
+        public async Task DeleteEmployeeAsync(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var employee = await context.Employees.FindAsync(id);
+
+            if (employee != null)
+            {
+                context.Employees.Remove(employee);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 
 }
