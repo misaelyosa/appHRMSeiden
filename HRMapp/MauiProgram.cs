@@ -42,15 +42,17 @@ public static class MauiProgram
         builder.Services.AddTransient<EmployeeDetailViewModel>();
 		builder.Services.AddSingleton<MainPageViewModel>();
 		builder.Services.AddTransient<EditEmployeeViewModel>();
+		builder.Services.AddTransient<CreateEmployeeViewModel>();
 
         // Register Pages
         builder.Services.AddTransient<ManageEmployee>();
         builder.Services.AddTransient<EmployeeDetailPage>();
 		builder.Services.AddSingleton<MainPage>();
 		builder.Services.AddTransient<EditEmployeeForm>();
+		builder.Services.AddTransient<CreateEmployeeForm>();
 
 #if DEBUG
-        builder.Logging.AddDebug();
+		builder.Logging.AddDebug();
 #endif
 
 		return builder.Build();

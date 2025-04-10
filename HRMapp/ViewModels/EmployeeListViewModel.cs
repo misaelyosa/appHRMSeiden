@@ -3,6 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
 using HRMapp.Pages;
+using HRMapp.Pages.EmployeeForms;
+using HRMapp.ViewModels.EmployeeFormViewModel;
+using HRMapp.ViewModels.EmployeeFormViewModel.Interface;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -82,6 +85,12 @@ namespace HRMapp.ViewModels
             await LoadEmployeeAsync();
             await Task.Delay(100);
             IsRefreshing = false;
+        }
+
+        [RelayCommand]
+        private async Task NavigateToCreateForm()
+        {
+            await Shell.Current.GoToAsync(nameof(CreateEmployeeForm));
         }
 
         private async Task NavigateToEmployeeDetail(int employeeId)

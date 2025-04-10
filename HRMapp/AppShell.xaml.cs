@@ -10,7 +10,10 @@ namespace HRMapp
             InitializeComponent();
             Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
             Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
+
+            //Employee form
             Routing.RegisterRoute("EmployeeForms/Edit", typeof(EditEmployeeForm));
+            Routing.RegisterRoute(nameof(CreateEmployeeForm), typeof(CreateEmployeeForm));
 
         }
     }

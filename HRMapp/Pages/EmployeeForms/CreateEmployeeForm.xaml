@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HRMapp.Pages.EmployeeForms.CreateEmployeeForm"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:viewModels="clr-namespace:HRMapp.ViewModels.EmployeeFormViewModel"
+             BackgroundColor="Beige"
+             Title="CreateNewEmployeeForm">
+    <ScrollView>
+        <input:FormView Padding="20" Spacing="20"
+                SubmitCommand="{Binding SubmitCommand}">
+
+            <input:AdvancedEntry Title="Full Name"
+                            Placeholder="Masukkan nama lengkap"
+                            PlaceholderColor="FloralWhite"
+                            TitleColor="Black"
+                            MaxLength="255"
+                            Text="{Binding NewEmployee.name}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:LettersOnlyValidation/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="NIP"                                 
+                            TitleColor="Black"
+                            Placeholder="Masukkan NIP"
+                            PlaceholderColor="FloralWhite"
+                            MaxLength="6"
+                            Text="{Binding NewEmployee.nip}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MinLengthValidation MinLength="5"/>
+                    <validation:MaxLengthValidation MaxLength="6"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, Auto" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Text="Department" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Picker Grid.Column="0"
+                                BackgroundColor="Black"
+                                TextColor="White"
+                                ItemsSource="{Binding Departments}"
+                                ItemDisplayBinding="{Binding name}"
+                                SelectedItem="{Binding SelectedDepartment}" />
+                    </Frame>
+                </VerticalStackLayout>
+
+                <input:AdvancedEntry Title="."
+                                     TitleColor="Transparent"
+                                     Placeholder="Pilih data disamping atau masukkan data department baru..."
+                                     BorderColor="Black"
+                                     PlaceholderColor="DimGray"
+                                     BackgroundColor="Transparent"
+                                     MaxLength="60"
+                                     Text="{Binding NewDepartment}"
+                                     Grid.Row="0"
+                                     Grid.Column="1">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="40"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                    <Label Text="Job" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0" HeightRequest="45">
+                        <Picker
+                            BackgroundColor="Black"
+                            TextColor="White"
+                            ItemsSource="{Binding Jobs}"
+                            ItemDisplayBinding="{Binding job_name}"
+                            SelectedItem="{Binding SelectedJob}" />
+                    </Frame>
+                </VerticalStackLayout>
+
+                <input:AdvancedEntry Title="."
+                                     TitleColor="Transparent"
+                                     Placeholder="Pilih data disamping atau masukkan data job baru..."
+                                     BorderColor="Black"
+                                     PlaceholderColor="DimGray"
+                                     BackgroundColor="Transparent"
+                                     MaxLength="60"
+                                     Text="{Binding NewDepartment}"
+                                     Grid.Row="1"
+                                     Grid.Column="1">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="40"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+            </Grid>
+
+            <input:AdvancedEntry Title="Nomor Induk Kependudukan (NIK)"                                 
+                            TitleColor="Black"
+                            MaxLength="16"
+                            Placeholder="Masukkan NIK Karyawan"
+                            PlaceholderColor="FloralWhite"
+                            Text="{Binding NewEmployee.nik}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:DigitsOnlyValidation/>
+                    <validation:MaxLengthValidation MaxLength="16"/>
+                    <validation:MinLengthValidation MinLength="16"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="Nomor Telepon"
+                                 Placeholder="Masukkan Nomor Telepon"
+                                 PlaceholderColor="FloralWhite"
+                            TitleColor="Black"
+                            MaxLength="15"
+                            Text="{Binding NewEmployee.phone_number}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:DigitsOnlyValidation/>
+                    <validation:MaxLengthValidation MaxLength="15"/>
+                    <validation:MinLengthValidation MinLength="12"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="Email"                                 
+                            TitleColor="Black"
+                                 Placeholder="Masukkan Email "
+                                 PlaceholderColor="FloralWhite"
+                            MaxLength="60"
+                            Text="{Binding NewEmployee.email}">
+                <input:AdvancedEntry.Validations>
+                    <validation:MaxLengthValidation MaxLength="60"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="8">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="Agama" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Picker Grid.Column="0"
+                                BackgroundColor="Black"
+                                ItemsSource="{Binding Religions}"
+                                ItemDisplayBinding="{Binding religion_name}"
+                                SelectedItem="{Binding SelectedReligion}"/>
+                    </Frame>
+                </VerticalStackLayout>
+                <input:AdvancedEntry Title="."
+                                     TitleColor="Transparent"
+                                    Placeholder="Pilih data disamping atau masukkan data agama baru..."
+                                    BorderColor="Black"
+                                    PlaceholderColor="DimGray"
+                                    BackgroundColor="Transparent"
+                                    MaxLength="60"
+                                    Text="{Binding NewReligion}"
+                                    Grid.Column="1">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="30"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+            </Grid>
+               
+
+            <VerticalStackLayout>
+                <Label Text="Jenis Kelamin" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0">
+                    <Picker
+                    BackgroundColor="Black"
+                    ItemsSource="{Binding Genders}"
+                    SelectedItem="{Binding SelectedGender}"/>
+                </Frame>
+            </VerticalStackLayout>
+
+            <Grid RowDefinitions="auto" ColumnDefinitions="*,auto" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                    <input:AdvancedEntry Title="Tempat Lahir"
+                                         Placeholder="Masukkan tempat asal kelahiran"
+                                         BackgroundColor="Black"
+                                         PlaceholderColor="FloralWhite"
+                                TitleColor="Black"
+                                MaxLength="50"
+                                Text="{Binding NewEmployee.birthplace}">
+                        <input:AdvancedEntry.Validations>
+                            <validation:RequiredValidation/>
+                            <validation:MaxLengthValidation MaxLength="50"/>
+                            <validation:MinLengthValidation MinLength="5"/>
+                        </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+                </VerticalStackLayout>
+
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0">
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Lahir" TextColor="White"/>
+                        <DatePicker MinimumDate="01/01/1945"
+                            Date="{Binding SelectedBirthdateDateTime, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <input:AdvancedEntry Title="Alamat"                                 
+                            TitleColor="Black"
+                                 Placeholder="Masukkan alamat karyawan"
+                                 PlaceholderColor="FloralWhite"
+                            MaxLength="255"
+                            Text="{Binding NewEmployee.address}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MaxLengthValidation MaxLength="255"/>
+                    <validation:MinLengthValidation MinLength="10"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, *" ColumnSpacing="16" RowSpacing="4">
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Grid.Column="0" Text="Kota" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
+                            <Label Grid.Column="1" Text="{Binding CurrentCity,StringFormat='Current City : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Picker Grid.Column="0"
+                        BackgroundColor="Black"
+                        TextColor="White"
+                        ItemsSource="{Binding Cities}"
+                        ItemDisplayBinding="{Binding city_name}"
+                        SelectedItem="{Binding SelectedCity, Mode=TwoWay}" />
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <input:AdvancedEntry Title="Pilih data diatas atau masukkan data kota dan provinsi"
+                                     TitleColor="Black"
+                                     Grid.Column="0"
+                                     Grid.Row="1"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan nama Kota"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="30"
+                              Text="{Binding NewCityName}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="30"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                    <Label Grid.Column="0" Text="Provinsi" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0" HeightRequest="45">
+                        <Label Text="{Binding SelectedProvince.province_name}" TextColor="White" VerticalOptions="Center"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <input:AdvancedEntry Title="*"
+                                     TitleColor="Transparent"
+                                     Grid.Column="1"
+                                     Grid.Row="1"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan nama provinsi"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="30"
+                              Text="{Binding NewCityName}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="30"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+            </Grid>
+
+            <input:AdvancedEntry Title="Status Kawin"
+                                 Placeholder="Masukkan status pernikahan karyawan"
+                                 PlaceholderColor="FloralWhite"
+                          TitleColor="Black"
+                          MaxLength="20"
+                          Text="{Binding NewEmployee.marital_status}">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MaxLengthValidation MaxLength="20"/>
+                    <validation:MinLengthValidation MinLength="2"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <VerticalStackLayout>
+                <Label Text="Status Karyawan" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0">
+                    <Picker
+                    BackgroundColor="Black"
+                    ItemsSource="{Binding NewEmployeeStatus}"
+                    SelectedItem="{Binding SelectedNewEmployeeStatus}"/>
+                </Frame>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout>
+                <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0" Margin="0,0,0,8">
+                    <Picker Grid.Column="0"
+                            BackgroundColor="Black"
+                            ItemsSource="{Binding Factories}"
+                            ItemDisplayBinding="{Binding name}"
+                            SelectedItem="{Binding SelectedFactory}"/>
+                </Frame>
+                
+                <Grid RowDefinitions="*" ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <input:AdvancedEntry Title="Pilih data di atas atau tambahkan data pabrik baru" 
+                                     TitleColor="DimGray"
+                                     Grid.Column="0"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan nama pabrik"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="30"
+                              Text="{Binding NewFactoryName}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="30"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <input:AdvancedEntry Title="*"
+                                     TitleColor="Transparent"
+                                     Grid.Column="1"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan alamat pabrik"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="255"
+                              Text="{Binding NewFactoryAddress}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="255"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <input:AdvancedEntry Title="*"
+                                     TitleColor="Transparent"
+                                     Grid.Column="2"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan kapasitas pekerja pabrik"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="255"
+                              Text="{Binding NewFactoryCapacity}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:NumericValidation/>
+                        <validation:MaxLengthValidation MaxLength="255"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+            </Grid>
+            </VerticalStackLayout>
+            
+
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*,auto" ColumnSpacing="16" RowSpacing="8">
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                    <Label Text="Edukasi Terakhir" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Picker Grid.Column="0"
+                            BackgroundColor="Black"
+                            ItemsSource="{Binding Educations}"
+                            ItemDisplayBinding="{Binding DisplayName}"
+                            SelectedItem="{Binding SelectedEducation}"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <Grid RowDefinitions="*" ColumnDefinitions="*,*" ColumnSpacing="8"
+                      Grid.Row="1" Grid.Column="0">
+                    <input:AdvancedEntry Title="Pilih data di atas atau tambahkan data baru" 
+                                     TitleColor="DimGray"
+                                     Grid.Column="0"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan tingkat edukasi"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="10"
+                              Text="{Binding NewEducationType}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:MaxLengthValidation MaxLength="10"/>
+                    </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+
+                    <input:AdvancedEntry Title="*"
+                                     TitleColor="Transparent"
+                                     Grid.Column="1"
+                                     BackgroundColor="Transparent"
+                                     Placeholder="Masukkan jurusan"
+                                     PlaceholderColor="DimGray"
+                                     BorderColor="Black"
+                              MaxLength="30"
+                              Text="{Binding NewEducationMajor}">
+                        <input:AdvancedEntry.Validations>
+                            <validation:MaxLengthValidation MaxLength="30"/>
+                        </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+                </Grid>
+               
+
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Lulus" TextColor="White"/>
+                        <DatePicker VerticalOptions="Center"
+                            MinimumDate="01/01/1970"
+                            Date="{Binding SelectedGraduationDateTime, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <input:AdvancedEntry Title="Skill"                                 
+                              TitleColor="Black"
+                                 Placeholder="Masukkan skill karyawan"
+                                 PlaceholderColor="FloralWhite"
+                              MaxLength="20"
+                              Text="{Binding NewEmployee.skill}">
+                <input:AdvancedEntry.Validations>
+                    <validation:MaxLengthValidation MaxLength="255"/>
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+
+            <Grid RowDefinitions="auto" ColumnDefinitions="*, *, *" ColumnSpacing="8">
+                <Button Grid.Row="0"
+                Grid.Column="2"
+                Text="Save"
+                BackgroundColor="ForestGreen"
+                TextColor="White"
+                HorizontalOptions="FillAndExpand"
+                input:FormView.IsSubmitButton="True" />
+
+                <Button Text="Reset"
+                Grid.Row="0"
+                BackgroundColor="DarkOrange"
+                Grid.Column="1"
+                HorizontalOptions="FillAndExpand"
+                input:FormView.IsResetButton="True"/>
+
+                <Button Text="Cancel"
+                Grid.Row="0"
+                Grid.Column="0"
+                HorizontalOptions="FillAndExpand"
+                Command="{Binding BackCommand}"
+                BackgroundColor="Red" />
+            </Grid>
+
+        </input:FormView>
+    </ScrollView>
+</ContentPage>
