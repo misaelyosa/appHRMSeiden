@@ -39,6 +39,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 .FirstOrDefaultAsync(e => e.employee_id == id);
         }
 
+        public async Task CreateEmployeeAsync(Employee employee)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            context.Employees.Add(employee);
+            await context.SaveChangesAsync();
+        }
+
         public async Task UpdateEmployeeAsync(Employee employee)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
