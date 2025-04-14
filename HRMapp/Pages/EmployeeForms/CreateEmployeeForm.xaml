@@ -11,7 +11,7 @@
         <input:FormView Padding="20" Spacing="20"
                 SubmitCommand="{Binding SubmitCommand}">
 
-            <input:AdvancedEntry Title="Full Name"
+            <input:AdvancedEntry TextColor="Black" Title="Full Name"
                             Placeholder="Masukkan nama lengkap"
                             BackgroundColor="White"
                             BorderColor="Black"
@@ -25,7 +25,7 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <input:AdvancedEntry Title="NIP"                                 
+            <input:AdvancedEntry TextColor="Black" Title="NIP"                                 
                             TitleColor="Black"
                             Placeholder="Masukkan NIP"
                             BackgroundColor="White"
@@ -65,7 +65,7 @@
                 </Frame>
             </VerticalStackLayout>
 
-            <input:AdvancedEntry Title="Nomor Induk Kependudukan (NIK)"                                 
+            <input:AdvancedEntry TextColor="Black" Title="Nomor Induk Kependudukan (NIK)"                                 
                             TitleColor="Black"
                             MaxLength="16"
                             Placeholder="Masukkan NIK Karyawan"
@@ -81,7 +81,7 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <input:AdvancedEntry Title="Nomor Telepon"
+            <input:AdvancedEntry TextColor="Black" Title="Nomor Telepon"
                                  Placeholder="Masukkan Nomor Telepon"
                                                              BackgroundColor="White"
                             BorderColor="Black"
@@ -97,7 +97,7 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <input:AdvancedEntry Title="Email"                                 
+            <input:AdvancedEntry TextColor="Black" Title="Email"                                 
                             TitleColor="Black"
                                  Placeholder="Masukkan Email "
                                                              BackgroundColor="White"
@@ -136,7 +136,7 @@
 
             <Grid RowDefinitions="auto" ColumnDefinitions="*,auto" ColumnSpacing="16">
                 <VerticalStackLayout Grid.Column="0" Grid.Row="0">
-                    <input:AdvancedEntry Title="Tempat Lahir"
+                    <input:AdvancedEntry TextColor="Black" Title="Tempat Lahir"
                                          Placeholder="Masukkan tempat asal kelahiran"
                                                                      BackgroundColor="White"
                             BorderColor="Black"
@@ -161,7 +161,7 @@
                 </Frame>
             </Grid>
 
-            <input:AdvancedEntry Title="Alamat"                                 
+            <input:AdvancedEntry TextColor="Black" Title="Alamat"                                 
                             TitleColor="Black"
                                  Placeholder="Masukkan alamat karyawan"
                                                              BackgroundColor="White"
@@ -189,8 +189,8 @@
                     </Frame>
                 </VerticalStackLayout>
 
-                <input:AdvancedEntry Title="Pilih data diatas atau masukkan data kota dan provinsi"
-                                     TitleColor="Red"
+                <input:AdvancedEntry TextColor="Black" Title="Pilih data diatas atau masukkan data kota dan provinsi"
+                                     TitleColor="DarkOrange" 
                                      Grid.Column="0"
                                      Grid.Row="1"
                                      BackgroundColor="Transparent"
@@ -211,7 +211,7 @@
                     </Frame>
                 </VerticalStackLayout>
 
-                <input:AdvancedEntry Title="*"
+                <input:AdvancedEntry TextColor="Black" Title="*"
                                      TitleColor="Transparent"
                                      Grid.Column="1"
                                      Grid.Row="1"
@@ -227,7 +227,7 @@
                 </input:AdvancedEntry>
             </Grid>
 
-            <input:AdvancedEntry Title="Status Kawin"
+            <input:AdvancedEntry TextColor="Black" Title="Status Kawin"
                                  Placeholder="Masukkan status pernikahan karyawan"
                                                              BackgroundColor="White"
                             BorderColor="Black"
@@ -281,7 +281,7 @@
                 
                     <Grid RowDefinitions="*" ColumnDefinitions="*,*" ColumnSpacing="8"
                       Grid.Row="1" Grid.Column="0">
-                        <input:AdvancedEntry Title="Pilih data di atas atau tambahkan data baru" 
+                        <input:AdvancedEntry TextColor="Black" Title="Pilih data di atas atau tambahkan data baru" 
                                      TitleColor="Red"
                                      Grid.Column="0"
                                      BackgroundColor="Transparent"
@@ -295,7 +295,7 @@
                             </input:AdvancedEntry.Validations>
                         </input:AdvancedEntry>
 
-                        <input:AdvancedEntry Title="*"
+                        <input:AdvancedEntry TextColor="Black" Title="*"
                                      TitleColor="Transparent"
                                      Grid.Column="1"
                                      BackgroundColor="Transparent"
@@ -322,7 +322,7 @@
 
 
 
-            <input:AdvancedEntry Title="Skill"                                 
+            <input:AdvancedEntry TextColor="Black" Title="Skill"                                 
                               TitleColor="Black"
                                  Placeholder="Masukkan skill karyawan"
                                                              BackgroundColor="White"
