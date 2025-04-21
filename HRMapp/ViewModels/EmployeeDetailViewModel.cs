@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
+using HRMapp.ViewModels;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -31,6 +32,9 @@ public partial class EmployeeDetailViewModel : ObservableObject
 
     [ObservableProperty]
     private int contractCount;
+
+    [ObservableProperty]
+    private int contractId;
 
     [ObservableProperty]
     private ObservableCollection<LogEmployee> logEntries = new();
@@ -76,6 +80,14 @@ public partial class EmployeeDetailViewModel : ObservableObject
             Tunjangan = await dbContext.Tunjangan
                 .FirstOrDefaultAsync(t => t.contract_id == firstContract.contract_id);
         }
+    }
+
+    [RelayCommand]
+    private async Task NavigateToGeneratePKWT(Contract contract)
+    {
+        if (contract == null) return;
+
+        await Shell.Current.GoToAsync($"GeneratePKWTPage?employeeId={EmployeeId}&contractId={contract.contract_id}");
     }
 
     public async Task LoadLogsAsync()

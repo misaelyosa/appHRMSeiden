@@ -66,6 +66,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task<Contract>? GetContractDetail(int contractId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Contracts.FindAsync(contractId);
+        }
     }
 
 }

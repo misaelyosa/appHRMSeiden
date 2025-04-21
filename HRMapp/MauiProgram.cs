@@ -8,6 +8,7 @@ using InputKit.Handlers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
+using QuestPDF.Infrastructure;
 
 namespace HRMapp;
 
@@ -15,6 +16,8 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
+		QuestPDF.Settings.License = LicenseType.Community;
+
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
@@ -43,6 +46,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MainPageViewModel>();
 		builder.Services.AddTransient<EditEmployeeViewModel>();
 		builder.Services.AddTransient<CreateEmployeeViewModel>();
+		builder.Services.AddTransient<GeneratePKWTPageViewModel>();
 
         // Register Pages
         builder.Services.AddTransient<ManageEmployee>();
@@ -50,6 +54,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MainPage>();
 		builder.Services.AddTransient<EditEmployeeForm>();
 		builder.Services.AddTransient<CreateEmployeeForm>();
+		builder.Services.AddTransient<GeneratePKWTPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

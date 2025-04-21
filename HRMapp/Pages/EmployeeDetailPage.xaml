@@ -4,7 +4,9 @@
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
              xmlns:akgul="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
              xmlns:viewModels="clr-namespace:HRMapp.ViewModels"
+             xmlns:formVM="clr-namespace:HRMapp.ViewModels.EmployeeFormViewModel"
              x:Class="HRMapp.Pages.EmployeeDetailPage"
+             x:Name="PageRoot"
              BackgroundColor="Beige"
              Title="EmployeeDetailPage">
 
@@ -343,6 +345,11 @@
                                         <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="3" Grid.ColumnSpan="3"/>
                                         <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="14" Grid.Row="4" Grid.ColumnSpan="3"/>
                                         <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="14" Grid.Row="5" Grid.ColumnSpan="3"/>
+
+                                        <Button Text="Generate PKWT" Grid.Row="4" Grid.Column="2"
+                                                BackgroundColor="LightBlue" TextColor="Black"
+                                                Command="{Binding BindingContext.NavigateToGeneratePKWTCommand, Source={x:Reference Name=PageRoot}}"
+                                                CommandParameter="{Binding}"/>
                                     </Grid>
                                 </Frame>
                             </DataTemplate>
