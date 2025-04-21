@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             x:Class="HRMapp.Pages.ManageEmployee"
+             Title="ManageEmployee">
+
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, Auto, Auto, *">
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0" BackgroundColor="White">
+                    <SearchBar Grid.Row="0"
+                               Placeholder="Search data karyawan...(Nama/NIP/NIK/Dept./Jabatan)"
+                               Margin="20,10,20,10"
+                               BackgroundColor="LightGray"
+                               TextColor="Black"
+                               Text="{Binding SearchText, Mode=TwoWay}"
+                               SearchCommand="{Binding SearchFilterCommand}"
+                               />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" BackgroundColor="White" Padding="0,10,20,10">
+                    <Button Text="Tambah Karyawan"
+                            BackgroundColor="DodgerBlue"
+                            TextColor="White"
+                            Command="{Binding NavigateToCreateFormCommand}"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid ColumnDefinitions="Auto, *" BackgroundColor="White" Grid.Row="1" Padding="20, 5, 20, 10">
+                <Label Text="Filter Data :"
+                       Grid.Column="0"
+                       Padding="0,10,0,5" 
+                       FontSize="Subtitle" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Start"
+                       VerticalOptions="Center"
+                       TextColor="Black"/>
+                <Border BackgroundColor="Transparent"
+                       Padding="5"
+                       Margin="10,0,0,0"
+                       HorizontalOptions="Fill"
+                       VerticalOptions="Center"
+                       Grid.Column="1">
+                        <Label Text="{Binding FilterToggleText}" 
+                            FontSize="Body"
+                            TextColor="Black"
+                            HorizontalTextAlignment="End"
+                            VerticalTextAlignment="Center"/>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleFilterCommand}"/>
+                    </Border.GestureRecognizers>
+                </Border>
+            </Grid>
+            
+            <VerticalStackLayout BackgroundColor="White"  Grid.Row="2" Padding="20, 5, 20, 10" 
+                                 IsVisible="{Binding IsFilterVisible}">
+                
+                <Picker Title="Select Department"
+                        TextColor="Black"
+                        TitleColor="Black"                     
+                        ItemsSource="{Binding DepartmentsName}"
+                        BackgroundColor="LightGray"
+                        SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"
+                        />
+                <Picker Title="Select Jabatan" 
+                        TextColor="Black"
+                        TitleColor="Black"
+                        Margin="0,5,0,0"
+                        ItemsSource="{Binding JobsName}"
+                        BackgroundColor="LightGray"
+                        SelectedItem="{Binding SelectedJob, Mode=TwoWay}"
+                        />
+                <Button Text="Apply Filter" FontAttributes="Bold" TextColor="WhiteSmoke" Margin="0,15,0,10" BackgroundColor="DodgerBlue" 
+                        Command="{Binding ApplyFilterCommand}"/>
+            </VerticalStackLayout>
+
+            <dg:DataGrid x:Name="employeeListDg"
+                            Grid.Row="3"
+                            ItemsSource="{Binding Employees}"
+                            HeaderBackground="LightGray"
+                            BorderColor="Black"
+                            BorderThickness="1"
+                            RowHeight="40"
+                            SelectionEnabled="True"
+                            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single"
+                            PullToRefreshCommand="{Binding RefreshDataCommand}"
+                            IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+
+                <dg:DataGrid.Columns>
+                    <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
+                    <dg:DataGridColumn Title="Nama" PropertyName="name"/>
+                    <dg:DataGridColumn Title="NIK" PropertyName="nik"/>
+                    <dg:DataGridColumn Title="Department" PropertyName="Department.name"/>
+                    <dg:DataGridColumn Title="Job Title" PropertyName="Job.job_name"/>
+                    <dg:DataGridColumn Title="Factory" PropertyName="Factory.name"/>
+                    <dg:DataGridColumn Title="Status" PropertyName="employee_status"/>
+                </dg:DataGrid.Columns>
+            </dg:DataGrid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

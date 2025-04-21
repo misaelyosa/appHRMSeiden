@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             xmlns:akgul="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             xmlns:viewModels="clr-namespace:HRMapp.ViewModels"
+             xmlns:formVM="clr-namespace:HRMapp.ViewModels.EmployeeFormViewModel"
+             x:Class="HRMapp.Pages.EmployeeDetailPage"
+             x:Name="PageRoot"
+             BackgroundColor="Beige"
+             Title="EmployeeDetailPage">
+
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid Padding="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Sidebar Stack -->
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                 BackgroundColor="Transparent"
+                                 Padding="16,16,0,0">
+                    <Border BackgroundColor="LightGrey">
+                        <Image Source="profile_pic_dummy.png"/>
+                    </Border>
+                    <Button BackgroundColor="DarkOrange"
+                        Text="Edit Data Karyawan"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Start"
+                        Margin="0,25,0,0"
+                        Command="{Binding EditEmployeeCommand}"/>
+                    <Button BackgroundColor="Red"  
+                        Text="Hapus Data Karyawan"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Start"
+                        Margin="0,8,0,0"
+                        Command="{Binding DeleteEmployeeCommand}"/>
+                </VerticalStackLayout>
+
+                <!-- Employee Info Grid -->
+                <Grid Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="4" Grid.RowSpan="3"
+                  Padding="25,12,0,0"
+                  BackgroundColor="Transparent"
+                  RowDefinitions="Auto, *">
+
+                    <Grid Grid.Row="0"
+                    ColumnDefinitions="Auto, *"
+                    RowDefinitions="Auto, Auto, Auto">
+                        <Label Text="{Binding Employee.name}"
+                            Grid.ColumnSpan="3"
+                            Grid.Row="0"
+                            FontSize="Large"
+                            FontAttributes="Bold"
+                            TextColor="Black"/>
+
+                        <HorizontalStackLayout Grid.Row="1"
+                                    Margin="0,0,0,5">
+                            <Label Text="{Binding Employee.Department.name}"
+                            FontSize="Medium" 
+                            TextColor="Black"
+                            FontAttributes="Bold"/>
+                            <Label Text=","
+                            FontSize="Medium"
+                            TextColor="Black"
+                            Margin="3,0,3,0"/>
+                            <Label Text="{Binding Employee.Job.job_name}"
+                            FontSize="Medium"
+                            TextColor="Black"
+                            FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout Grid.Row="2"
+                                    Margin="0,0,0,3">
+                            <Label Text="{Binding Employee.nip}"
+                        FontSize="Micro"
+                        FontAttributes="Bold"
+                        TextColor="Black"/>
+                            <Label Text="-"
+                        Margin="5,0,0,0"
+                        FontAttributes="Bold"
+                        FontSize="Micro"
+                        TextColor="Black"/>
+                            <Label 
+                    Text="{Binding Employee.Factory.name}" 
+                    Margin="5, 0, 0, 0"  
+                    FontSize="Micro"
+                    FontAttributes="Bold"
+                    TextColor="Black"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Grid Grid.Row="1"
+                     ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto,
+                      Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                      RowSpacing="3">
+                        <Label Text="NIK : "                       
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        FontSize="Micro"
+                        TextColor="Black"/>
+                        <Label Text="{Binding Employee.nik}"   
+                        Margin="8,0 ,0, 0"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        FontSize="Micro"
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="No HP : " 
+                        Grid.Row="1" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="{Binding Employee.phone_number}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="1" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Email : " 
+                        Grid.Row="11" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.email}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="11" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Gender : " 
+                        Grid.Row="3" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.gender}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="3" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Tempat, Tanggal Lahir : " 
+                        Grid.Row="4" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <HorizontalStackLayout Grid.Row="4"
+                        Grid.Column="1">
+                            <Label 
+                            Text="{Binding Employee.birthdate, Converter={StaticResource DateToStringConverter}}" 
+                            Margin="8, 0, 0, 0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                            <Label Text="," 
+                            Margin="3,0,0,0"
+                            FontSize="Micro"
+                            TextColor="Black"/>
+                            <Label Text="{Binding Employee.birthplace}" 
+                            Margin="5, 0, 0, 0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                        </HorizontalStackLayout>
+
+                        <Label 
+                        Text="Alamat : " 
+                        Grid.Row="5" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.address}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="5" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Kota, Provinsi : " 
+                        Grid.Row="6" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <HorizontalStackLayout Grid.Row="6" 
+                            Grid.Column="1">
+                            <Label 
+                            Text="{Binding Employee.City.city_name}" 
+                            Margin="8, 0, 0, 0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                            <Label Text="," 
+                            Margin="3,0,0,0"
+                            FontSize="Micro"
+                            TextColor="Black"/>
+                            <Label Text="{Binding Employee.City.Provinces.province_name}"
+                            TextColor="Black"
+                            FontSize="Micro"
+                            Margin="5,0,0,0"/>
+                        </HorizontalStackLayout>
+
+                        <Label 
+                        Text="Status Kawin : " 
+                        Grid.Row="7" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.marital_status}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="7" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Edukasi Terakhir: " 
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <HorizontalStackLayout Grid.Row="8"
+                    Grid.Column="1">
+                            <Label 
+                            Text="{Binding Employee.Education.education_type}" 
+                            Margin="8, 0, 0, 0" 
+                            FontSize="Micro" 
+                            TextColor="Black"/>
+                            <Label Text="{Binding Employee.Education.major}"
+                            Margin="4,0,0,0"
+                            FontSize="Micro"
+                            TextColor="Black"/>
+                        </HorizontalStackLayout>
+
+                        <Label 
+                        Text="Tahun Lulus : " 
+                        Grid.Row="9" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.graduation_date, Converter={StaticResource DateToStringConverter}}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="9" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Skill : " 
+                        Grid.Row="10" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.skill}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="10" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label 
+                        Text="Status Karyawan : " 
+                        Grid.Row="12" 
+                        Grid.Column="0" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+                        <Label 
+                        Text="{Binding Employee.employee_status}" 
+                        Margin="8, 0, 0, 0" 
+                        Grid.Row="12" 
+                        Grid.Column="1" 
+                        FontSize="Micro" 
+                        TextColor="Black"/>
+
+                        <Label Text="Agama : "
+                           Grid.Row="2"
+                           Grid.Column="0"
+                           FontSize="Micro"
+                           TextColor="Black"/>
+                        <Label Text="{Binding Employee.Religion.religion_name}"
+                           Margin="8,0,0,0"
+                           Grid.Row="2"
+                           Grid.Column="1"
+                           FontSize="Micro"
+                           TextColor="Black"/>
+                    </Grid>
+                </Grid>
+
+                <!-- Contracts -->
+                <VerticalStackLayout Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="5" Margin="16,0,16,0">
+                    <Label Text="Contracts" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,5,0,0"/>
+                    <CollectionView ItemsSource="{Binding Contractz}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="8"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="Gray" BackgroundColor="GhostWhite" Padding="10" Margin="10">
+                                    <Grid RowSpacing="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label TextColor="Black" Text="{Binding contract_nip, StringFormat='NIP Kontrak : {0}'}" FontSize="14" Grid.Row="0" Grid.ColumnSpan="2"/>
+                                        <Label TextColor="Black" Text="{Binding author, StringFormat='Created by : {0}'}" FontSize="14" Grid.Row="0" Grid.Column="2"/>
+                                        <Label TextColor="Black" Text="{Binding contract_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak : {0}'}" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2"/>
+                                        <Label TextColor="Black" Text="{Binding author, StringFormat='Created at : {0}'}" FontSize="14" Grid.Row="1" Grid.Column="2"/>
+                                        <Label TextColor="Black" Text="{Binding hire_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Bergabung : {0}'}" FontSize="14" Grid.Row="2" Grid.ColumnSpan="2"/>
+                                        <Label TextColor="Black" Text="{Binding author, StringFormat='Updated at : {0}'}" FontSize="14" Grid.Row="2" Grid.Column="2"/>
+                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="3" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="14" Grid.Row="4" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="14" Grid.Row="5" Grid.ColumnSpan="3"/>
+
+                                        <Button Text="Generate PKWT" Grid.Row="4" Grid.Column="2"
+                                                BackgroundColor="LightBlue" TextColor="Black"
+                                                Command="{Binding BindingContext.NavigateToGeneratePKWTCommand, Source={x:Reference Name=PageRoot}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!-- Logs Section -->
+                <VerticalStackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="16,8,16,0">
+                    <Label Text="Log Data Karyawan" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,0,0,16"/>
+                    <Label Text="{Binding LogEntries.Count, StringFormat='Logs Found: {0}'}" TextColor="Red" />
+                    <akgul:DataGrid ItemsSource="{Binding LogEntries}" HeightRequest="300" BorderColor="Gray">
+                        <akgul:DataGrid.Columns>
+                            <akgul:DataGridColumn Title="Field" PropertyName="field_name" />
+                            <akgul:DataGridColumn Title="Old Value" PropertyName="old_value" />
+                            <akgul:DataGridColumn Title="New Value" PropertyName="new_value" />
+                            <akgul:DataGridColumn Title="Changed By" PropertyName="updated_by" />
+                            <akgul:DataGridColumn Title="Changed At" PropertyName="updated_at"/>
+                        </akgul:DataGrid.Columns>
+                    </akgul:DataGrid>
+                </VerticalStackLayout>
+
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
