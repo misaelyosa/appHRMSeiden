@@ -57,6 +57,9 @@ namespace HRMapp.Data.Model
 
         public DateOnly? graduation_date { get; set; }
 
+        [Required]
+        public DateOnly hire_date { get; set; }
+
         [MaxLength(255)]
         public string? skill { get; set; }
 

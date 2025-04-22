@@ -310,7 +310,7 @@
                            TextColor="Black"/>
 
                         <Label Text="Tanggal Bergabung : " FontSize="Micro" Grid.Column="0" Grid.Row="12" TextColor="Black"/>
-                        <Label TextColor="Black" FontSize="Micro" Text="{Binding HireDate, Converter={StaticResource DateToStringConverter}}" Grid.Row="12" Grid.Column="1"/>
+                        <Label TextColor="Black" FontSize="Micro" Text="{Binding Employee.hire_date, Converter={StaticResource DateToStringConverter}}" Grid.Row="12" Grid.Column="1"/>
                     </Grid>
                 </Grid>
 

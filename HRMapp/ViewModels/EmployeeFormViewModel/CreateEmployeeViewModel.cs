@@ -52,6 +52,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [ObservableProperty]
         private DateOnly selectedGraduationDate;
         [ObservableProperty]
+        private DateOnly selectedHireDate;
+        [ObservableProperty]
         private string selectedEmployeeStatus;
 
 
@@ -65,9 +67,15 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [ObservableProperty]
         private string newEducationMajor;
 
+        public DateTime SelectedHireDateTime
+        {
+            get => SelectedHireDate.ToDateTime(TimeOnly.MinValue);
+            set => SelectedHireDate = DateOnly.FromDateTime(value);
+        }
+
         public DateTime SelectedBirthdateDateTime
         {
-            get => selectedBirthdate.ToDateTime(TimeOnly.MinValue);
+            get => SelectedBirthdate.ToDateTime(TimeOnly.MinValue);
             set => SelectedBirthdate = DateOnly.FromDateTime(value);
         }
 
@@ -125,6 +133,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 address = NewEmployee.address,
                 marital_status = NewEmployee.marital_status,
                 graduation_date = SelectedGraduationDate,
+                hire_date = SelectedHireDate,
                 gender = SelectedGender,
 
                 department_id = SelectedDepartment.department_id,

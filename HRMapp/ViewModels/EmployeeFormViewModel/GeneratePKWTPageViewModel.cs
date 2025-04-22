@@ -127,8 +127,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         }
 
         [ObservableProperty]
-        private DateOnly selectedHireDate;
-        [ObservableProperty]
         private DateOnly selectedContractDate;
         [ObservableProperty]
         private DateOnly selectedEndDate;
@@ -146,16 +144,11 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             var updateContract = new Contract
             {
-                hire_date = selectedHireDate
+                 
             };
         }
 
         //proxy buat convert datetime (compatible with datepicker)
-        public DateTime HireDateTime
-        {
-            get => SelectedContract.hire_date.ToDateTime(TimeOnly.MinValue);
-            set => SelectedContract.hire_date = DateOnly.FromDateTime(value);
-        }
 
         public DateTime ContractDateTime
         {

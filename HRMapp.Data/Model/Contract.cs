@@ -21,9 +21,6 @@ namespace HRMapp.Data.Model
         public DateOnly contract_date { get; set; }
 
         [Required]
-        public DateOnly hire_date { get; set; }
-
-        [Required]
         public DateOnly end_date { get; set; }
 
         [Required]
