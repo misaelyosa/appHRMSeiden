@@ -4,21 +4,19 @@
              x:Class="HRMapp.Pages.EmployeeForms.GeneratePKWTPage"
              Title="GeneratePKWTPage"
              BackgroundColor="White">
-    <VerticalStackLayout>
-        <Label 
-            Text="{Binding ContractId}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            FontSize="Large"
-            TextColor="Black"/>        
-        <Label 
-            Text="{Binding EmployeeId}"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            FontSize="Large"
-            TextColor="Black"/>
+    <ScrollView>
+        <Grid RowDefinitions="*, auto" ColumnDefinitions="*,*,*" RowSpacing="16">
+            <VerticalStackLayout Grid.Row="0" Grid.ColumnSpan="3">
 
-        <Button Text="Create PDF"
-                Command="{Binding CreatePdfCommand}"/>
-    </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1">
+                    <Button Text="Create PDF"
+                        Command="{Binding CreatePdfCommand}"/>
+                    <Button Text="Open Generated PDF"
+                        Command="{Binding OpenPdfExternalCommand}"
+                            BackgroundColor="Orange"/>
+                </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>

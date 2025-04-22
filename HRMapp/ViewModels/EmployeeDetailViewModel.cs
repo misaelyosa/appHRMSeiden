@@ -37,6 +37,9 @@ public partial class EmployeeDetailViewModel : ObservableObject
     private int contractId;
 
     [ObservableProperty]
+    private DateOnly hireDate;
+
+    [ObservableProperty]
     private ObservableCollection<LogEmployee> logEntries = new();
 
     public EmployeeDetailViewModel(IDbContextFactory<AppDbContext> dbContextFactory, IEmployeeService employeeService)
@@ -79,6 +82,8 @@ public partial class EmployeeDetailViewModel : ObservableObject
             var firstContract = Contractz.First();
             Tunjangan = await dbContext.Tunjangan
                 .FirstOrDefaultAsync(t => t.contract_id == firstContract.contract_id);
+
+            HireDate = firstContract.hire_date;
         }
     }
 

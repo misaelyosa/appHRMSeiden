@@ -105,7 +105,7 @@
 
                     <Grid Grid.Row="1"
                      ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto,
-                      Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
+                      Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto"
                       RowSpacing="3">
                         <Label Text="NIK : "                       
                         Grid.Row="0"
@@ -285,14 +285,14 @@
 
                         <Label 
                         Text="Status Karyawan : " 
-                        Grid.Row="12" 
+                        Grid.Row="13" 
                         Grid.Column="0" 
                         FontSize="Micro" 
                         TextColor="Black"/>
                         <Label 
                         Text="{Binding Employee.employee_status}" 
                         Margin="8, 0, 0, 0" 
-                        Grid.Row="12" 
+                        Grid.Row="13" 
                         Grid.Column="1" 
                         FontSize="Micro" 
                         TextColor="Black"/>
@@ -308,6 +308,9 @@
                            Grid.Column="1"
                            FontSize="Micro"
                            TextColor="Black"/>
+
+                        <Label Text="Tanggal Bergabung : " FontSize="Micro" Grid.Column="0" Grid.Row="12" TextColor="Black"/>
+                        <Label TextColor="Black" FontSize="Micro" Text="{Binding HireDate, Converter={StaticResource DateToStringConverter}}" Grid.Row="12" Grid.Column="1"/>
                     </Grid>
                 </Grid>
 
@@ -340,13 +343,13 @@
                                         <Label TextColor="Black" Text="{Binding author, StringFormat='Created by : {0}'}" FontSize="14" Grid.Row="0" Grid.Column="2"/>
                                         <Label TextColor="Black" Text="{Binding contract_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak : {0}'}" FontSize="14" Grid.Row="1" Grid.ColumnSpan="2"/>
                                         <Label TextColor="Black" Text="{Binding author, StringFormat='Created at : {0}'}" FontSize="14" Grid.Row="1" Grid.Column="2"/>
-                                        <Label TextColor="Black" Text="{Binding hire_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Bergabung : {0}'}" FontSize="14" Grid.Row="2" Grid.ColumnSpan="2"/>
+                                       
                                         <Label TextColor="Black" Text="{Binding author, StringFormat='Updated at : {0}'}" FontSize="14" Grid.Row="2" Grid.Column="2"/>
-                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="3" Grid.ColumnSpan="3"/>
-                                        <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="14" Grid.Row="4" Grid.ColumnSpan="3"/>
-                                        <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="14" Grid.Row="5" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="2" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="14" Grid.Row="3" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="Micro" Grid.Row="5" Grid.ColumnSpan="3" FontAttributes="Bold" />
 
-                                        <Button Text="Generate PKWT" Grid.Row="4" Grid.Column="2"
+                                        <Button Text="Detail PKWT" Grid.Row="5" Grid.Column="2"
                                                 BackgroundColor="LightBlue" TextColor="Black"
                                                 Command="{Binding BindingContext.NavigateToGeneratePKWTCommand, Source={x:Reference Name=PageRoot}}"
                                                 CommandParameter="{Binding}"/>

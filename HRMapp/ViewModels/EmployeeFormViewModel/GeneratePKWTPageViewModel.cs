@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using QuestPDF.Previewer;
 using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel
 {
@@ -29,6 +30,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [ObservableProperty]
         private Employee selectedEmployee;
 
+        private string fileName;
 
 
         public GeneratePKWTPageViewModel(IEmployeeService employeeService)
@@ -43,6 +45,42 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         }
 
         [RelayCommand]
+        private async Task OpenPdfExternal()
+        {
+            var folderPath = @"F:\Coolyeah\G_Smt 6\tesPdf";
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var trimEmp = SelectedEmployee.name.Replace(" ", "");
+
+            var contractDate = SelectedContract.contract_date.ToString("dd-MM-yyyy");
+            fileName = $"PKWT_{SelectedContract.contract_nip}_{trimEmp ?? "Unknown"}_{contractDate}.pdf";
+            var fullPath = Path.Combine(folderPath, fileName);
+
+
+            if (File.Exists(fullPath))
+            {
+                try
+                {
+                    await Launcher.OpenAsync(new Uri(fullPath));
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error opening PDF: {ex.Message}");
+
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to open the PDF file.", "OK");
+                }
+            }
+            else
+            {
+                Debug.WriteLine("PDF file does not exist at path: " + fullPath);
+
+                await Application.Current.MainPage.DisplayAlert("File Not Found", "The PDF file does not exist. Please generate it first.", "OK");
+            }
+        }
+
+        [RelayCommand]
         private void CreatePdf()
         {
             var folderPath = @"F:\Coolyeah\G_Smt 6\tesPdf";
@@ -53,11 +91,27 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             var trimEmp = SelectedEmployee.name.Replace(" ", "");
 
             var contractDate = SelectedContract.contract_date.ToString("dd-MM-yyyy");
-            var fileName = $"PKWT_{SelectedContract.contract_nip}_{trimEmp ?? "Unknown"}_{contractDate}.pdf";
+            fileName = $"PKWT_{SelectedContract.contract_nip}_{trimEmp ?? "Unknown"}_{contractDate}.pdf";
             var fullPath = Path.Combine(folderPath, fileName);
 
-            GeneratePdf(fullPath);
-            Debug.WriteLine("PDF created at: " + fullPath);
+            try
+            {
+                GeneratePdf(fullPath);
+                Debug.WriteLine("PDF created at: " + fullPath);
+                Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                {
+                    await Application.Current.MainPage.DisplayAlert("PDF Created", "The PDF file was successfully generated.", "OK");
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"PDF creation failed: {ex.Message}");
+                
+                Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to generate the PDF file.", "OK");
+                });
+            }
         }
 
         public async Task LoadContractDetailAsync(int contractId)
@@ -72,11 +126,41 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             } 
         }
 
+        [ObservableProperty]
+        private DateOnly selectedHireDate;
+        [ObservableProperty]
+        private DateOnly selectedContractDate;
+        [ObservableProperty]
+        private DateOnly selectedEndDate;
+        [ObservableProperty]
+        private int contractDuration;
+        [ObservableProperty]
+        private int contractNip;
+        [ObservableProperty]
+        private int gajiPokok;
+
+        [RelayCommand]
+        private async Task EditContractDetail()
+        {
+            
+
+            var updateContract = new Contract
+            {
+                hire_date = selectedHireDate
+            };
+        }
+
         //proxy buat convert datetime (compatible with datepicker)
-        public DateTime ContractStartDateTime
+        public DateTime HireDateTime
         {
             get => SelectedContract.hire_date.ToDateTime(TimeOnly.MinValue);
             set => SelectedContract.hire_date = DateOnly.FromDateTime(value);
+        }
+
+        public DateTime ContractDateTime
+        {
+            get => SelectedContract.contract_date.ToDateTime(TimeOnly.MinValue);
+            set => SelectedContract.contract_date = DateOnly.FromDateTime(value);
         }
 
         public DateTime ContractEndDateTime
@@ -106,7 +190,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             var printedToday = today.ToString("dd MMMM yyyy", indo);
             var formattedBirthdate = employee.birthdate.ToString("dd MMMM yyyy", indo);
             var dayToday = today.ToString("dddd", indo);
-            int countDuration = HitungDurasiBulan(ContractEndDateTime, ContractStartDateTime);
+            int countDuration = HitungDurasiBulan(ContractEndDateTime, ContractDateTime);
             string spellDuration = Terbilang(countDuration).Trim();
 
             long gaji = contract.gaji_pokok;
@@ -377,7 +461,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                         col.Item().AlignCenter().Text("Pasal 9\nPenutup");
                         col.Item().Row(row =>
                         {
-                            row.RelativeItem(1).Text("1.\n2.\n3.").AlignCenter();
+                            row.RelativeItem(1).Text("1.\n\n2.\n3.").AlignCenter();
                             row.RelativeItem(11).Text("Disamping ketentuan-ketentuan yang diatur dalam Perjanjian ini PARA PIHAK menyatakan tunduk dan patuh pada peraturan perundang-undangan yang berlaku di bidang ketenagakerjaan.\n" +
                                 "Perjanjian ini mulai berlaku dan mengikat PARA PIHAK sejak tanggal ditandatangani.\n" +
                                 "Apabila terjadi perselisihan antara kedua pihak maka akan diselesaikan secara musyawarah dan kekeluargaan.");
@@ -415,7 +499,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         string Terbilang(long number)
         {
-            string[] angka = { "nol", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas" };
+            string[] angka = { "", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas" };
 
             if (number < 12)
                 return angka[number];

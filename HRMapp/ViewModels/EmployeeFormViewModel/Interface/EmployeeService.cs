@@ -55,6 +55,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             await context.SaveChangesAsync();
         }
 
+
         public async Task DeleteEmployeeAsync(int id)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
@@ -71,6 +72,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         {
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Contracts.FindAsync(contractId);
+        }
+        public async Task UpdateContractAsync(Contract contract)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            context.Contracts.Update(contract);
+            await context.SaveChangesAsync();
         }
     }
 
