@@ -92,7 +92,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         //proxy buat convert datetime (compatible with datepicker)
         public DateTime SelectedBirthdateDateTime
         {
-            get => selectedBirthdate.ToDateTime(TimeOnly.MinValue);
+            get => SelectedBirthdate.ToDateTime(TimeOnly.MinValue);
             set => SelectedBirthdate = DateOnly.FromDateTime(value);
         }
 
@@ -317,6 +317,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     AddChange("Graduation Date", initialEmployee.graduation_date?.ToString(), SelectedGraduationDate.ToString());
 
                 if (initialEmployee.hire_date != SelectedHireDate)
+                    AddChange("Tanggal Bergabung", initialEmployee.hire_date.ToString(), SelectedHireDate.ToString());
                     AddChange("Tanggal Bergabung", initialEmployee.hire_date.ToString(), SelectedHireDate.ToString());
 
 

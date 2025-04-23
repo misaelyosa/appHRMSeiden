@@ -52,10 +52,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            var trimEmp = SelectedEmployee.name.Replace(" ", "");
+            var trimEmp = string.IsNullOrWhiteSpace(SelectedEmployee?.name)
+                    ? "Unknown"
+                    : SelectedEmployee.name.Replace(" ", "");
 
-            var contractDate = SelectedContract.contract_date.ToString("dd-MM-yyyy");
-            fileName = $"PKWT_{SelectedContract.contract_nip}_{trimEmp ?? "Unknown"}_{contractDate}.pdf";
+            var contractDate = SelectedContract?.contract_date.ToString("dd-MM-yyyy") ?? "UnknownDate";
+            var nip = SelectedContract?.contract_nip ?? "UnknownNIP";
+
+            fileName = $"PKWT_{nip}_{trimEmp}_{contractDate}.pdf";
             var fullPath = Path.Combine(folderPath, fileName);
 
 
@@ -88,10 +92,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            var trimEmp = SelectedEmployee.name.Replace(" ", "");
+            var trimEmp = string.IsNullOrWhiteSpace(SelectedEmployee?.name)
+                    ? "Unknown"
+                    : SelectedEmployee.name.Replace(" ", "");
 
-            var contractDate = SelectedContract.contract_date.ToString("dd-MM-yyyy");
-            fileName = $"PKWT_{SelectedContract.contract_nip}_{trimEmp ?? "Unknown"}_{contractDate}.pdf";
+            var contractDate = SelectedContract?.contract_date.ToString("dd-MM-yyyy") ?? "UnknownDate";
+            var nip = SelectedContract?.contract_nip ?? "UnknownNIP";
+
+            fileName = $"PKWT_{nip}_{trimEmp}_{contractDate}.pdf";
             var fullPath = Path.Combine(folderPath, fileName);
 
             try
@@ -126,40 +134,128 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             } 
         }
 
+        partial void OnSelectedContractChanged(Contract value)
+        {
+            ContractNip = value.contract_nip.ToString();
+            ContractDuration = value.contract_duration.ToString();
+            GajiPokok = value.gaji_pokok.ToString();
+
+            SelectedContractDate = value.contract_date;
+            SelectedEndDate = value.end_date;
+
+            OnPropertyChanged(nameof(ContractDateTime));
+            OnPropertyChanged(nameof(ContractEndDateTime));
+
+            UpdateContractEndDate();
+        }
+
+        partial void OnSelectedContractDateChanged(DateOnly value)
+        {
+            UpdateContractEndDate();
+        }
+        partial void OnContractDurationChanged(string value)
+        {
+            UpdateContractEndDate();
+        }
+        private void UpdateContractEndDate()
+        {
+            if (int.TryParse(ContractDuration, out var months))
+            {
+                SelectedEndDate = SelectedContractDate.AddMonths(months);
+                OnPropertyChanged(nameof(ContractEndDateTime));
+            }
+        }
+
         [ObservableProperty]
         private DateOnly selectedContractDate;
         [ObservableProperty]
         private DateOnly selectedEndDate;
         [ObservableProperty]
-        private int contractDuration;
+        private string contractDuration;
         [ObservableProperty]
-        private int contractNip;
+        private string contractNip;
         [ObservableProperty]
-        private int gajiPokok;
+        private string gajiPokok;
 
         [RelayCommand]
         private async Task EditContractDetail()
         {
-            
+            var formattedMessage = $"Data to be updated:\n\n" +
+                           $"NIP             : {ContractNip}\n" +
+                           $"Contract Date   : {SelectedContractDate:dd/MM/yyyy}\n" +
+                           $"End Date        : {SelectedEndDate:dd/MM/yyyy}\n" +
+                           $"Duration        : {ContractDuration} bulan\n" +
+                           $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}";
 
-            var updateContract = new Contract
+            var confirm = await Application.Current.MainPage.DisplayAlert(
+                "Confirm Changes",
+                formattedMessage,
+                "Confirm",
+                "Cancel"
+            );
+
+            if (!confirm)
+                return;
+            
+            var updatedContract = new Contract
             {
-                 
+                contract_id = SelectedContract.contract_id,
+                employee_id = SelectedContract.employee_id,
+
+                contract_date = SelectedContractDate,
+                end_date = SelectedEndDate,
+                contract_nip = ContractNip,
+                gaji_pokok = int.TryParse(GajiPokok, out var gaji) ? gaji : 0,
+                contract_duration = int.TryParse(ContractDuration, out var durasi) ? durasi : 0,
+
+                updated_at = DateTime.Now,
+                author = "admin" //todo --> kalo uda ada session ganti 
             };
+
+            try
+            {
+                await _employeeService.UpdateContractAsync(updatedContract);
+
+                await LoadContractDetailAsync(updatedContract.contract_id);
+                Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Kontrak berhasil diupdate.", "OK");
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Update Contract failed: {ex.Message}");
+
+                Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Gagal mengupdate data kontrak.", "OK");
+                });
+            }
+            
         }
 
         //proxy buat convert datetime (compatible with datepicker)
 
         public DateTime ContractDateTime
         {
-            get => SelectedContract.contract_date.ToDateTime(TimeOnly.MinValue);
-            set => SelectedContract.contract_date = DateOnly.FromDateTime(value);
+            get => SelectedContractDate.ToDateTime(TimeOnly.MinValue);
+            set
+            {
+                SelectedContractDate = DateOnly.FromDateTime(value);
+                OnPropertyChanged(nameof(ContractDateTime));
+            }
         }
 
         public DateTime ContractEndDateTime
         {
-            get => SelectedContract.end_date.ToDateTime(TimeOnly.MinValue);
-            set => SelectedContract.end_date = DateOnly.FromDateTime(value);
+            get =>     SelectedEndDate.ToDateTime(TimeOnly.MinValue);
+
+
+            set
+            {
+                if (SelectedContract != null)
+                    SelectedContract.end_date = DateOnly.FromDateTime(value);
+            }
         }
 
         public void GeneratePdf(string outputPath)
@@ -183,8 +279,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             var printedToday = today.ToString("dd MMMM yyyy", indo);
             var formattedBirthdate = employee.birthdate.ToString("dd MMMM yyyy", indo);
             var dayToday = today.ToString("dddd", indo);
-            int countDuration = HitungDurasiBulan(ContractEndDateTime, ContractDateTime);
-            string spellDuration = Terbilang(countDuration).Trim();
+            var Duration = contract?.contract_duration ?? 0;
+            string spellDuration = Terbilang(Duration).Trim();
 
             long gaji = contract.gaji_pokok;
             string currencyFormat(int amount) => $"Rp. {amount:N0}";
@@ -341,7 +437,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                             row.RelativeItem(11).Text(text =>
                             {
                                 text.Span("Perjanjian ini berlaku untuk jangka waktu ");
-                                text.Span($"{countDuration} ({spellDuration}) ").Bold();
+                                text.Span($"{Duration} ({spellDuration}) ").Bold();
                                 text.Span($"bulan terhitung sejak tanggal ");
                                 text.Span($"{formattedStart} ").Bold();
                                 text.Span("dan berakhir pada tanggal ");
@@ -485,10 +581,10 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             Debug.WriteLine("Saving PDF to: " + outputPath);
         }
 
-        int HitungDurasiBulan(DateTime start, DateTime end)
-        {
-            return (end.Year - start.Year) * 12 + end.Month - start.Month;
-        }
+        //int HitungDurasiBulan(DateTime start, DateTime end)
+        //{
+        //    return (end.Year - start.Year) * 12 + end.Month - start.Month;
+        //}
 
         string Terbilang(long number)
         {
