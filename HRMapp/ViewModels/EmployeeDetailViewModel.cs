@@ -89,6 +89,12 @@ public partial class EmployeeDetailViewModel : ObservableObject
 
         await Shell.Current.GoToAsync($"GeneratePKWTPage?employeeId={EmployeeId}&contractId={contract.contract_id}");
     }
+    
+    [RelayCommand]
+    private async Task NavigateToCreateContractPage()
+    {
+        await Shell.Current.GoToAsync($"CreateContractForm?employeeId={EmployeeId}");
+    }
 
     public async Task LoadLogsAsync()
     {

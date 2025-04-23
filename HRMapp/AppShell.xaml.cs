@@ -16,6 +16,7 @@ namespace HRMapp
             Routing.RegisterRoute(nameof(CreateEmployeeForm), typeof(CreateEmployeeForm));
 
             Routing.RegisterRoute("GeneratePKWTPage", typeof(GeneratePKWTPage));
+            Routing.RegisterRoute("CreateContractForm", typeof(CreateContractForm));
 
         }
     }

@@ -83,6 +83,9 @@
 	  <MauiXaml Update="Pages\EmployeeDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\CreateContractForm.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\CreateEmployeeForm.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
