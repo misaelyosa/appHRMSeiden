@@ -1,12 +1,88 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+             xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
              x:Class="HRMapp.Pages.EmployeeForms.CreateContractForm"
-             Title="CreateContractForm">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             Title="CreateContractForm"
+             BackgroundColor="White">
+    <ScrollView>
+        <VerticalStackLayout Grid.Row="0" Grid.ColumnSpan="3">
+            <Label Text="Edit Contract" TextColor="Black" FontAttributes="Bold" FontSize="Medium" Margin="0,16,0,0" HorizontalOptions="Center"/>
+
+            <input:FormView Padding="10" Spacing="20"
+                            SubmitCommand="{Binding CreateContractCommand}">
+
+                <input:AdvancedEntry Title="Contract NIP"                                 
+                      TitleColor="Black"
+                      MaxLength="6"
+                      Text="{Binding ContractNip}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:MinLengthValidation MinLength="5"/>
+                        <validation:MaxLengthValidation MaxLength="6"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <input:AdvancedEntry Title="Gaji Pokok"                                 
+                      TitleColor="Black"
+                      MaxLength="15"
+                      Text="{Binding GajiPokok}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:DigitsOnlyValidation/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <input:AdvancedEntry Title="Durasi Kontrak (Bulan)"                                 
+                      TitleColor="Black"
+                      MaxLength="15"
+                      Text="{Binding ContractDuration}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:RequiredValidation/>
+                        <validation:DigitsOnlyValidation/>
+                        <validation:MaxLengthValidation MaxLength="4"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, *, *" ColumnSpacing="8">
+
+                    <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                        <VerticalStackLayout>
+                            <Label Text="Tanggal Terkontrak" TextColor="White"/>
+                            <DatePicker VerticalOptions="Center"
+                                MinimumDate="01/01/2000"
+                                Date="{Binding ContractDateTime, Mode=TwoWay}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                        <VerticalStackLayout>
+                            <Label Text="Tanggal Selesai Kontrak" TextColor="White"/>
+                            <Label VerticalOptions="Center"
+                            TextColor="LightGray"
+                           Margin="0,16,0,0"
+                            Text="{Binding ContractEndDateTime, StringFormat='{0:dd-MM-yyyy}'}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Button Grid.Row="1"
+                    Grid.Column="2"
+                    Text="Save"
+                    BackgroundColor="ForestGreen"
+                    TextColor="White"
+                    HorizontalOptions="FillAndExpand"
+                    input:FormView.IsSubmitButton="True" />
+
+                    <Button Text="Reset"
+                    Grid.Row="0"
+                    BackgroundColor="DarkOrange"
+                    Grid.Column="2"
+                    HorizontalOptions="FillAndExpand"
+                    input:FormView.IsResetButton="True"/>
+                </Grid>
+
+            </input:FormView>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

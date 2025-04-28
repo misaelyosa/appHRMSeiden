@@ -79,6 +79,13 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             context.Contracts.Update(contract);
             await context.SaveChangesAsync();
         }
+        public async Task CreateContractAsync(Contract contract)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            context.Contracts.Add(contract);
+            await context.SaveChangesAsync();
+        }
     }
 
 }
