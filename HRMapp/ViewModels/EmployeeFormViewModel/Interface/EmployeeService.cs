@@ -59,11 +59,28 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         public async Task DeleteEmployeeAsync(int id)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
-            var employee = await context.Employees.FindAsync(id);
+            var employee = await context.Employees
+                .Include(e => e.Contracts)
+                .Include(e => e.Courses)
+                .Include(e => e.LogEmployees)
+                .FirstOrDefaultAsync(e => e.employee_id == id);
 
             if (employee != null)
             {
+                foreach (var contract in employee.Contracts)
+                {
+                    var listTunjangan = await context.Tunjangan
+                        .Where(t => t.contract_id == contract.contract_id)
+                        .ToListAsync();
+
+                    context.Tunjangan.RemoveRange(listTunjangan);
+                }
+
+                context.Contracts.RemoveRange(employee.Contracts);
+                context.Course.RemoveRange(employee.Courses);
+                context.LogEmployees.RemoveRange(employee.LogEmployees);
                 context.Employees.Remove(employee);
+
                 await context.SaveChangesAsync();
             }
         }
