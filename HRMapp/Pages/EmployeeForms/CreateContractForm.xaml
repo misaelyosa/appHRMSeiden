@@ -8,21 +8,10 @@
              BackgroundColor="White">
     <ScrollView>
         <VerticalStackLayout Grid.Row="0" Grid.ColumnSpan="3">
-            <Label Text="Edit Contract" TextColor="Black" FontAttributes="Bold" FontSize="Medium" Margin="0,16,0,0" HorizontalOptions="Center"/>
+            <Label Text="Create Contract" TextColor="Black" FontAttributes="Bold" FontSize="Medium" Margin="0,16,0,0" HorizontalOptions="Center"/>
 
             <input:FormView Padding="10" Spacing="20"
                             SubmitCommand="{Binding CreateContractCommand}">
-
-                <input:AdvancedEntry Title="Contract NIP"                                 
-                      TitleColor="Black"
-                      MaxLength="6"
-                      Text="{Binding ContractNip}">
-                    <input:AdvancedEntry.Validations>
-                        <validation:RequiredValidation/>
-                        <validation:MinLengthValidation MinLength="5"/>
-                        <validation:MaxLengthValidation MaxLength="6"/>
-                    </input:AdvancedEntry.Validations>
-                </input:AdvancedEntry>
 
                 <input:AdvancedEntry Title="Gaji Pokok"                                 
                       TitleColor="Black"

@@ -82,7 +82,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             var newContract = new Contract
             {
                 employee_id = EmployeeId,
-                contract_nip = ContractNip,
                 contract_date = SelectedContractDate,
                 contract_duration = int.Parse(ContractDuration),
                 end_date = SelectedEndDate,

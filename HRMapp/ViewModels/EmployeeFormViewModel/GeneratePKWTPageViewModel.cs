@@ -16,6 +16,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 {
     [QueryProperty(nameof(EmployeeId), "employeeId")]
     [QueryProperty(nameof(ContractId), "contractId")]
+    [QueryProperty(nameof(ContractIndex), "contractIndex")]
     public partial class GeneratePKWTPageViewModel : ObservableObject
     {
         private readonly IEmployeeService _employeeService;
@@ -24,6 +25,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         [ObservableProperty]
         private int contractId;
+
+        [ObservableProperty]
+        private int contractIndex;
 
         [ObservableProperty]
         private Contract selectedContract;
@@ -57,7 +61,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     : SelectedEmployee.name.Replace(" ", "");
 
             var contractDate = SelectedContract?.contract_date.ToString("dd-MM-yyyy") ?? "UnknownDate";
-            var nip = SelectedContract?.contract_nip ?? "UnknownNIP";
+            var nip = SelectedEmployee?.nip ?? "UnknownNIP";
 
             fileName = $"PKWT_{nip}_{trimEmp}_{contractDate}.pdf";
             var fullPath = Path.Combine(folderPath, fileName);
@@ -97,7 +101,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     : SelectedEmployee.name.Replace(" ", "");
 
             var contractDate = SelectedContract?.contract_date.ToString("dd-MM-yyyy") ?? "UnknownDate";
-            var nip = SelectedContract?.contract_nip ?? "UnknownNIP";
+            var nip = SelectedEmployee?.nip ?? "UnknownNIP";
 
             fileName = $"PKWT_{nip}_{trimEmp}_{contractDate}.pdf";
             var fullPath = Path.Combine(folderPath, fileName);
@@ -136,7 +140,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         partial void OnSelectedContractChanged(Contract value)
         {
-            ContractNip = value.contract_nip.ToString();
             ContractDuration = value.contract_duration.ToString();
             GajiPokok = value.gaji_pokok.ToString();
 
@@ -173,15 +176,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [ObservableProperty]
         private string contractDuration;
         [ObservableProperty]
-        private string contractNip;
-        [ObservableProperty]
         private string gajiPokok;
+        [ObservableProperty]
+        private string alphabetCountContract;
 
         [RelayCommand]
         private async Task EditContractDetail()
         {
             var formattedMessage = $"Data to be updated:\n\n" +
-                           $"NIP             : {ContractNip}\n" +
                            $"Contract Date   : {SelectedContractDate:dd/MM/yyyy}\n" +
                            $"End Date        : {SelectedEndDate:dd/MM/yyyy}\n" +
                            $"Duration        : {ContractDuration} bulan\n" +
@@ -204,7 +206,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
                 contract_date = SelectedContractDate,
                 end_date = SelectedEndDate,
-                contract_nip = ContractNip,
                 gaji_pokok = int.TryParse(GajiPokok, out var gaji) ? gaji : 0,
                 contract_duration = int.TryParse(ContractDuration, out var durasi) ? durasi : 0,
 
@@ -258,6 +259,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             }
         }
 
+        partial void OnContractIndexChanged(int value)
+        {
+            AlphabetCountContract = ConverttoAlphabet(value+1);
+            Debug.WriteLine($"ini count contract {value} (converted to alphabet: {AlphabetCountContract})");
+        }
+
         public void GeneratePdf(string outputPath)
         {
             Debug.WriteLine("Checking contract...");
@@ -269,6 +276,11 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             var contract = SelectedContract;
             var employee = SelectedEmployee;
 
+            //kop surat
+            var romanMonth = MonthToRoman(contract.contract_date.Month);
+            Debug.WriteLine($"(converted to alphabet: {AlphabetCountContract})");
+
+            //isi
             var startDate = contract.contract_date;
             var endDate = contract.end_date;
             var today = DateTime.Today;
@@ -276,9 +288,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             var formattedStart = startDate.ToString("dd MMMM yyyy", indo);
             var formattedEnd = endDate.ToString("dd MMMM yyyy", indo);
-            var printedToday = today.ToString("dd MMMM yyyy", indo);
+            var printedToday = startDate.ToString("dd MMMM yyyy", indo);
             var formattedBirthdate = employee.birthdate.ToString("dd MMMM yyyy", indo);
-            var dayToday = today.ToString("dddd", indo);
+            var dayToday = startDate.ToString("dddd", indo);
             var Duration = contract?.contract_duration ?? 0;
             string spellDuration = Terbilang(Duration).Trim();
 
@@ -307,7 +319,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                         }
 
                         col.Item().AlignCenter().Text("PERJANJIAN KERJA WAKTU TERTENTU").FontSize(13).Bold().Underline();
-                        col.Item().AlignCenter().Text($"Nomor : {contract.contract_nip ?? employee.nip} B / SEI-PKWT / I / 2025");
+                        col.Item().AlignCenter().Text($"Nomor : {employee.nip} {AlphabetCountContract} / SEI-PKWT / {romanMonth} / {contract.contract_date.Year}"); //month -> romawi, countContract = abcdll
 
                         col.Item().Text(text =>
                         {
@@ -586,7 +598,32 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         //    return (end.Year - start.Year) * 12 + end.Month - start.Month;
         //}
 
-        string Terbilang(long number)
+        public static string ConverttoAlphabet(int number)
+        {
+            if (number < 1)
+                return string.Empty;
+
+            var result = string.Empty;
+            while (number > 0)
+            {
+                number--; 
+                result = (char)('A' + (number % 26)) + result;
+                number /= 26;
+            }
+            return result;
+        }
+
+        public static string MonthToRoman(int month)
+        {
+            string[] RomanMonths ={ "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII" };
+
+            if (month < 1 || month > 12)
+                return string.Empty;
+
+            return RomanMonths[month];
+        }
+
+        public static string Terbilang(long number)
         {
             string[] angka = { "", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas" };
 
@@ -607,7 +644,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             else if (number < 1_000_000_000)
                 return Terbilang(number / 1_000_000) + " juta " + Terbilang(number % 1_000_000);
             else
-                return number.ToString(); // For values beyond 999 million
+                return number.ToString(); 
         }
     }
 }
