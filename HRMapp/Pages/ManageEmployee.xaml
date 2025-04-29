@@ -66,13 +66,24 @@
                 <Picker Title="Select Jabatan" 
                         TextColor="Black"
                         TitleColor="Black"
-                        Margin="0,5,0,0"
                         ItemsSource="{Binding JobsName}"
                         BackgroundColor="LightGray"
                         SelectedItem="{Binding SelectedJob, Mode=TwoWay}"
                         />
-                <Button Text="Apply Filter" FontAttributes="Bold" TextColor="WhiteSmoke" Margin="0,15,0,10" BackgroundColor="DodgerBlue" 
-                        Command="{Binding ApplyFilterCommand}"/>
+                <Picker Title="Select Pabrik"
+                        TextColor="Black"
+                        TitleColor="Black"
+                        Margin="0,5,0,0"
+                        ItemsSource="{Binding FactoryName}"
+                        BackgroundColor="LightGray"
+                        SelectedItem="{Binding SelectedFactory, Mode=TwoWay}"/>
+
+
+                <Grid ColumnDefinitions="*, auto" Margin="0,15,0,10" ColumnSpacing="16">
+                    <Button Text="Apply Filter" FontAttributes="Bold" TextColor="WhiteSmoke" BackgroundColor="DodgerBlue" 
+                            Command="{Binding ApplyFilterCommand}" Grid.Column="0"/>
+                    <Button Text="Reset" BackgroundColor="DarkOrange" Grid.Column="1" Command="{Binding ResetFilterCommand}"/>
+                </Grid>
             </VerticalStackLayout>
 
             <dg:DataGrid x:Name="employeeListDg"
@@ -83,7 +94,7 @@
                             BorderThickness="1"
                             RowHeight="40"
                             SelectionEnabled="True"
-                            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single"
+                            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single" 
                             PullToRefreshCommand="{Binding RefreshDataCommand}"
                             IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
 
