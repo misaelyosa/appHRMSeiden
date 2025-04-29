@@ -171,7 +171,7 @@
                         <HorizontalStackLayout Grid.Row="4"
                         Grid.Column="1">
                             <Label 
-                            Text="{Binding Employee.birthdate, Converter={StaticResource DateToStringConverter}}" 
+                            Text="{Binding Employee.birthdate, StringFormat='{0:dd MMMM yyyy}'}" 
                             Margin="8, 0, 0, 0" 
                             FontSize="Micro" 
                             TextColor="Black"/>
@@ -262,7 +262,7 @@
                         FontSize="Micro" 
                         TextColor="Black"/>
                         <Label 
-                        Text="{Binding Employee.graduation_date, Converter={StaticResource DateToStringConverter}}" 
+                        Text="{Binding Employee.graduation_date, StringFormat='{0:dd MMMM yyyy}'}" 
                         Margin="8, 0, 0, 0" 
                         Grid.Row="9" 
                         Grid.Column="1" 
@@ -310,7 +310,7 @@
                            TextColor="Black"/>
 
                         <Label Text="Tanggal Bergabung : " FontSize="Micro" Grid.Column="0" Grid.Row="12" TextColor="Black"/>
-                        <Label TextColor="Black" FontSize="Micro" Text="{Binding Employee.hire_date, Converter={StaticResource DateToStringConverter}}" Grid.Row="12" Grid.Column="1"/>
+                        <Label TextColor="Black" FontSize="Micro" Text="{Binding Employee.hire_date, StringFormat='  {0:dd MMMM yyyy}'}" Grid.Row="12" Grid.Column="1"/>
                     </Grid>
                 </Grid>
 
@@ -339,6 +339,7 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -355,13 +356,14 @@
                                         <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="1" Grid.ColumnSpan="3"/>
                                         <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter}, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="16" Grid.Row="2" Grid.ColumnSpan="3"/>
                                         <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="Micro" Grid.Row="4" Grid.ColumnSpan="3" FontAttributes="Bold" />
-                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Tunjangan... : {0}'}" FontSize="14" Grid.Row="5" Grid.ColumnSpan="3"/>
-                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Tunjangan MK : {0}'}" FontSize="14" Grid.Row="6" Grid.ColumnSpan="1"/>
+                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Tunjangan... : {0}'}" FontSize="14" Grid.Row="5" Grid.ColumnSpan="3" VerticalOptions="Start"/>
+                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Tunjangan MK : {0}'}" FontSize="14" Grid.Row="6" Grid.ColumnSpan="1" VerticalOptions="Start"/>
 
-                                        <Button Text="Hapus Kontrak" Grid.Row="5" Grid.Column="2"
+                                        <Button Text="Hapus Kontrak" Grid.Row="6" Grid.Column="2"
                                                 BackgroundColor="OrangeRed" TextColor="Black"
-                                                Command="{Binding DeleteContractCommand}"/>
-                                        <Button Text="Detail PKWT" Grid.Row="6" Grid.Column="2"
+                                                Command="{Binding BindingContext.DeleteContractCommand, Source={x:Reference Name=PageRoot}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Text="Detail PKWT" Grid.Row="7" Grid.Column="2"
                                                 BackgroundColor="LightBlue" TextColor="Black"
                                                 Command="{Binding BindingContext.NavigateToGeneratePKWTCommand, Source={x:Reference Name=PageRoot}}"
                                                 CommandParameter="{Binding}"/>
@@ -373,18 +375,22 @@
                 </VerticalStackLayout>
 
                 <!-- Logs Section -->
+                
                 <VerticalStackLayout Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5" Margin="16,8,16,0">
                     <Label Text="Log Data Karyawan" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,0,0,16"/>
                     <Label Text="{Binding LogEntries.Count, StringFormat='Logs Found: {0}'}" TextColor="Red" />
-                    <akgul:DataGrid ItemsSource="{Binding LogEntries}" HeightRequest="300" BorderColor="Gray">
-                        <akgul:DataGrid.Columns>
-                            <akgul:DataGridColumn Title="Field" PropertyName="field_name" />
-                            <akgul:DataGridColumn Title="Old Value" PropertyName="old_value" />
-                            <akgul:DataGridColumn Title="New Value" PropertyName="new_value" />
-                            <akgul:DataGridColumn Title="Changed By" PropertyName="updated_by" />
-                            <akgul:DataGridColumn Title="Changed At" PropertyName="updated_at"/>
-                        </akgul:DataGrid.Columns>
-                    </akgul:DataGrid>
+
+                    <ScrollView Orientation="Vertical" HeightRequest="300">
+                        <akgul:DataGrid ItemsSource="{Binding LogEntries}" HeightRequest="300" BorderColor="Gray" IsRefreshing="False">
+                            <akgul:DataGrid.Columns>
+                                <akgul:DataGridColumn Title="Field" PropertyName="field_name" />
+                                <akgul:DataGridColumn Title="Old Value" PropertyName="old_value" />
+                                <akgul:DataGridColumn Title="New Value" PropertyName="new_value" />
+                                <akgul:DataGridColumn Title="Changed By" PropertyName="updated_by" />
+                                <akgul:DataGridColumn Title="Changed At" PropertyName="updated_at"/>
+                            </akgul:DataGrid.Columns>
+                        </akgul:DataGrid>
+                    </ScrollView>
                 </VerticalStackLayout>
 
             </Grid>

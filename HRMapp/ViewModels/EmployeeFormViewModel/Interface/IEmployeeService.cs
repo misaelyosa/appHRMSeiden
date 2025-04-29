@@ -11,5 +11,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task<Contract>? GetContractDetail(int contractId);
         Task UpdateContractAsync(Contract contract);
         Task CreateContractAsync(Contract contract);
+        Task DeleteContractAsync(Contract contract);
     }
 }

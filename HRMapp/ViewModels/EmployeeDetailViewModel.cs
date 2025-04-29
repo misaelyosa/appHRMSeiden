@@ -84,12 +84,6 @@ public partial class EmployeeDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task DeleteContract(Contract contract)
-    {
-
-    }
-
-    [RelayCommand]
     private async Task NavigateToGeneratePKWT(Contract contract)
     {
         if (contract == null) return;
@@ -146,7 +140,7 @@ public partial class EmployeeDetailViewModel : ObservableObject
             return;
 
         bool confirmRelatedData = await Shell.Current.DisplayAlert("Confirm Deletion",
-            "Yakin? Semua related data akan terhapus juga dan tidak dapat di restore", "Yes", "Cancel");
+            "Apakah anda yakin? Semua data yang berhubungan akan terhapus dan tidak dapat di restore", "Yes", "Cancel");
         if (!confirmRelatedData)
             return;
 
@@ -161,6 +155,37 @@ public partial class EmployeeDetailViewModel : ObservableObject
         {
             Debug.WriteLine($"Error deleting employee: {ex.Message}");
             await Shell.Current.DisplayAlert("Error", "Gagal menghapus data karyawan.", "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteContract(Contract contract)
+    {
+        if (Employee == null)
+            return;
+
+        bool confirmDelete = await Shell.Current.DisplayAlert("Confirm Delete",
+            $"Apakah anda yakin akan menghapus data kontrak?", "Yes", "Cancel");
+
+        if (!confirmDelete)
+            return;
+
+        bool confirmRelatedData = await Shell.Current.DisplayAlert("Confirm Deletion",
+            "Apakah anda yakin? Data yang terhapus tidak dapat di restore", "Yes", "Cancel");
+        if (!confirmRelatedData)
+            return;
+
+        try
+        {
+            await _employeeService.DeleteContractAsync(contract);
+
+            await Shell.Current.DisplayAlert("Success", $"Data kontrak berhasil terhapus.", "OK");
+            await RefreshData();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error deleting employee: {ex.Message}");
+            await Shell.Current.DisplayAlert("Error", "Gagal menghapus data kontrak.", "OK");
         }
     }
 }

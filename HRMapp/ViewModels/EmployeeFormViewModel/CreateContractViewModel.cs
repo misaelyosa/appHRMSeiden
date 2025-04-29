@@ -62,8 +62,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [RelayCommand]
         private async Task CreateContract()
         {
-            var formattedMessage = $"Data to be updated:\n\n" +
-               $"NIP             : {ContractNip}\n" +
+            var formattedMessage = $"Data to be created:\n\n" +
                $"Contract Date   : {SelectedContractDate:dd/MM/yyyy}\n" +
                $"End Date        : {SelectedEndDate:dd/MM/yyyy}\n" +
                $"Duration        : {ContractDuration} bulan\n" +
@@ -98,6 +97,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 Application.Current.MainPage.Dispatcher.Dispatch(async () =>
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Kontrak berhasil ditambahkan.", "OK");
+                    await Shell.Current.GoToAsync("..");
                 });
             }
             catch (Exception ex)
