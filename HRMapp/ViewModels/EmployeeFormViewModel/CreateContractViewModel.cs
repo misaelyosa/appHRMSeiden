@@ -12,7 +12,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         [ObservableProperty]
         private int employeeId;
-
+        [ObservableProperty]
+        private Employee selectedEmployee;
         [ObservableProperty]
         private DateOnly selectedContractDate;
         [ObservableProperty]
@@ -23,7 +24,10 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         private string contractNip;
         [ObservableProperty]
         private string gajiPokok;
-
+        [ObservableProperty]
+        private string tunjanganMK;
+        [ObservableProperty]
+        private string tunjanganOther;
         //proxy datetime
         public DateTime ContractDateTime
         {
@@ -66,7 +70,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                $"Contract Date   : {SelectedContractDate:dd/MM/yyyy}\n" +
                $"End Date        : {SelectedEndDate:dd/MM/yyyy}\n" +
                $"Duration        : {ContractDuration} bulan\n" +
-               $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}";
+               $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}"+
+               (string.IsNullOrWhiteSpace(TunjanganMK) ? "" : $"Tunjangan MK    : Rp. {int.Parse(TunjanganMK):N0}\n") +
+               (string.IsNullOrWhiteSpace(TunjanganOther) ? "" : $"Tunjangan ...   : Rp. {int.Parse(TunjanganOther):N0}\n");
 
             var confirm = await Application.Current.MainPage.DisplayAlert(
                 "Confirm Changes",
@@ -91,9 +97,38 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                
             };
 
+            SelectedEmployee = await _employeeService.GetEmployeeByIdAsync(EmployeeId);
+            var tunjanganList = new List<Tunjangan>();
+
+
+            if (!string.IsNullOrWhiteSpace(TunjanganMK))
+            {
+                tunjanganList.Add(new Tunjangan
+                {
+                    tunjangan_name = $"Tunjangan MK_{SelectedEmployee.nip}",
+                    amount = int.Parse(TunjanganMK),
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(TunjanganOther))
+            {
+                tunjanganList.Add(new Tunjangan
+                {
+                    tunjangan_name = $"Tunjangan..._{SelectedEmployee.nip}",
+                    amount = int.Parse(TunjanganOther)
+                });
+            }
+            
+
             try
             {
                 await _employeeService.CreateContractAsync(newContract);
+
+                foreach(var tunjangan in tunjanganList)
+                {
+                    tunjangan.contract_id = newContract.contract_id;
+                    await _employeeService.CreateTunjanganAsync(tunjangan);
+                }
                 Application.Current.MainPage.Dispatcher.Dispatch(async () =>
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Kontrak berhasil ditambahkan.", "OK");

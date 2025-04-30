@@ -24,13 +24,31 @@
                 </input:AdvancedEntry>
 
                 <input:AdvancedEntry Title="Durasi Kontrak (Bulan)"                                 
-                      TitleColor="Black"
-                      MaxLength="15"
-                      Text="{Binding ContractDuration}">
+                    TitleColor="Black"
+                    MaxLength="15"
+                    Text="{Binding ContractDuration}">
                     <input:AdvancedEntry.Validations>
                         <validation:RequiredValidation/>
                         <validation:DigitsOnlyValidation/>
                         <validation:MaxLengthValidation MaxLength="4"/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <input:AdvancedEntry Title="Tunjangan MK (opsional)"                                 
+                    TitleColor="Black"
+                    MaxLength="15"
+                    Text="{Binding TunjanganMK}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:DigitsOnlyValidation/>
+                    </input:AdvancedEntry.Validations>
+                </input:AdvancedEntry>
+
+                <input:AdvancedEntry Title="Tunjangan ... (opsional)"                                 
+                    TitleColor="Black"
+                    MaxLength="15"
+                    Text="{Binding TunjanganOther}">
+                    <input:AdvancedEntry.Validations>
+                        <validation:DigitsOnlyValidation/>
                     </input:AdvancedEntry.Validations>
                 </input:AdvancedEntry>
 

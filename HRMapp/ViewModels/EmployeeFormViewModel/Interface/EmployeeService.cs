@@ -113,5 +113,28 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await context.SaveChangesAsync();
             }
         }
+
+        //Tunjangan
+        public async Task CreateTunjanganAsync(Tunjangan tunjangan)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            context.Tunjangan.Add(tunjangan);
+            await context.SaveChangesAsync();
+        }
+        public async Task <Tunjangan> GetTunjanganMK(int contractId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Tunjangan.Where(e => e.contract_id == contractId && 
+            e.tunjangan_name.Contains("MK", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+        }        
+        public async Task <Tunjangan> GetTunjanganOther(int contractId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Tunjangan.Where(e => e.contract_id == contractId &&
+            !e.tunjangan_name.Contains("MK", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+        }
     }
 }

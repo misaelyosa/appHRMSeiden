@@ -25,9 +25,6 @@ public partial class EmployeeDetailViewModel : ObservableObject
     private ObservableCollection<Contract> contractz = new();
 
     [ObservableProperty]
-    private Tunjangan tunjangan;
-
-    [ObservableProperty]
     private bool isRefreshing;
 
     [ObservableProperty]
@@ -66,21 +63,13 @@ public partial class EmployeeDetailViewModel : ObservableObject
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        Contractz = new ObservableCollection<Contract>(await dbContext.Contracts
-                    .Where(e => e.employee_id == EmployeeId)
-                    .OrderBy(e => e.contract_date)
-                    .ToListAsync());
+        var contracts = await dbContext.Contracts
+               .Where(e => e.employee_id == EmployeeId)
+               .OrderBy(e => e.contract_date)
+               .ToListAsync();
 
-        ContractCount = Contractz.Count();
-        OnPropertyChanged(nameof(ContractCount));
-        Debug.WriteLine(ContractCount);
+        Contractz = new ObservableCollection<Contract>(contracts); 
 
-        if (Contractz.Any())
-        {
-            var firstContract = Contractz.First();
-            Tunjangan = await dbContext.Tunjangan
-                .FirstOrDefaultAsync(t => t.contract_id == firstContract.contract_id);
-        }
     }
 
     [RelayCommand]
