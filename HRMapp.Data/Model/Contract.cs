@@ -14,14 +14,7 @@ namespace HRMapp.Data.Model
         public int contract_id { get; set; }
 
         [Required]
-        [MaxLength(6)]
-        public string contract_nip { get; set; }
-
-        [Required]
         public DateOnly contract_date { get; set; }
-
-        [Required]
-        public DateOnly hire_date { get; set; }
 
         [Required]
         public DateOnly end_date { get; set; }

@@ -9,4 +9,11 @@ public partial class ManageEmployee : ContentPage
 
 		BindingContext = viewModel;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        employeeListDg.SelectedItem = null;
+    }
 }

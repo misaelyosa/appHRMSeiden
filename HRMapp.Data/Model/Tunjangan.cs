@@ -13,7 +13,7 @@ namespace HRMapp.Data.Model
         [Required]
         public int tunjangan_id { get; set; }
 
-        public int? tunjangan_name { get; set; }
+        public string? tunjangan_name { get; set; }
 
         public int? amount { get; set; }
 

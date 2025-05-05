@@ -4,6 +4,7 @@ using HRMapp.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422084558_moveHireDateAttrFromContractToEmployee")]
+    partial class moveHireDateAttrFromContractToEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,6 +64,11 @@ namespace HRMapp.Data.Migrations
 
                     b.Property<int>("contract_duration")
                         .HasColumnType("int");
+
+                    b.Property<string>("contract_nip")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("varchar(6)");
 
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
@@ -419,8 +427,8 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("contract_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("tunjangan_name")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("tunjangan_name")
+                        .HasColumnType("int");
 
                     b.HasKey("tunjangan_id");
 

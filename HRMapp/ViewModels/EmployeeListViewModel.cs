@@ -26,6 +26,9 @@ namespace HRMapp.ViewModels
         private ObservableCollection<string> jobsName = new();
 
         [ObservableProperty]
+        private ObservableCollection<string> factoryName = new();
+
+        [ObservableProperty]
         private string searchText = string.Empty;
 
         [ObservableProperty]
@@ -35,13 +38,17 @@ namespace HRMapp.ViewModels
         private string selectedDepartment;
 
         [ObservableProperty]
-        private string selectedJob;
+        private string selectedJob;        
+        
+        [ObservableProperty]
+        private string selectedFactory;
 
         [ObservableProperty]
         private bool isRefreshing;
 
         [ObservableProperty]
         private bool isFilterVisible;
+
         public string FilterToggleText => IsFilterVisible ? "▲ Hide" : "▼ Show";
 
 
@@ -51,6 +58,7 @@ namespace HRMapp.ViewModels
             LoadDepartmentAsync();
             LoadJobsAsync();
             LoadEmployeeAsync();
+            LoadFactoryAsync();
             SearchFilter();
             OnSelectedEmployeeChanged(SelectedEmployee);
             RefreshData();
@@ -106,7 +114,6 @@ namespace HRMapp.ViewModels
             if (value != null)
             {
                 var selectedEmpId = value.employee_id;
-
                 NavigateToEmployeeDetail(selectedEmpId);
             }
         }
@@ -142,6 +149,22 @@ namespace HRMapp.ViewModels
             OnPropertyChanged(nameof(JobsName));
 
             SelectedJob = JobsName.FirstOrDefault();
+        }        
+        
+        [RelayCommand]
+        private async Task LoadFactoryAsync()
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+
+            var factoryName = await dbContext.Factories
+                .Select(c => c.name)
+                .ToListAsync();
+            factoryName.Insert(0, "none");
+
+            FactoryName = new ObservableCollection<string>(factoryName);
+            OnPropertyChanged(nameof(FactoryName));
+
+            SelectedFactory = FactoryName.FirstOrDefault();
         }
 
         //Filter Command
@@ -191,19 +214,35 @@ namespace HRMapp.ViewModels
 
             if (!string.IsNullOrEmpty(SelectedDepartment) && SelectedDepartment != "none")
             {
-                query = query.Where(e => e.Department != null && e.Department.name == selectedDepartment);
+                query = query.Where(e => e.Department != null && e.Department.name == SelectedDepartment);
             }
 
-            if (!string.IsNullOrEmpty(selectedJob) && selectedJob != "none")
+            if (!string.IsNullOrEmpty(SelectedJob) && SelectedJob != "none")
             {
-                query = query.Where(e => e.Job != null && e.Job.job_name == selectedJob);
+                query = query.Where(e => e.Job != null && e.Job.job_name == SelectedJob);
             }
 
-            var filteredEmployees = await query.OrderBy(e => e.employee_id).ToListAsync();
+            if (!string.IsNullOrEmpty(SelectedFactory) && SelectedFactory != "none")
+            {
+                query = query.Where(e => e.Factory != null && e.Factory.name == SelectedFactory);
+            }
+
+            var filteredEmployees = await query.OrderBy(e => e.nip).ToListAsync();
 
             Employees = new ObservableCollection<Employee>(filteredEmployees);
             OnPropertyChanged(nameof(Employees));
         }
+
+        [RelayCommand]
+        private async Task ResetFilter()
+        {
+            SelectedDepartment = "none";
+            SelectedJob = "none";
+            SelectedFactory = "none";
+            SearchText = null;
+
+            await LoadEmployeeAsync();
+        } 
 
         [RelayCommand]        
         private void ToggleFilter()

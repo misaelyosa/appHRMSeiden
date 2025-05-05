@@ -55,14 +55,32 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             await context.SaveChangesAsync();
         }
 
+
         public async Task DeleteEmployeeAsync(int id)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
-            var employee = await context.Employees.FindAsync(id);
+            var employee = await context.Employees
+                .Include(e => e.Contracts)
+                .Include(e => e.Courses)
+                .Include(e => e.LogEmployees)
+                .FirstOrDefaultAsync(e => e.employee_id == id);
 
             if (employee != null)
             {
+                foreach (var contract in employee.Contracts)
+                {
+                    var listTunjangan = await context.Tunjangan
+                        .Where(t => t.contract_id == contract.contract_id)
+                        .ToListAsync();
+
+                    context.Tunjangan.RemoveRange(listTunjangan);
+                }
+
+                context.Contracts.RemoveRange(employee.Contracts);
+                context.Course.RemoveRange(employee.Courses);
+                context.LogEmployees.RemoveRange(employee.LogEmployees);
                 context.Employees.Remove(employee);
+
                 await context.SaveChangesAsync();
             }
         }
@@ -72,6 +90,85 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Contracts.FindAsync(contractId);
         }
-    }
+        public async Task UpdateContractAsync(Contract contract)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            context.Contracts.Update(contract);
+            await context.SaveChangesAsync();
+        }
+        public async Task CreateContractAsync(Contract contract)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
 
+            context.Contracts.Add(contract);
+            await context.SaveChangesAsync();
+        }
+        public async Task DeleteContractAsync(Contract contract)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (contract != null)
+            {
+                var listTunjangan = await context.Tunjangan
+                    .Where(t => t.contract_id == contract.contract_id)
+                    .ToListAsync();
+
+                context.Tunjangan.RemoveRange(listTunjangan);
+                
+                context.Contracts.Remove(contract);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        //Tunjangan
+        public async Task<int> GetContractCountByEmployeeIdAsync(int employeeId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Contracts
+                .Where(c => c.employee_id == employeeId)
+                .CountAsync();
+        }
+        public async Task CreateTunjanganAsync(Tunjangan tunjangan)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            context.Tunjangan.Add(tunjangan);
+            await context.SaveChangesAsync();
+        }
+        public async Task UpdateTunjanganAsync(Tunjangan tunjangan)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            bool isMK = tunjangan.tunjangan_name?.Contains("MK", StringComparison.OrdinalIgnoreCase) ?? false;
+
+            var existingTunjangan = await context.Tunjangan
+            .FirstOrDefaultAsync(t => t.contract_id == tunjangan.contract_id &&
+                               (isMK
+                                   ? t.tunjangan_name.ToLower().Contains("mk") : !t.tunjangan_name.ToLower().Contains("mk")));
+
+            if (existingTunjangan != null)
+            {
+                existingTunjangan.amount = tunjangan.amount;
+            }
+            else
+            {
+                context.Tunjangan.Add(tunjangan);
+            }
+
+            await context.SaveChangesAsync();
+        }
+        public async Task <Tunjangan> GetTunjanganMK(int contractId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Tunjangan.Where(e => e.contract_id == contractId && 
+            e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
+        }        
+        public async Task <Tunjangan> GetTunjanganOther(int contractId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Tunjangan.Where(e => e.contract_id == contractId &&
+            !e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
+        }
+    }
 }

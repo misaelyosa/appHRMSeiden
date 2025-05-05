@@ -47,6 +47,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<EditEmployeeViewModel>();
 		builder.Services.AddTransient<CreateEmployeeViewModel>();
 		builder.Services.AddTransient<GeneratePKWTPageViewModel>();
+		builder.Services.AddTransient<CreateContractViewModel>();
 
         // Register Pages
         builder.Services.AddTransient<ManageEmployee>();
@@ -55,6 +56,7 @@ public static class MauiProgram
 		builder.Services.AddTransient<EditEmployeeForm>();
 		builder.Services.AddTransient<CreateEmployeeForm>();
 		builder.Services.AddTransient<GeneratePKWTPage>();
+		builder.Services.AddTransient<CreateContractForm>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

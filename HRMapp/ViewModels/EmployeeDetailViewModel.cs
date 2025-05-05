@@ -25,9 +25,6 @@ public partial class EmployeeDetailViewModel : ObservableObject
     private ObservableCollection<Contract> contractz = new();
 
     [ObservableProperty]
-    private Tunjangan tunjangan;
-
-    [ObservableProperty]
     private bool isRefreshing;
 
     [ObservableProperty]
@@ -66,20 +63,13 @@ public partial class EmployeeDetailViewModel : ObservableObject
     {
         using var dbContext = _dbContextFactory.CreateDbContext();
 
-        Contractz = new ObservableCollection<Contract>(await dbContext.Contracts
-                    .Where(e => e.employee_id == EmployeeId)
-                    .ToListAsync());
+        var contracts = await dbContext.Contracts
+               .Where(e => e.employee_id == EmployeeId)
+               .OrderBy(e => e.contract_date)
+               .ToListAsync();
 
-        ContractCount = Contractz.Count();
-        OnPropertyChanged(nameof(ContractCount));
-        Debug.WriteLine(ContractCount);
+        Contractz = new ObservableCollection<Contract>(contracts); 
 
-        if (Contractz.Any())
-        {
-            var firstContract = Contractz.First();
-            Tunjangan = await dbContext.Tunjangan
-                .FirstOrDefaultAsync(t => t.contract_id == firstContract.contract_id);
-        }
     }
 
     [RelayCommand]
@@ -87,7 +77,16 @@ public partial class EmployeeDetailViewModel : ObservableObject
     {
         if (contract == null) return;
 
-        await Shell.Current.GoToAsync($"GeneratePKWTPage?employeeId={EmployeeId}&contractId={contract.contract_id}");
+        var index = Contractz.IndexOf(contract);
+        Debug.WriteLine($"Navigating to PKWT page - Employee: {EmployeeId}, Contract: {contract.contract_id}, Index: {index}");
+
+        await Shell.Current.GoToAsync($"GeneratePKWTPage?employeeId={EmployeeId}&contractId={contract.contract_id}&contractIndex={index}");
+    }
+    
+    [RelayCommand]
+    private async Task NavigateToCreateContractPage()
+    {
+        await Shell.Current.GoToAsync($"CreateContractForm?employeeId={EmployeeId}");
     }
 
     public async Task LoadLogsAsync()
@@ -120,20 +119,62 @@ public partial class EmployeeDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task DeleteEmployee()
     {
-        bool confirm = await Shell.Current.DisplayAlert("Confirm Delete", $"Are you sure you want to delete {Employee?.name}?", "Yes", "Cancel");
-        if (!confirm || Employee == null)
+        if (Employee == null)
+            return;
+
+        bool confirmDelete = await Shell.Current.DisplayAlert("Confirm Delete",
+            $"Apakah anda yakin akan menghapus data {Employee?.name}?", "Yes", "Cancel");
+
+        if (!confirmDelete)
+            return;
+
+        bool confirmRelatedData = await Shell.Current.DisplayAlert("Confirm Deletion",
+            "Apakah anda yakin? Semua data yang berhubungan akan terhapus dan tidak dapat di restore", "Yes", "Cancel");
+        if (!confirmRelatedData)
             return;
 
         try
         {
             await _employeeService.DeleteEmployeeAsync(Employee.employee_id);
-            await Shell.Current.DisplayAlert("Success", "Employee deleted successfully.", "OK");
+
+            await Shell.Current.DisplayAlert("Success", $"Data {Employee?.name} dan semua related data berhasil terhapus.", "OK");
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"Error deleting employee: {ex.Message}");
-            await Shell.Current.DisplayAlert("Error", "Failed to delete employee.", "OK");
+            await Shell.Current.DisplayAlert("Error", "Gagal menghapus data karyawan.", "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DeleteContract(Contract contract)
+    {
+        if (Employee == null)
+            return;
+
+        bool confirmDelete = await Shell.Current.DisplayAlert("Confirm Delete",
+            $"Apakah anda yakin akan menghapus data kontrak?", "Yes", "Cancel");
+
+        if (!confirmDelete)
+            return;
+
+        bool confirmRelatedData = await Shell.Current.DisplayAlert("Confirm Deletion",
+            "Apakah anda yakin? Data yang terhapus tidak dapat di restore", "Yes", "Cancel");
+        if (!confirmRelatedData)
+            return;
+
+        try
+        {
+            await _employeeService.DeleteContractAsync(contract);
+
+            await Shell.Current.DisplayAlert("Success", $"Data kontrak berhasil terhapus.", "OK");
+            await RefreshData();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error deleting employee: {ex.Message}");
+            await Shell.Current.DisplayAlert("Error", "Gagal menghapus data kontrak.", "OK");
         }
     }
 }

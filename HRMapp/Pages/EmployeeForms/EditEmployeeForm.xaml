@@ -193,29 +193,40 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <VerticalStackLayout>
-                <Label Text="Status Karyawan" Margin="8,0,0,0" TextColor="Black"/>
-                <Frame CornerRadius="20" Padding="32,0,0,0">
-                    <Picker
-                            BackgroundColor="Black"
-                            ItemsSource="{Binding EmployeeStatus}"
-                            SelectedItem="{Binding SelectedEmployeeStatus}"/>
-                </Frame>
-            </VerticalStackLayout>
-
-            <VerticalStackLayout>
-                <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>
-                <Frame CornerRadius="20" Padding="32,0,0,0">
-                    <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
-                        <Label Grid.Column="1" Text="{Binding CurrentFactory,StringFormat='Current Factory : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
-                        <Picker Grid.Column="0"
+            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*,auto" ColumnSpacing="16" RowSpacing="8">
+                <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                    <Label Text="Status Karyawan" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Picker
                                 BackgroundColor="Black"
-                                ItemsSource="{Binding Factories}"
-                                ItemDisplayBinding="{Binding name}"
-                                SelectedItem="{Binding SelectedFactory}"/>
-                    </Grid>
+                                ItemsSource="{Binding EmployeeStatus}"
+                                SelectedItem="{Binding SelectedEmployeeStatus}"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                    <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0">
+                        <Grid RowDefinitions="auto" ColumnDefinitions="*,auto">
+                            <Label Grid.Column="1" Text="{Binding CurrentFactory,StringFormat='Current Factory : {0}'}" TextColor="White" Margin="32,0,16,0" HorizontalOptions="End" VerticalOptions="Center"/>
+                            <Picker Grid.Column="0"
+                                    BackgroundColor="Black"
+                                    ItemsSource="{Binding Factories}"
+                                    ItemDisplayBinding="{Binding name}"
+                                    SelectedItem="{Binding SelectedFactory}"/>
+                        </Grid>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Bergabung" TextColor="White"/>
+                        <DatePicker VerticalOptions="Center"
+                                    MinimumDate="01/01/1970"
+                                    Date="{Binding SelectedHireDateTime, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
                 </Frame>
-            </VerticalStackLayout>
+            </Grid>
 
             <Grid RowDefinitions="auto, auto" ColumnDefinitions="*,auto" ColumnSpacing="16" RowSpacing="8">
                 <VerticalStackLayout Grid.Column="0" Grid.Row="0">

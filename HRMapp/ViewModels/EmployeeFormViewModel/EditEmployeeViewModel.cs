@@ -57,6 +57,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         
         [ObservableProperty]
         private DateOnly selectedGraduationDate;
+        [ObservableProperty]
+        private DateOnly selectedHireDate;
 
         [ObservableProperty]
         private string currentCity;
@@ -90,8 +92,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         //proxy buat convert datetime (compatible with datepicker)
         public DateTime SelectedBirthdateDateTime
         {
-            get => selectedBirthdate.ToDateTime(TimeOnly.MinValue);
+            get => SelectedBirthdate.ToDateTime(TimeOnly.MinValue);
             set => SelectedBirthdate = DateOnly.FromDateTime(value);
+        }
+
+        public DateTime SelectedHireDateTime
+        {
+            get => SelectedHireDate.ToDateTime(TimeOnly.MinValue);
+            set => SelectedHireDate = DateOnly.FromDateTime(value);
         }
 
         public DateTime SelectedGraduationDateTime
@@ -146,6 +154,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 birthdate = Employee.birthdate,
                 employee_status = Employee.employee_status,
                 graduation_date = Employee.graduation_date,
+                hire_date = Employee.hire_date,
                 City = new City { city_id = Employee.City?.city_id ?? 0, city_name = Employee.City?.city_name },
                 Department = new Department { department_id = Employee.Department?.department_id ?? 0, name = Employee.Department?.name },
                 Job = new Job { job_id = Employee.Job?.job_id ?? 0, job_name = Employee.Job?.job_name },
@@ -169,6 +178,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 SelectedReligion = Religions.FirstOrDefault(r => r.religion_id == Employee.Religion.religion_id);
                 SelectedGender = Employee.gender.ToLower();
                 SelectedBirthdate = Employee.birthdate;
+                SelectedHireDate = Employee.hire_date;
                 SelectedGraduationDate = Employee.graduation_date ?? DateOnly.FromDateTime(DateTime.Today);
                 SelectedEmployeeStatus = Employee.employee_status.ToUpper();
 
@@ -181,7 +191,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
                 var edType = SelectedEducation.education_type;
                 var major = SelectedEducation.major;
-                currentEducation =edType + $" - " + major;
+                CurrentEducation =edType + $" - " + major;
             }
 
             OnPropertyChanged(nameof(Departments));
@@ -192,6 +202,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             OnPropertyChanged(nameof(Educations));
             OnPropertyChanged(nameof(Religions));
             OnPropertyChanged(nameof(CurrentEducation));
+            OnPropertyChanged(nameof(SelectedHireDateTime));
             OnPropertyChanged(nameof(SelectedBirthdateDateTime));
             OnPropertyChanged(nameof(SelectedGraduationDateTime));
         }
@@ -219,6 +230,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 Employee.birthdate = SelectedBirthdate;
                 Employee.employee_status = SelectedEmployeeStatus;
                 Employee.graduation_date = SelectedGraduationDate;
+                Employee.hire_date = SelectedHireDate;
 
                 //Log Entries
                 var logs = new List<LogEmployee>();
@@ -303,6 +315,10 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
                 if (initialEmployee.graduation_date != SelectedGraduationDate)
                     AddChange("Graduation Date", initialEmployee.graduation_date?.ToString(), SelectedGraduationDate.ToString());
+
+                if (initialEmployee.hire_date != SelectedHireDate)
+                    AddChange("Tanggal Bergabung", initialEmployee.hire_date.ToString(), SelectedHireDate.ToString());
+                    AddChange("Tanggal Bergabung", initialEmployee.hire_date.ToString(), SelectedHireDate.ToString());
 
 
                 if (logs.Count > 0)

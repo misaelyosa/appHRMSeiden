@@ -242,16 +242,27 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <VerticalStackLayout>
-                <Label Text="Status Karyawan" Margin="8,0,0,0" TextColor="Black"/>
-                <Frame CornerRadius="20" Padding="32,0,0,0" BackgroundColor="White">
-                    <Picker
-                    BackgroundColor="White"
-                        TextColor="Black"
-                    ItemsSource="{Binding EmployeeStatus}"
-                    SelectedItem="{Binding SelectedEmployeeStatus}"/>
+            <Grid ColumnDefinitions="*,auto" ColumnSpacing="16">
+                <VerticalStackLayout Grid.Column="0">
+                    <Label Text="Status Karyawan" Margin="8,0,0,0" TextColor="Black"/>
+                    <Frame CornerRadius="20" Padding="32,0,0,0" BackgroundColor="White">
+                        <Picker
+                        BackgroundColor="White"
+                            TextColor="Black"
+                        ItemsSource="{Binding EmployeeStatus}"
+                        SelectedItem="{Binding SelectedEmployeeStatus}"/>
+                    </Frame>
+                </VerticalStackLayout>
+
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0">
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Bergabung" TextColor="White"/>
+                        <DatePicker VerticalOptions="Center"
+                                MinimumDate="01/01/1970"
+                                Date="{Binding SelectedHireDateTime, Mode=TwoWay}"/>
+                    </VerticalStackLayout>
                 </Frame>
-            </VerticalStackLayout>
+            </Grid>
 
             <VerticalStackLayout>
                 <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>

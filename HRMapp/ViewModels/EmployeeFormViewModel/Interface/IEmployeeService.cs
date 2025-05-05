@@ -9,5 +9,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task UpdateEmployeeAsync(Employee employee);
         Task DeleteEmployeeAsync(int id);
         Task<Contract>? GetContractDetail(int contractId);
+        Task UpdateContractAsync(Contract contract);
+        Task CreateContractAsync(Contract contract);
+        Task DeleteContractAsync(Contract contract);
+
+        Task<int> GetContractCountByEmployeeIdAsync(int employeeId);
+        Task CreateTunjanganAsync(Tunjangan tunjangan);
+        Task UpdateTunjanganAsync(Tunjangan tunjangan);
+        Task <Tunjangan> GetTunjanganMK(int contractId);
+        Task <Tunjangan> GetTunjanganOther(int contractId);
     }
 }
