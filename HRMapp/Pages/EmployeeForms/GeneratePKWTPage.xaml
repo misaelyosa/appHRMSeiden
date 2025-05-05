@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
              xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             xmlns:customvalidation="clr-namespace:HRMapp.ViewModels;assembly=HRMapp"
              x:Class="HRMapp.Pages.EmployeeForms.GeneratePKWTPage"
              Title="GeneratePKWTPage"
              BackgroundColor="White">
@@ -34,6 +35,25 @@
                             <validation:MaxLengthValidation MaxLength="4"/>
                         </input:AdvancedEntry.Validations>
                     </input:AdvancedEntry>
+
+                    <input:AdvancedEntry Title="Tunjangan MK (opsional)"                                 
+                    TitleColor="Black"
+                    MaxLength="15"
+                    Text="{Binding TunjanganMK}">
+                        <input:AdvancedEntry.Validations>
+                            <customvalidation:NullableNumericValidator/>
+                        </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+
+                    <input:AdvancedEntry Title="Tunjangan ... (opsional)"                                 
+                    TitleColor="Black"
+                    MaxLength="15"
+                    Text="{Binding TunjanganOther}">
+                        <input:AdvancedEntry.Validations>
+                            <customvalidation:NullableNumericValidator/>
+                        </input:AdvancedEntry.Validations>
+                    </input:AdvancedEntry>
+
 
                     <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, *, *" ColumnSpacing="8">
 

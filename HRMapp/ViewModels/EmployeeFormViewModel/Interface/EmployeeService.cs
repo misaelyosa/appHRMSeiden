@@ -109,6 +109,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
             if (contract != null)
             {
+                var listTunjangan = await context.Tunjangan
+                    .Where(t => t.contract_id == contract.contract_id)
+                    .ToListAsync();
+
+                context.Tunjangan.RemoveRange(listTunjangan);
+                
                 context.Contracts.Remove(contract);
                 await context.SaveChangesAsync();
             }
@@ -122,19 +128,26 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             context.Tunjangan.Add(tunjangan);
             await context.SaveChangesAsync();
         }
+        public async Task UpdateTunjanganAsync(Tunjangan tunjangan)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            context.Tunjangan.Update(tunjangan);
+            await context.SaveChangesAsync();
+        }
         public async Task <Tunjangan> GetTunjanganMK(int contractId)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
             return await context.Tunjangan.Where(e => e.contract_id == contractId && 
-            e.tunjangan_name.Contains("MK", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+            e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
         }        
         public async Task <Tunjangan> GetTunjanganOther(int contractId)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
             return await context.Tunjangan.Where(e => e.contract_id == contractId &&
-            !e.tunjangan_name.Contains("MK", StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+            !e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
         }
     }
 }

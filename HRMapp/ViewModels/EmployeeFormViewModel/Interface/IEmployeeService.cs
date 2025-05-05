@@ -14,6 +14,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task DeleteContractAsync(Contract contract);
 
         Task CreateTunjanganAsync(Tunjangan tunjangan);
+        Task UpdateTunjanganAsync(Tunjangan tunjangan);
         Task <Tunjangan> GetTunjanganMK(int contractId);
         Task <Tunjangan> GetTunjanganOther(int contractId);
     }

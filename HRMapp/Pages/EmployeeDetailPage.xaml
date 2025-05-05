@@ -340,7 +340,6 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -349,22 +348,21 @@
                                         </Grid.ColumnDefinitions>
 
                                         
-                                        <Label TextColor="Black" Text="{Binding Author, StringFormat='Created by : {0}'}" FontSize="14" Grid.Row="0" Grid.Column="2"/>
-                                        <Label TextColor="Black" Text="{Binding ContractDate, StringFormat='Tanggal Kontrak : {0}'}" FontSize="16" Grid.Row="0" Grid.ColumnSpan="2"/>
-                                        <Label TextColor="Black" Text="{Binding CreatedAt, StringFormat='Created at : {0}'}" FontSize="14" Grid.Row="1" Grid.Column="2"/>
+                                        <Label TextColor="Black" Text="{Binding author, StringFormat='Created by : {0}'}" FontSize="14" Grid.Row="0" Grid.Column="2"/>
+                                        <Label TextColor="Black" Text="{Binding contract_date, Converter={StaticResource DateToStringConverter} ,StringFormat='Tanggal Kontrak : {0}'}" FontSize="16" Grid.Row="0" Grid.ColumnSpan="2"/>
+                                        <Label TextColor="Black" Text="{Binding created_at, StringFormat='Created at : {0}'}" FontSize="14" Grid.Row="1" Grid.Column="2"/>
                                        
-                                        <Label TextColor="Black" Text="{Binding UpdatedAt, StringFormat='Updated at : {0}'}" FontSize="14" Grid.Row="2" Grid.Column="2"/>
-                                        <Label TextColor="Black" Text="{Binding ContractDuration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="1" Grid.ColumnSpan="3"/>
-                                        <Label TextColor="Black" Text="{Binding EndDate, StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="16" Grid.Row="2" Grid.ColumnSpan="3"/>
-                                        <Label TextColor="Black" Text="{Binding GajiPokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="Micro" Grid.Row="4" Grid.ColumnSpan="3" FontAttributes="Bold" />
-                                        <Label TextColor="Black" Text="{Binding TunjanganOther, StringFormat='Tunjangan... : {0}'}" FontSize="14" Grid.Row="5" Grid.ColumnSpan="3" VerticalOptions="Start"/>
-                                        <Label TextColor="Black" Text="{Binding TunjanganMK, StringFormat='Tunjangan MK : {0}'}" FontSize="14" Grid.Row="6" Grid.ColumnSpan="1" VerticalOptions="Start"/>
+                                        <Label TextColor="Black" Text="{Binding updated_at, StringFormat='Updated at : {0}'}" FontSize="14" Grid.Row="2" Grid.Column="2"/>
+                                        <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="1" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter},StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="16" Grid.Row="2" Grid.ColumnSpan="3"/>
+                                        <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="Micro" Grid.Row="4" Grid.ColumnSpan="3" FontAttributes="Bold" />
+                                        
 
-                                        <Button Text="Hapus Kontrak" Grid.Row="6" Grid.Column="2"
+                                        <Button Text="Hapus Kontrak" Grid.Row="5" Grid.Column="2"
                                                 BackgroundColor="OrangeRed" TextColor="Black"
                                                 Command="{Binding BindingContext.DeleteContractCommand, Source={x:Reference Name=PageRoot}}"
                                                 CommandParameter="{Binding}"/>
-                                        <Button Text="Detail PKWT" Grid.Row="7" Grid.Column="2"
+                                        <Button Text="Detail PKWT" Grid.Row="6" Grid.Column="2"
                                                 BackgroundColor="LightBlue" TextColor="Black"
                                                 Command="{Binding BindingContext.NavigateToGeneratePKWTCommand, Source={x:Reference Name=PageRoot}}"
                                                 CommandParameter="{Binding}"/>

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using QuestPDF.Previewer;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using static QuestPDF.Helpers.Colors;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel
 {
@@ -33,6 +34,15 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         private Contract selectedContract;
         [ObservableProperty]
         private Employee selectedEmployee;
+
+        [ObservableProperty]
+        private Tunjangan tjMK;
+        [ObservableProperty]
+        private Tunjangan tjOther;
+        [ObservableProperty]
+        private string tunjanganMK;
+        [ObservableProperty]
+        private string tunjanganOther;
 
         private string fileName;
 
@@ -128,14 +138,23 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         public async Task LoadContractDetailAsync(int contractId)
         {
-            var contract = await _employeeService.GetContractDetail(contractId);
-            if (contract != null)
+            try
             {
-                SelectedContract = contract;
-                SelectedEmployee = await _employeeService.GetEmployeeByIdAsync(contract.employee_id);
-                Debug.WriteLine(SelectedContract.contract_date);
-                Debug.WriteLine(SelectedEmployee.name);
-            } 
+                var contract = await _employeeService.GetContractDetail(contractId);
+                if (contract != null)
+                {
+                    SelectedContract = contract;
+                    SelectedEmployee = await _employeeService.GetEmployeeByIdAsync(contract.employee_id);
+                    TjMK = await _employeeService.GetTunjanganMK(contractId);
+                    TjOther = await _employeeService.GetTunjanganOther(contractId);
+                    Debug.WriteLine(SelectedContract.contract_date);
+                    Debug.WriteLine(SelectedEmployee.name);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error loading contract details: {ex.Message}");
+            }
         }
 
         partial void OnSelectedContractChanged(Contract value)
@@ -145,6 +164,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             SelectedContractDate = value.contract_date;
             SelectedEndDate = value.end_date;
+
+            TunjanganMK = TjMK?.amount.ToString() ?? "0";
+            TunjanganOther = TjOther?.amount.ToString() ?? "0";
 
             OnPropertyChanged(nameof(ContractDateTime));
             OnPropertyChanged(nameof(ContractEndDateTime));
@@ -187,7 +209,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                            $"Contract Date   : {SelectedContractDate:dd/MM/yyyy}\n" +
                            $"End Date        : {SelectedEndDate:dd/MM/yyyy}\n" +
                            $"Duration        : {ContractDuration} bulan\n" +
-                           $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}";
+                           $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}\n"+
+                           (string.IsNullOrWhiteSpace(TunjanganMK) ? "" : $"Tunjangan MK    : Rp. {int.Parse(TunjanganMK):N0}\n") +
+                           (string.IsNullOrWhiteSpace(TunjanganOther) ? "" : $"Tunjangan ...   : Rp. {int.Parse(TunjanganOther):N0}\n");
 
             var confirm = await Application.Current.MainPage.DisplayAlert(
                 "Confirm Changes",
@@ -213,9 +237,34 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 author = "admin" //todo --> kalo uda ada session ganti 
             };
 
+            var tunjanganList = new List<Tunjangan>();
+            if(!string.IsNullOrWhiteSpace(TunjanganMK))
+            {
+                tunjanganList.Add(new Tunjangan
+                {
+                    contract_id = SelectedContract.contract_id,
+                    tunjangan_name = $"Tunjangan MK_{SelectedEmployee.nip}",
+                    amount = int.Parse(TunjanganMK)
+                });
+            }
+            if (!string.IsNullOrWhiteSpace(TunjanganOther))
+            {
+                tunjanganList.Add(new Tunjangan
+                {
+                    contract_id = SelectedContract.contract_id,
+                    tunjangan_name = $"Tunjangan..._{SelectedEmployee.nip}",
+                    amount = int.Parse(TunjanganOther)
+                });
+            }
+
             try
             {
                 await _employeeService.UpdateContractAsync(updatedContract);
+
+                foreach(var tunjangan in tunjanganList)
+                {
+                    await _employeeService.UpdateTunjanganAsync(tunjangan);
+                }
 
                 await LoadContractDetailAsync(updatedContract.contract_id);
                 Application.Current.MainPage.Dispatcher.Dispatch(async () =>
@@ -276,6 +325,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             var contract = SelectedContract;
             var employee = SelectedEmployee;
 
+            var tunjanganMK = TjMK;
+            var tunjanganOther = TjOther;
+
             //kop surat
             var romanMonth = MonthToRoman(contract.contract_date.Month);
             Debug.WriteLine($"(converted to alphabet: {AlphabetCountContract})");
@@ -295,8 +347,11 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             string spellDuration = Terbilang(Duration).Trim();
 
             long gaji = contract.gaji_pokok;
-            string currencyFormat(int amount) => $"Rp. {amount:N0}";
-            string spellGaji = Terbilang(gaji).Trim() + " rupiah";
+            string currencyFormat(int? amount) => $"Rp. {amount:N0}";
+            string spellGaji = Terbilang(gaji).Trim() + " rupiah"; 
+            string spellTjMK = Terbilang((long)(tunjanganMK?.amount ?? 0));
+            string spellTjOther = Terbilang((long)(tunjanganOther?.amount ?? 0));
+
 
             Document.Create(container =>
             {
@@ -423,13 +478,13 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                         {
                             row.RelativeItem(2).Text("");
                             row.RelativeItem(2).Text("- Tunjangan ……");
-                            row.RelativeItem(8).Text(":     Rp. -");
+                            row.RelativeItem(8).Text($":     {currencyFormat(tunjanganOther?.amount) ?? "-"} ({spellTjOther})");
                         });
                         col.Item().Row(row =>
                         {
                             row.RelativeItem(2).Text("");
                             row.RelativeItem(2).Text("- Tunjangan MK");
-                            row.RelativeItem(8).Text(":     Rp. -");
+                            row.RelativeItem(8).Text($":    {currencyFormat(tunjanganMK?.amount)?? "-"} ({spellTjMK})");
                         });
                         col.Item().Row(row =>
                         {
