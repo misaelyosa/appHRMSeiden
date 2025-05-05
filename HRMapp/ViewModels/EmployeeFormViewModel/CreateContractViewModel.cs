@@ -70,7 +70,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                $"Contract Date   : {SelectedContractDate:dd/MM/yyyy}\n" +
                $"End Date        : {SelectedEndDate:dd/MM/yyyy}\n" +
                $"Duration        : {ContractDuration} bulan\n" +
-               $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}"+
+               $"Gaji Pokok      : Rp. {int.Parse(GajiPokok):N0}\n"+
                (string.IsNullOrWhiteSpace(TunjanganMK) ? "" : $"Tunjangan MK    : Rp. {int.Parse(TunjanganMK):N0}\n") +
                (string.IsNullOrWhiteSpace(TunjanganOther) ? "" : $"Tunjangan ...   : Rp. {int.Parse(TunjanganOther):N0}\n");
 
@@ -83,6 +83,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             if (!confirm)
                 return;
+
+            var contractCount = await _employeeService.GetContractCountByEmployeeIdAsync(EmployeeId);
+            var contractIndex = contractCount + 1;
 
             var newContract = new Contract
             {
@@ -105,7 +108,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             {
                 tunjanganList.Add(new Tunjangan
                 {
-                    tunjangan_name = $"Tunjangan MK_{SelectedEmployee.nip}",
+                    tunjangan_name = $"TunjanganMK_{SelectedEmployee.nip}_{contractIndex}",
                     amount = int.Parse(TunjanganMK),
                 });
             }
@@ -114,7 +117,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             {
                 tunjanganList.Add(new Tunjangan
                 {
-                    tunjangan_name = $"Tunjangan..._{SelectedEmployee.nip}",
+                    tunjangan_name = $"TunjanganOther_{SelectedEmployee.nip}_{contractIndex}",
                     amount = int.Parse(TunjanganOther)
                 });
             }

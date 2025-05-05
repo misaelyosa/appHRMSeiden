@@ -121,10 +121,16 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         }
 
         //Tunjangan
+        public async Task<int> GetContractCountByEmployeeIdAsync(int employeeId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Contracts
+                .Where(c => c.employee_id == employeeId)
+                .CountAsync();
+        }
         public async Task CreateTunjanganAsync(Tunjangan tunjangan)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
-
             context.Tunjangan.Add(tunjangan);
             await context.SaveChangesAsync();
         }
@@ -132,7 +138,22 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
-            context.Tunjangan.Update(tunjangan);
+            bool isMK = tunjangan.tunjangan_name?.Contains("MK", StringComparison.OrdinalIgnoreCase) ?? false;
+
+            var existingTunjangan = await context.Tunjangan
+            .FirstOrDefaultAsync(t => t.contract_id == tunjangan.contract_id &&
+                               (isMK
+                                   ? t.tunjangan_name.ToLower().Contains("mk") : !t.tunjangan_name.ToLower().Contains("mk")));
+
+            if (existingTunjangan != null)
+            {
+                existingTunjangan.amount = tunjangan.amount;
+            }
+            else
+            {
+                context.Tunjangan.Add(tunjangan);
+            }
+
             await context.SaveChangesAsync();
         }
         public async Task <Tunjangan> GetTunjanganMK(int contractId)

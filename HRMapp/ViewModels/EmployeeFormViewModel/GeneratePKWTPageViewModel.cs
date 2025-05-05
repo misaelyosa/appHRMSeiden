@@ -141,12 +141,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             try
             {
                 var contract = await _employeeService.GetContractDetail(contractId);
+                TjMK = await _employeeService.GetTunjanganMK(contractId);
+                TjOther = await _employeeService.GetTunjanganOther(contractId);
                 if (contract != null)
                 {
                     SelectedContract = contract;
                     SelectedEmployee = await _employeeService.GetEmployeeByIdAsync(contract.employee_id);
-                    TjMK = await _employeeService.GetTunjanganMK(contractId);
-                    TjOther = await _employeeService.GetTunjanganOther(contractId);
                     Debug.WriteLine(SelectedContract.contract_date);
                     Debug.WriteLine(SelectedEmployee.name);
                 }
@@ -236,14 +236,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 updated_at = DateTime.Now,
                 author = "admin" //todo --> kalo uda ada session ganti 
             };
-
             var tunjanganList = new List<Tunjangan>();
-            if(!string.IsNullOrWhiteSpace(TunjanganMK))
+            if (!string.IsNullOrWhiteSpace(TunjanganMK))
             {
                 tunjanganList.Add(new Tunjangan
                 {
-                    contract_id = SelectedContract.contract_id,
-                    tunjangan_name = $"Tunjangan MK_{SelectedEmployee.nip}",
+                    tunjangan_name = $"TunjanganMK_{SelectedEmployee.nip}_{ContractIndex+1}",
                     amount = int.Parse(TunjanganMK)
                 });
             }
@@ -251,18 +249,17 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             {
                 tunjanganList.Add(new Tunjangan
                 {
-                    contract_id = SelectedContract.contract_id,
-                    tunjangan_name = $"Tunjangan..._{SelectedEmployee.nip}",
+                    tunjangan_name = $"TunjanganOther_{SelectedEmployee.nip}_{ContractIndex+1}",
                     amount = int.Parse(TunjanganOther)
                 });
             }
-
             try
             {
                 await _employeeService.UpdateContractAsync(updatedContract);
 
                 foreach(var tunjangan in tunjanganList)
                 {
+                    tunjangan.contract_id = updatedContract.contract_id;
                     await _employeeService.UpdateTunjanganAsync(tunjangan);
                 }
 
@@ -270,6 +267,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 Application.Current.MainPage.Dispatcher.Dispatch(async () =>
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Kontrak berhasil diupdate.", "OK");
+                    //await Shell.Current.GoToAsync("..");
                 });
             }
             catch (Exception ex)
@@ -308,13 +306,13 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             }
         }
 
-        partial void OnContractIndexChanged(int value)
-        {
-            AlphabetCountContract = ConverttoAlphabet(value+1);
-            Debug.WriteLine($"ini count contract {value} (converted to alphabet: {AlphabetCountContract})");
-        }
+        //partial void OnContractIndexChanged(int value)
+        //{
+        //    AlphabetCountContract = ConverttoAlphabet(value+1);
+        //    Debug.WriteLine($"ini count contract {value} (converted to alphabet: {AlphabetCountContract})");
+        //}
 
-        public void GeneratePdf(string outputPath)
+        public async Task GeneratePdf(string outputPath)
         {
             Debug.WriteLine("Checking contract...");
             Debug.WriteLine($"SelectedContract: {SelectedContract.contract_id}");
@@ -330,6 +328,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             //kop surat
             var romanMonth = MonthToRoman(contract.contract_date.Month);
+
+            var countContract = ContractIndex + 1;
+            AlphabetCountContract = ConverttoAlphabet(countContract);
             Debug.WriteLine($"(converted to alphabet: {AlphabetCountContract})");
 
             //isi
@@ -478,7 +479,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                         {
                             row.RelativeItem(2).Text("");
                             row.RelativeItem(2).Text("- Tunjangan ……");
-                            row.RelativeItem(8).Text($":     {currencyFormat(tunjanganOther?.amount) ?? "-"} ({spellTjOther})");
+                            row.RelativeItem(8).Text($":    {currencyFormat(tunjanganOther?.amount) ?? "-"} ({spellTjOther})");
                         });
                         col.Item().Row(row =>
                         {
