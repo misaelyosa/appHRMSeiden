@@ -14,7 +14,7 @@ namespace HRMapp.Data.Model
         public int session_id { get; set; }
 
         [Required]
-        public string username { get; set; }
+        public string user_token { get; set; }
 
         public DateTime last_login { get; set; }
 
