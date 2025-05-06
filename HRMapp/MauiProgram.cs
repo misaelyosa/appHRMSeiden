@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
 using QuestPDF.Infrastructure;
+using HRMapp.ViewModels.SessionViewModel;
+using HRMapp.Pages.Session;
 
 namespace HRMapp;
 
@@ -48,6 +50,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<CreateEmployeeViewModel>();
 		builder.Services.AddTransient<GeneratePKWTPageViewModel>();
 		builder.Services.AddTransient<CreateContractViewModel>();
+		//session
+		builder.Services.AddTransient<SignupViewModel>();
+		builder.Services.AddTransient<LoginViewModel>();
+		builder.Services.AddTransient<ResetPasswordViewModel>();
 
         // Register Pages
         builder.Services.AddTransient<ManageEmployee>();
@@ -57,6 +63,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<CreateEmployeeForm>();
 		builder.Services.AddTransient<GeneratePKWTPage>();
 		builder.Services.AddTransient<CreateContractForm>();
+		//session
+		builder.Services.AddTransient<SignupPage>();
+		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddTransient<ResetPasswordPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();
