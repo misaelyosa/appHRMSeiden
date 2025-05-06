@@ -17,7 +17,9 @@ namespace HRMapp.Data.Model
         public string username { get; set; }
 
         [Required]
-        public string password_hash { get; set; } 
+        public string password_hash { get; set; }
+
+        public string? forgot_pass_token { get; set; }
 
         [Required]
         [MaxLength(20)]

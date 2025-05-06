@@ -16,8 +16,6 @@ namespace HRMapp.Data.Model
         [Required]
         public string username { get; set; }
 
-        public string? forgot_pass_token { get; set; }
-
         public DateTime last_login { get; set; }
 
         //FK
