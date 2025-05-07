@@ -20,28 +20,50 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
 
         public async Task<bool> IsUserLoggedInAsync()
         {
-            using var context = await _contextFactory.CreateDbContextAsync();
-            return await context.Session.AnyAsync();
+            var user_token = await SecureStorage.GetAsync("user_token");
+            if (string.IsNullOrEmpty(user_token))
+            {
+                return false;
+            }
+            else
+            {
+                using var context = await _contextFactory.CreateDbContextAsync();
+
+                return await context.Session.AnyAsync(s => s.user_token == user_token);
+            }
+
         }
 
         public async Task<bool> LoginAsync(string username, string password)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
+            var token = Guid.NewGuid().ToString();
             var user = await context.Users.FirstOrDefaultAsync(e => e.username == username && e.password_hash == password);
-           
+            
             if (user != null)
             {
-                var addSession = new Session
-                {   
-                    user_id = user.user_id,
-                    user_token = user.username,
-                    last_login = DateTime.Now,
-                };
+                var existingSession = await context.Session.FirstOrDefaultAsync(s => s.user_id == user.user_id);
 
-                context.Add(addSession);
+                if (existingSession != null)
+                {
+                    existingSession.last_login = DateTime.Now;
+                    context.Update(existingSession);
+                } 
+                else
+                {
+                    var addSession = new Session
+                    {
+                        user_id = user.user_id,
+                        user_token = token,
+                        last_login = DateTime.Now,
+                    };
+
+                    context.Add(addSession);
+                }
+
                 await context.SaveChangesAsync();
-
+                await SecureStorage.Default.SetAsync("user_token", token);
                 return true;
             }
             return false;
@@ -49,9 +71,20 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
 
         public async Task LogoutAsync()
         {
-            using var context = await _contextFactory.CreateDbContextAsync();
-            context.Session.RemoveRange(context.Session);
-            await context.SaveChangesAsync();
+            var token = await SecureStorage.GetAsync("user_token");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                using var context = await _contextFactory.CreateDbContextAsync();
+                var session = await context.Session.FirstOrDefaultAsync(s => s.user_token == token);
+                if (session != null)
+                {
+                    context.Session.Remove(session);
+                    await context.SaveChangesAsync();
+                }
+
+                SecureStorage.Default.Remove("user_token");
+            }
         }
     }
 }
