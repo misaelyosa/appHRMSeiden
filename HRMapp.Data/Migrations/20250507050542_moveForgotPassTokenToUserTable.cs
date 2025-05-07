@@ -5,7 +5,7 @@
 namespace HRMapp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class MoveResetTokentoUserTable : Migration
+    public partial class moveForgotPassTokenToUserTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

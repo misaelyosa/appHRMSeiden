@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250507041138_resetUserSessionTable")]
-    partial class resetUserSessionTable
+    [Migration("20250507061642_fixFKSessionTable")]
+    partial class fixFKSessionTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -380,6 +380,8 @@ namespace HRMapp.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("session_id"));
+
                     b.Property<DateTime>("last_login")
                         .HasColumnType("datetime(6)");
 
@@ -391,6 +393,8 @@ namespace HRMapp.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("session_id");
+
+                    b.HasIndex("user_id");
 
                     b.ToTable("Session");
                 });
@@ -548,7 +552,7 @@ namespace HRMapp.Data.Migrations
                 {
                     b.HasOne("HRMapp.Data.Model.User", "User")
                         .WithMany()
-                        .HasForeignKey("session_id")
+                        .HasForeignKey("user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

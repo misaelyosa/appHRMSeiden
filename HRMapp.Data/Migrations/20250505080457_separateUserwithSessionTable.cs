@@ -19,16 +19,9 @@ namespace HRMapp.Data.Migrations
                 name: "password",
                 table: "Session");
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.DropColumn(
                 name: "username",
-                table: "Session",
-                type: "longtext",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "varchar(50)",
-                oldMaxLength: 50)
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                table: "Session");
 
             migrationBuilder.AlterColumn<int>(
                 name: "session_id",
@@ -57,6 +50,8 @@ namespace HRMapp.Data.Migrations
                     password_hash = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     authority = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    forgot_pass_token = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -88,16 +83,9 @@ namespace HRMapp.Data.Migrations
                 name: "user_id",
                 table: "Session");
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.DropColumn(
                 name: "username",
-                table: "Session",
-                type: "varchar(50)",
-                maxLength: 50,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "longtext")
-                .Annotation("MySql:CharSet", "utf8mb4")
-                .OldAnnotation("MySql:CharSet", "utf8mb4");
+                table: "Session");
 
             migrationBuilder.AlterColumn<int>(
                 name: "session_id",

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250506020644_MoveResetTokentoUserTable")]
-    partial class MoveResetTokentoUserTable
+    [Migration("20250507050542_moveForgotPassTokenToUserTable")]
+    partial class moveForgotPassTokenToUserTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -385,7 +385,7 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("user_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("username")
+                    b.Property<string>("user_token")
                         .IsRequired()
                         .HasColumnType("longtext");
 

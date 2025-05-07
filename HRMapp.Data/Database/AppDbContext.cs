@@ -109,7 +109,7 @@ namespace HRMapp.Data.Database
             modelBuilder.Entity<Session>()
                 .HasOne(c => c.User)
                 .WithMany()
-                .HasForeignKey(c => c.session_id);
+                .HasForeignKey(c => c.user_id);
         }
     }
 }
