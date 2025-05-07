@@ -11,6 +11,7 @@ using UraniumUI;
 using QuestPDF.Infrastructure;
 using HRMapp.ViewModels.SessionViewModel;
 using HRMapp.Pages.Session;
+using HRMapp.ViewModels.SessionViewModel.Interface;
 
 namespace HRMapp;
 
@@ -21,7 +22,7 @@ public static class MauiProgram
 		QuestPDF.Settings.License = LicenseType.Community;
 
 		var builder = MauiApp.CreateBuilder();
-		builder
+        builder
 			.UseMauiApp<App>()
 			.ConfigureMauiHandlers(handlers =>
 			{
@@ -41,6 +42,7 @@ public static class MauiProgram
                              new MySqlServerVersion(new Version(10, 4, 28))));
 
         builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+		builder.Services.AddScoped<ISessionService, SessionService>();
 
         // Register ViewModels
         builder.Services.AddSingleton<EmployeeListViewModel>();

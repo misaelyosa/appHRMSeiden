@@ -1,5 +1,7 @@
 ﻿using HRMapp.Pages;
 using HRMapp.Pages.EmployeeForms;
+using HRMapp.Pages.Session;
+using System.Diagnostics;
 
 namespace HRMapp
 {
@@ -7,17 +9,30 @@ namespace HRMapp
     {
         public AppShell()
         {
-            InitializeComponent();
-            Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
-            Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
+            try
+            {
+                InitializeComponent();
+                Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
+                Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
+                Routing.RegisterRoute("MainPage", typeof(MainPage));
 
-            //Employee form
-            Routing.RegisterRoute("EmployeeForms/Edit", typeof(EditEmployeeForm));
-            Routing.RegisterRoute(nameof(CreateEmployeeForm), typeof(CreateEmployeeForm));
+                //Employee form
+                Routing.RegisterRoute("EmployeeForms/Edit", typeof(EditEmployeeForm));
+                Routing.RegisterRoute(nameof(CreateEmployeeForm), typeof(CreateEmployeeForm));
 
-            Routing.RegisterRoute("GeneratePKWTPage", typeof(GeneratePKWTPage));
-            Routing.RegisterRoute("CreateContractForm", typeof(CreateContractForm));
+                Routing.RegisterRoute("GeneratePKWTPage", typeof(GeneratePKWTPage));
+                Routing.RegisterRoute("CreateContractForm", typeof(CreateContractForm));
 
+                //Session route 
+                Routing.RegisterRoute("LoginPage", typeof(LoginPage));
+                Routing.RegisterRoute("SignupPage", typeof(SignupPage));
+                Routing.RegisterRoute("ResetPasswordPage", typeof(ResetPasswordPage));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ AppShell initialization error: {ex}");
+                throw;
+            }
         }
     }
 }
