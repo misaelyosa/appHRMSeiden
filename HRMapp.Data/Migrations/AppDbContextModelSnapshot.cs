@@ -374,6 +374,7 @@ namespace HRMapp.Data.Migrations
             modelBuilder.Entity("HRMapp.Data.Model.Session", b =>
                 {
                     b.Property<int>("session_id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("last_login")

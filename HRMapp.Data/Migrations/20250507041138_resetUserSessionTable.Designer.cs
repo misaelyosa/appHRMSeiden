@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250506032815_renameUsertoken")]
-    partial class renameUsertoken
+    [Migration("20250507041138_resetUserSessionTable")]
+    partial class resetUserSessionTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -377,6 +377,7 @@ namespace HRMapp.Data.Migrations
             modelBuilder.Entity("HRMapp.Data.Model.Session", b =>
                 {
                     b.Property<int>("session_id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("last_login")

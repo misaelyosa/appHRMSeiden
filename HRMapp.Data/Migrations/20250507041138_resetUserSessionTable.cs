@@ -5,7 +5,7 @@
 namespace HRMapp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class renameUsertoken : Migration
+    public partial class resetUserSessionTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
