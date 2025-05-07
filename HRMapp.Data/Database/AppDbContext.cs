@@ -110,6 +110,11 @@ namespace HRMapp.Data.Database
                 .HasOne(c => c.User)
                 .WithMany()
                 .HasForeignKey(c => c.user_id);
+
+            modelBuilder
+                .Entity<Session>()
+                .Property(s => s.status)
+                .HasConversion<string>();
         }
     }
 }
