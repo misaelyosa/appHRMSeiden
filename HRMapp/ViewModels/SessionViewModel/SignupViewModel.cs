@@ -17,6 +17,7 @@ namespace HRMapp.ViewModels.SessionViewModel
         public SignupViewModel(ISessionService sessionService)
         {
             _sessionService = sessionService;
+            CheckIsAdmin();
         }
 
         [ObservableProperty]
@@ -25,6 +26,27 @@ namespace HRMapp.ViewModels.SessionViewModel
         private string password;
         [ObservableProperty]
         private string authority;
+
+        [ObservableProperty]
+        private List<string> pickerAuth = new();
+        [ObservableProperty]
+        private string selectedAuth;
+        [ObservableProperty]
+        private bool isAdmin;
+        [ObservableProperty]
+        private bool isNotAdmin = true;
+
+        [RelayCommand]
+        public async Task CheckIsAdmin()
+        {
+           IsAdmin = await _sessionService.CheckIsAdmin();
+
+            if (IsAdmin)
+            {
+                PickerAuth = new List<string> { "admin", "user" };
+                IsNotAdmin = false;
+            }
+        }
 
         [RelayCommand]
         public async Task NavigateToLoginPage()

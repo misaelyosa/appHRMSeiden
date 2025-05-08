@@ -178,9 +178,34 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             }
             else
             {
-                //await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
                 return forgotPwToken;
             }
+        }
+
+        public async Task<bool> CheckIsAdmin()
+        {
+            var user_token = await SecureStorage.Default.GetAsync("user_token");
+            if (string.IsNullOrEmpty(user_token))
+            {
+                return false;
+            }
+
+            var context = await _contextFactory.CreateDbContextAsync();
+            var session = await context.Session.FirstOrDefaultAsync(s => s.user_token == user_token);
+            var user = await context.Users.FirstOrDefaultAsync(u => u.user_id == session.user_id);
+
+            bool checkauth = user.authority.ToLower() == "admin";
+            bool checktoken = user_token == session.user_token;
+            Debug.WriteLine($"hasil check auth : {checkauth}");
+            Debug.WriteLine($"hasil check token : {checktoken}");
+
+            if (user.authority.ToLower() == "admin" && user_token == session.user_token)
+            {
+                Debug.WriteLine("admin datank");
+                return true;
+            } 
+            return false;
         }
     }
 }

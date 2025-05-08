@@ -48,6 +48,15 @@
                     </input:AdvancedEntry.Validations>
                 </input:AdvancedEntry>
 
+                <Picker Title="Select Authority"
+                    ItemsSource="{Binding PickerAuth}"
+                    SelectedItem="{Binding SelectedAuth}"
+                    IsEnabled="{Binding IsAdmin}"
+                    IsVisible="{Binding IsAdmin}"
+                        BackgroundColor="Black"
+                    TitleColor="Black"
+                    TextColor="White" />
+
 
                 <Button Text="Register"
                  input:FormView.IsSubmitButton="True"
@@ -61,8 +70,11 @@
 
             <!-- Log In -->
             <VerticalStackLayout HorizontalOptions="Center" Margin="0,20,0,0">
-                <Label Text="Already have an account?" TextColor="Gray" />
+                <Label Text="Already have an account?" TextColor="Gray" IsEnabled="{Binding IsNotAdmin}"
+                    IsVisible="{Binding IsNotAdmin}" />
                 <Button Text="Log In"
+                    IsEnabled="{Binding IsNotAdmin}"
+                    IsVisible="{Binding IsNotAdmin}"
                      BackgroundColor="Transparent"
                      TextColor="Blue"
                      FontAttributes="Bold"

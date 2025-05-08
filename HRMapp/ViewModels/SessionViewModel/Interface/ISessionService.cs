@@ -15,5 +15,6 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
 
         //register
         Task<string?> RegisterAsync(string username, string password, string authority);
+        Task<bool> CheckIsAdmin();
     }
 }
