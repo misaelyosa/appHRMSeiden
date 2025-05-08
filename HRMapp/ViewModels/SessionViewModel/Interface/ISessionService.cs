@@ -9,6 +9,7 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
     public interface ISessionService
     {
         Task<bool> IsUserLoggedInAsync();
+        public string Username { get; }
         Task<bool> LoginAsync(string username, string password);
         Task LogoutAsync();
     }

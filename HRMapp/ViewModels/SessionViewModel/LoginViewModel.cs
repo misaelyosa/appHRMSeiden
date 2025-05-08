@@ -31,7 +31,7 @@ namespace HRMapp.ViewModels.SessionViewModel
             
             if (success)
             {
-                Application.Current.MainPage = new AppShell();
+                Application.Current.MainPage = new AppShell(_sessionService);
             }
             else
             {

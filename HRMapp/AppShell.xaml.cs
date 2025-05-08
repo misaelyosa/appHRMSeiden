@@ -1,17 +1,23 @@
 ﻿using HRMapp.Pages;
 using HRMapp.Pages.EmployeeForms;
 using HRMapp.Pages.Session;
+using HRMapp.ViewModels.SessionViewModel;
+using HRMapp.ViewModels.SessionViewModel.Interface;
 using System.Diagnostics;
 
 namespace HRMapp
 {
     public partial class AppShell : Shell
     {
-        public AppShell()
+        private readonly ISessionService _sessionService;
+        public AppShell(ISessionService sessionService)
         {
             try
             {
                 InitializeComponent();
+                _sessionService = sessionService;
+                BindingContext = this;
+
                 Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
                 Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
                 Routing.RegisterRoute("MainPage", typeof(MainPage));
@@ -30,9 +36,21 @@ namespace HRMapp
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"❌ AppShell initialization error: {ex}");
+                Debug.WriteLine($"AppShell initialization error: {ex}");
                 throw;
             }
+        }
+        public string Username => _sessionService.Username;
+        public void RefreshUsernameBinding()
+        {
+            OnPropertyChanged(nameof(Username));
+        }
+
+        private async void OnLogoutClicked(object sender, EventArgs e)
+        {
+            await _sessionService.LogoutAsync();
+            var loginVm = new LoginViewModel(_sessionService);
+            Application.Current.MainPage = new NavigationPage(new LoginPage(loginVm));
         }
     }
 }

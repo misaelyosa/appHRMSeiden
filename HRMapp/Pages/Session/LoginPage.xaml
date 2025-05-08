@@ -15,10 +15,10 @@
                    TextColor="Black"
                    FontAttributes="Bold" />
 
-            <Label Text="Login"
+            <Label Text="Log In"
                    FontSize="20"
                    HorizontalOptions="Center"
-                   TextColor="Black"/>
+                   TextColor="MediumPurple"/>
 
             <Label Text="Hello, welcome back"
                    FontSize="14"
@@ -32,6 +32,7 @@
                 <input:AdvancedEntry Title="Username"
                          TitleColor="Black"
                          Placeholder="Enter your username"
+                                     PlaceholderColor="Gray"
                          Text="{Binding Username}">
                     <input:AdvancedEntry.Validations>
                         <validation:RequiredValidation />
@@ -42,6 +43,7 @@
                 <input:AdvancedEntry Title="Password"
                          TitleColor="Black"
                          Placeholder="Enter your password"
+                                     PlaceholderColor="Gray"
                          IsPassword="True"
                          Text="{Binding Password}">
                     <input:AdvancedEntry.Validations>
