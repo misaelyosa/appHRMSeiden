@@ -82,36 +82,43 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
 
             var token = Guid.NewGuid().ToString();
-            var user = await context.Users.FirstOrDefaultAsync(e => e.username == username && e.password_hash == password);
+            var user = await context.Users.FirstOrDefaultAsync(e => e.username == username);
             
             if (user != null)
             {
-                Username = user.username;
-                var existingSession = await context.Session.FirstOrDefaultAsync(s => s.user_id == user.user_id);
+                var storedPassword = user.password_hash;
+                var isPassMatch = PasswordHasher.Verify(password, storedPassword);
 
-                if (existingSession != null)
+                if (isPassMatch)
                 {
-                    existingSession.user_token = token;
-                    existingSession.last_login = DateTime.Now;
-                    existingSession.status = Sessionstatus.Active;
-                    context.Update(existingSession);
-                } 
-                else
-                {
-                    var addSession = new Session
+                    Username = user.username;
+                    var existingSession = await context.Session.FirstOrDefaultAsync(s => s.user_id == user.user_id);
+
+                    if (existingSession != null)
                     {
-                        user_id = user.user_id,
-                        user_token = token,
-                        last_login = DateTime.Now,
-                        status = Sessionstatus.Active
-                    };
+                        existingSession.user_token = token;
+                        existingSession.last_login = DateTime.Now;
+                        existingSession.status = Sessionstatus.Active;
+                        context.Update(existingSession);
+                    } 
+                    else
+                    {
+                        var addSession = new Session
+                        {
+                            user_id = user.user_id,
+                            user_token = token,
+                            last_login = DateTime.Now,
+                            status = Sessionstatus.Active
+                        };
 
-                    context.Add(addSession);
+                        context.Add(addSession);
+                    }
+
+                    await context.SaveChangesAsync();
+                    await SecureStorage.Default.SetAsync("user_token", token);
+                    return true;
                 }
-
-                await context.SaveChangesAsync();
-                await SecureStorage.Default.SetAsync("user_token", token);
-                return true;
+                return false;
             }
             return false;
         }
@@ -131,6 +138,48 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
                 }
 
                 SecureStorage.Default.Remove("user_token");
+            }
+        }
+
+        public async Task<string?> RegisterAsync(string username, string password, string authority)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var hashedPw = PasswordHasher.Hash(password);
+            var forgotPwToken = Guid.NewGuid().ToString();
+
+            if (string.IsNullOrEmpty(authority))
+            {
+                var newUser = new User
+                {
+                    username = username,
+                    password_hash = hashedPw,
+                    authority = "user",
+                    forgot_pass_token = forgotPwToken
+                };
+                context.Users.Add(newUser);
+            } 
+            else
+            {
+                var newAdmin = new User
+                {
+                    username = username,
+                    password_hash = hashedPw,
+                    authority = authority,
+                    forgot_pass_token = forgotPwToken
+                };
+                context.Users.Add(newAdmin);
+            }
+
+            bool isDuplicate = await context.Users.AnyAsync(u => u.username == username);
+            if (isDuplicate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Gagal Register", $"username {username} sudah pernah digunakan.", "OK");
+                return null;
+            }
+            else
+            {
+                //await context.SaveChangesAsync();
+                return forgotPwToken;
             }
         }
     }

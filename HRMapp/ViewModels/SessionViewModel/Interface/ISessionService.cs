@@ -12,5 +12,8 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
         public string Username { get; }
         Task<bool> LoginAsync(string username, string password);
         Task LogoutAsync();
+
+        //register
+        Task<string?> RegisterAsync(string username, string password, string authority);
     }
 }
