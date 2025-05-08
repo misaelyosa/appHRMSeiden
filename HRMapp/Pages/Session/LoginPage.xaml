@@ -64,9 +64,7 @@
 
             <!-- Remember me and forgot password -->
             <Grid ColumnDefinitions="*, Auto">
-                <CheckBox IsChecked="True"
-                          VerticalOptions="Center" />
-                <Label Text="Remember me"
+                <Label Text=""
                        VerticalOptions="Center"
                        FontSize="14"
                        TextColor="Gray"
@@ -76,7 +74,8 @@
                         FontSize="12"
                         BackgroundColor="Transparent"
                         TextColor="Blue"
-                        Grid.Column="1" />
+                        Grid.Column="1" 
+                        Command="{Binding NavigateToForgotPasswordPageCommand}"/>
             </Grid>
 
 
@@ -87,6 +86,7 @@
                         BackgroundColor="Transparent"
                         TextColor="Blue"
                         FontAttributes="Bold"
+                        Command="{Binding NavigateToRegisterPageCommand}"
                        />
             </VerticalStackLayout>
         </VerticalStackLayout>
