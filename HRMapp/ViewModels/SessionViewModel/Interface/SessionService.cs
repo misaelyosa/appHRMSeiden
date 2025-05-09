@@ -207,5 +207,52 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             } 
             return false;
         }
+
+
+        //Reset Password
+        public async Task<string?> ValidateForgotPasswordToken(string username, string token)
+        {
+            var context = await _contextFactory.CreateDbContextAsync();
+
+            var user = await context.Users.FirstOrDefaultAsync(u => u.username == username);
+            var resettoken = await context.Users.FirstOrDefaultAsync(u => u.forgot_pass_token == token);
+            if (user != null)
+            {
+                var userId = user.user_id.ToString();
+                if (resettoken != null)
+                {
+                    Debug.WriteLine("ini true");
+                    return userId;
+                }
+                await Application.Current.MainPage.DisplayAlert("Data tidak valid", "Token reset password yang diberikan salah.", "OK");
+                return null;
+            }
+            await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", $"User dengan username {username} tidak ditemukan.", "OK");
+            return null;        
+        }    
+
+        public async Task<string?> ResetPassword(string userId, string newPassword)
+        {
+            var context = await _contextFactory.CreateDbContextAsync();
+            var user = await context.Users.FirstOrDefaultAsync(u => u.user_id == int.Parse(userId));
+
+            if (!string.IsNullOrEmpty(userId) && user != null)
+            {
+                if (!string.IsNullOrEmpty(newPassword))
+                {
+                    var newPassHash = PasswordHasher.Hash(newPassword);
+                    var newToken = Guid.NewGuid().ToString();
+                    user.password_hash = newPassHash;
+                    user.forgot_pass_token = newToken;
+
+                    await context.SaveChangesAsync();
+                    return newToken;
+                }
+                return null;
+            }
+            await Application.Current.MainPage.DisplayAlert("User ID not set", "Ulang proses verifikasi kembali", "OK");
+            return null;
+        }
     }
+
 }

@@ -16,5 +16,9 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
         //register
         Task<string?> RegisterAsync(string username, string password, string authority);
         Task<bool> CheckIsAdmin();
+
+        //reset password
+        Task<string?> ValidateForgotPasswordToken(string username, string token);
+        Task<string?> ResetPassword(string userId, string newPassword);
     }
 }
