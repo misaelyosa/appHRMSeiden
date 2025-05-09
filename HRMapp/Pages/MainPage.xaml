@@ -9,8 +9,15 @@
             Padding="20, 20 , 20, 20"
             Spacing="25">
 
+            <Button Text="Add User" Command="{Binding NavigateToRegisterCommand}"                     
+                    IsEnabled="{Binding IsAdmin}"
+                    IsVisible="{Binding IsAdmin}"/>
+
+            <Button Text="Copy Reset Password Token" Command="{Binding GetResetTokenCommand}"/>
+
             <Label Text="Lihat data karyawan :" FontSize="Medium" FontAttributes="Bold" TextColor="black" HorizontalTextAlignment="Start"/>
             <Button Text="Manage Karyawan" FontSize="16" FontAttributes="Bold" Command="{Binding NavigateToManageEmployeeCommand}"/>
+            
 
         </VerticalStackLayout>
     </ScrollView>

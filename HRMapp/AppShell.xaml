@@ -9,13 +9,21 @@
     Title="HRMapp">
 
     <Shell.TitleView>
-        <Grid Padding="20,20,10,10">
-            <Label Text="Welcome, !"
+        <Grid ColumnDefinitions="*, auto" Padding="20,10,0,10" RowDefinitions="auto">
+            <Label Text="{Binding Username, StringFormat='Welcome, {0}!'}"
+                   Grid.Column="0"
                    FontSize="20"
                    TextColor="Black"
                    FontAttributes="Bold"
                    HorizontalOptions="Start"
                    VerticalOptions="Center"/>
+            <Button Text="LOGOUT"
+                    VerticalOptions="Center"
+                    Grid.Column="1"
+                    TextColor="Red"
+                    FontAttributes="Bold"
+                    Clicked="OnLogoutClicked"
+                    BackgroundColor="Transparent"/>
         </Grid>
     </Shell.TitleView>
 

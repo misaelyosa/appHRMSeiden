@@ -4,6 +4,7 @@ using HRMapp.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505080457_separateUserwithSessionTable")]
+    partial class separateUserwithSessionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -374,28 +377,22 @@ namespace HRMapp.Data.Migrations
             modelBuilder.Entity("HRMapp.Data.Model.Session", b =>
                 {
                     b.Property<int>("session_id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("session_id"));
+                    b.Property<string>("forgot_pass_token")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("last_login")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
                     b.Property<int>("user_id")
                         .HasColumnType("int");
 
-                    b.Property<string>("user_token")
+                    b.Property<string>("username")
                         .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("session_id");
-
-                    b.HasIndex("user_id");
 
                     b.ToTable("Session");
                 });
@@ -436,9 +433,6 @@ namespace HRMapp.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
-
-                    b.Property<string>("forgot_pass_token")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("password_hash")
                         .IsRequired()
@@ -553,7 +547,7 @@ namespace HRMapp.Data.Migrations
                 {
                     b.HasOne("HRMapp.Data.Model.User", "User")
                         .WithMany()
-                        .HasForeignKey("user_id")
+                        .HasForeignKey("session_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

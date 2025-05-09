@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using UraniumUI;
 using QuestPDF.Infrastructure;
+using HRMapp.ViewModels.SessionViewModel;
+using HRMapp.Pages.Session;
+using HRMapp.ViewModels.SessionViewModel.Interface;
 
 namespace HRMapp;
 
@@ -19,7 +22,7 @@ public static class MauiProgram
 		QuestPDF.Settings.License = LicenseType.Community;
 
 		var builder = MauiApp.CreateBuilder();
-		builder
+        builder
 			.UseMauiApp<App>()
 			.ConfigureMauiHandlers(handlers =>
 			{
@@ -39,6 +42,7 @@ public static class MauiProgram
                              new MySqlServerVersion(new Version(10, 4, 28))));
 
         builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+		builder.Services.AddScoped<ISessionService, SessionService>();
 
         // Register ViewModels
         builder.Services.AddSingleton<EmployeeListViewModel>();
@@ -48,6 +52,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<CreateEmployeeViewModel>();
 		builder.Services.AddTransient<GeneratePKWTPageViewModel>();
 		builder.Services.AddTransient<CreateContractViewModel>();
+		//session
+		builder.Services.AddTransient<SignupViewModel>();
+		builder.Services.AddTransient<LoginViewModel>();
+		builder.Services.AddTransient<ResetPasswordViewModel>();
 
         // Register Pages
         builder.Services.AddTransient<ManageEmployee>();
@@ -57,6 +65,10 @@ public static class MauiProgram
 		builder.Services.AddTransient<CreateEmployeeForm>();
 		builder.Services.AddTransient<GeneratePKWTPage>();
 		builder.Services.AddTransient<CreateContractForm>();
+		//session
+		builder.Services.AddTransient<SignupPage>();
+		builder.Services.AddTransient<LoginPage>();
+		builder.Services.AddTransient<ResetPasswordPage>();
 
 #if DEBUG
 		builder.Logging.AddDebug();

@@ -13,6 +13,7 @@ namespace HRMapp.Data.Database
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
+        public DbSet<User> Users { get; set; } 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<Department> Departments { get; set; }
@@ -105,6 +106,15 @@ namespace HRMapp.Data.Database
                 .HasOne(c => c.Contract)
                 .WithMany()
                 .HasForeignKey(c => c.contract_id);
+            modelBuilder.Entity<Session>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.user_id);
+
+            modelBuilder
+                .Entity<Session>()
+                .Property(s => s.status)
+                .HasConversion<string>();
         }
     }
 }
