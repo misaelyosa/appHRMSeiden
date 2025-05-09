@@ -20,5 +20,6 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
         //reset password
         Task<string?> ValidateForgotPasswordToken(string username, string token);
         Task<string?> ResetPassword(string userId, string newPassword);
+        Task<string?> GetResetToken();
     }
 }

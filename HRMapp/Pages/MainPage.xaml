@@ -13,6 +13,8 @@
                     IsEnabled="{Binding IsAdmin}"
                     IsVisible="{Binding IsAdmin}"/>
 
+            <Button Text="Copy Reset Password Token" Command="{Binding GetResetTokenCommand}"/>
+
             <Label Text="Lihat data karyawan :" FontSize="Medium" FontAttributes="Bold" TextColor="black" HorizontalTextAlignment="Start"/>
             <Button Text="Manage Karyawan" FontSize="16" FontAttributes="Bold" Command="{Binding NavigateToManageEmployeeCommand}"/>
             

@@ -28,6 +28,25 @@ namespace HRMapp.ViewModels
         }
 
         [RelayCommand]
+        public async Task GetResetToken()
+        {
+            var resetToken = await _sessionService.GetResetToken();
+            if (!string.IsNullOrEmpty(resetToken))
+            {
+                await Clipboard.Default.SetTextAsync(resetToken);
+                await Application.Current.MainPage.DisplayAlert("Token Disalin",
+                $"Token reset password ({resetToken}) telah disalin ke clipboard. Silakan tempel (paste) di tempat yang dibutuhkan.",
+                "OK");
+            } 
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Token tidak ditemukan",
+                "Token reset password tidak ditemukan, coba logout dan coba kembali.",
+                "OK");
+            }
+        }
+        
+        [RelayCommand]
         private async Task NavigateToManageEmployee()
         {
             await Shell.Current.GoToAsync(nameof(ManageEmployee));

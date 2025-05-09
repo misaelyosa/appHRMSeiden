@@ -253,6 +253,24 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             await Application.Current.MainPage.DisplayAlert("User ID not set", "Ulang proses verifikasi kembali", "OK");
             return null;
         }
-    }
 
+        public async Task<string?> GetResetToken()
+        {
+            var context = await _contextFactory.CreateDbContextAsync();
+            var user_token = await SecureStorage.GetAsync("user_token");
+            var session = await context.Session.FirstOrDefaultAsync(s => s.user_token == user_token);
+
+            if (session != null)
+            {
+                var user = await context.Users.FirstOrDefaultAsync(u => u.user_id == session.user_id);
+
+                if (user != null)
+                {
+                    return user.forgot_pass_token;
+                }
+                return null;
+            }
+            return null;
+        }
+    }   
 }
