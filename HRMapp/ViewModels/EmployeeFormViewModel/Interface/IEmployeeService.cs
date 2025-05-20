@@ -19,5 +19,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task UpdateTunjanganAsync(Tunjangan tunjangan);
         Task <Tunjangan> GetTunjanganMK(int contractId);
         Task <Tunjangan> GetTunjanganOther(int contractId);
+
+        Task AddNewCityProvince(string newCity, string newProvince);
     }
 }

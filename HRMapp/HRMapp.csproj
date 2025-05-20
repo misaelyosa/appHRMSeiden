@@ -61,6 +61,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="4.0.6" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="InputKit.Maui" Version="4.5.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
@@ -68,7 +69,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
 		<PackageReference Include="QuestPDF" Version="2025.4.0" />
@@ -93,6 +94,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\GeneratePKWTPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\NewCityProvince.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ManageEmployee.xaml">

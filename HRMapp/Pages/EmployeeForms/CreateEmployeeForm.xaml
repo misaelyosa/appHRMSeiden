@@ -188,7 +188,7 @@
                 </input:AdvancedEntry.Validations>
             </input:AdvancedEntry>
 
-            <Grid RowDefinitions="auto, auto" ColumnDefinitions="*, *" ColumnSpacing="16" RowSpacing="4">
+            <Grid RowDefinitions="auto" ColumnDefinitions="*, *, auto" ColumnSpacing="16" RowSpacing="4">
                 <VerticalStackLayout Grid.Row="0" Grid.Column="0">
                     <Label Grid.Column="0" Text="Kota" Margin="8,0,0,0" TextColor="Black"/>
                     <Frame CornerRadius="20" Padding="32,0,0,0" BackgroundColor="White">
@@ -201,21 +201,6 @@
                     </Frame>
                 </VerticalStackLayout>
 
-                <input:AdvancedEntry TextColor="Black" Title="Pilih data diatas atau masukkan data kota dan provinsi"
-                                     TitleColor="DarkOrange" 
-                                     Grid.Column="0"
-                                     Grid.Row="1"
-                                     BackgroundColor="Transparent"
-                                     Placeholder="Masukkan nama Kota"
-                                     PlaceholderColor="DimGray"
-                                     BorderColor="Black"
-                              MaxLength="30"
-                              Text="{Binding NewCityName}">
-                    <input:AdvancedEntry.Validations>
-                        <validation:MaxLengthValidation MaxLength="30"/>
-                    </input:AdvancedEntry.Validations>
-                </input:AdvancedEntry>
-
                 <VerticalStackLayout Grid.Row="0" Grid.Column="1">
                     <Label Grid.Column="0" Text="Provinsi" Margin="8,0,0,0" TextColor="Black"/>
                     <Frame CornerRadius="20" Padding="32,0,0,0" HeightRequest="45" BackgroundColor="White">
@@ -223,20 +208,7 @@
                     </Frame>
                 </VerticalStackLayout>
 
-                <input:AdvancedEntry TextColor="Black" Title="*"
-                                     TitleColor="Transparent"
-                                     Grid.Column="1"
-                                     Grid.Row="1"
-                                     BackgroundColor="Transparent"
-                                     Placeholder="Masukkan nama provinsi"
-                                     PlaceholderColor="DimGray"
-                                     BorderColor="Black"
-                              MaxLength="30"
-                              Text="{Binding NewProvinceName}">
-                    <input:AdvancedEntry.Validations>
-                        <validation:MaxLengthValidation MaxLength="30"/>
-                    </input:AdvancedEntry.Validations>
-                </input:AdvancedEntry>
+                <Button VerticalOptions="End" Text="Tambahkan Kota dan Provinsi" Clicked="OnOpenPopupClicked" Grid.Column="2"/>
             </Grid>
 
             <input:AdvancedEntry TextColor="Black" Title="Status Kawin"

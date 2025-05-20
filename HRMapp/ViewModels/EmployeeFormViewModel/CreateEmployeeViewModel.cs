@@ -103,13 +103,33 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             EmployeeStatus.Add("Non Active");
 
             using var context = await _dbContextFactory.CreateDbContextAsync();
-            Departments = new(context.Departments.ToList());
-            Jobs = new(context.Jobs.ToList());
-            Factories = new(context.Factories.ToList());
-            Cities = new(context.Cities.Include(c => c.Provinces).ToList());
-            Provinces = new(context.Provinces.ToList());
-            Educations = new(context.Educations.ToList());
-            Religions = new(context.Religions.ToList());
+            Departments.Clear();
+            foreach (var d in context.Departments.ToList())
+                Departments.Add(d);
+
+            Jobs.Clear();
+            foreach (var j in context.Jobs.ToList())
+                Jobs.Add(j);
+
+            Factories.Clear();
+            foreach (var f in context.Factories.ToList())
+                Factories.Add(f);
+
+            Cities.Clear();
+            foreach (var c in context.Cities.Include(c => c.Provinces).ToList())
+                Cities.Add(c);
+
+            Provinces.Clear();
+            foreach (var p in context.Provinces.ToList())
+                Provinces.Add(p);
+
+            Educations.Clear();
+            foreach (var e in context.Educations.ToList())
+                Educations.Add(e);
+
+            Religions.Clear();
+            foreach (var r in context.Religions.ToList())
+                Religions.Add(r);
         }
 
         partial void OnSelectedCityChanged(City city)
@@ -133,6 +153,19 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             if(SelectedFactory != null)
             {
                 _ = GetGeneratedNip(factory);
+            }
+        }
+
+        [RelayCommand]
+        private async Task AddNewCityProvince()
+        {
+            if(!string.IsNullOrEmpty(NewCityName) && !string.IsNullOrEmpty(NewProvinceName))
+            {
+                await _employeeService.AddNewCityProvince(NewCityName, NewProvinceName);
+                await LoadDropdown();
+                SelectedCity = Cities.FirstOrDefault(c => c.city_name.Equals(NewCityName, StringComparison.OrdinalIgnoreCase));
+                SelectedProvince = Provinces.FirstOrDefault(p => p.province_name.Equals(NewProvinceName, StringComparison.OrdinalIgnoreCase));
+                return;
             }
         }
 

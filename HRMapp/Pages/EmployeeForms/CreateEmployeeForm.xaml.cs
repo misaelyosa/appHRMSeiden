@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 
 namespace HRMapp.Pages.EmployeeForms;
@@ -11,6 +12,12 @@ public partial class CreateEmployeeForm : ContentPage
         _viewModel = viewModel;
         BindingContext = _viewModel;
 	}
+
+    private void OnOpenPopupClicked(object sender, EventArgs e)
+    {
+        var popup = new NewCityProvince(this.BindingContext); 
+        this.ShowPopup(popup);
+    }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {

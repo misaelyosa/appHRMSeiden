@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
@@ -205,6 +206,69 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
             return await context.Tunjangan.Where(e => e.contract_id == contractId &&
             !e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
+        }
+
+        //add city province 
+        public async Task AddNewCityProvince(string newCity, string newProvince)
+        {
+            string Normalize(string input)
+            {
+                return Regex.Replace(input ?? "", "[^a-zA-Z]", "").ToLower().Trim();
+            }
+
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (!string.IsNullOrEmpty(newCity) && !string.IsNullOrEmpty(newProvince))
+            {
+                var existingcity = await context.Cities.FirstOrDefaultAsync(c => c.city_name.ToLower() == newCity.ToLower());
+                if (existingcity != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data kota sudah ada", $"Data kota {newCity} sudah ada sebelumnya, silahkan pilih dari dropdown", "OK");
+                    return;
+                } 
+                else
+                {
+                    var provinces = await context.Provinces.ToListAsync();
+                    var existingProvince = provinces.FirstOrDefault(p => Normalize(p.province_name) == Normalize(newProvince));
+
+                    if (existingProvince == null)
+                    {
+                        var insertProvince = new Province
+                        {
+                            province_name = newProvince
+                        };
+
+                        context.Provinces.Add(insertProvince);
+                        await context.SaveChangesAsync();
+
+                        var provincesAfter = await context.Provinces.ToListAsync();
+                        var newprovince = provincesAfter.FirstOrDefault(p => Normalize(p.province_name) == Normalize(newProvince));
+                        var insertCity = new City
+                        {
+                            city_name = newCity,
+                            province_id = newprovince.province_id
+                        };
+
+                        context.Cities.Add(insertCity);
+                        await context.SaveChangesAsync();
+                        await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data kota {insertCity.city_name} dan provinsi {insertCity.Provinces.province_name} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
+                        Debug.WriteLine(insertCity.city_name, insertCity.province_id);
+                    }
+                    else
+                    {
+                        var insertCity = new City
+                        {
+                            city_name = newCity,
+                            province_id = existingProvince.province_id
+                        };
+
+                        context.Cities.Add(insertCity);
+                        await context.SaveChangesAsync();
+                        await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data kota {insertCity.city_name} dan provinsi {insertCity.Provinces.province_name} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
+                        Debug.WriteLine(insertCity.city_name, insertCity.province_id);
+                    }
+                }
+            }
         }
     }
 }

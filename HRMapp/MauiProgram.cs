@@ -12,6 +12,7 @@ using QuestPDF.Infrastructure;
 using HRMapp.ViewModels.SessionViewModel;
 using HRMapp.Pages.Session;
 using HRMapp.ViewModels.SessionViewModel.Interface;
+using CommunityToolkit.Maui;
 
 namespace HRMapp;
 
@@ -24,7 +25,8 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
         builder
 			.UseMauiApp<App>()
-			.ConfigureMauiHandlers(handlers =>
+            .UseMauiCommunityToolkit()
+            .ConfigureMauiHandlers(handlers =>
 			{
 				handlers.AddInputKitHandlers();
 			})
