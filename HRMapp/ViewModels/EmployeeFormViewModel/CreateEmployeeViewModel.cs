@@ -96,9 +96,18 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         private async Task LoadDropdown()
         {
+            if (Genders.Any())
+            {
+                Genders.Clear();
+            } 
             Genders.Add("laki-laki");
             Genders.Add("perempuan");
+           
 
+            if (EmployeeStatus.Any())
+            {
+                EmployeeStatus.Clear();
+            }
             EmployeeStatus.Add("Active");
             EmployeeStatus.Add("Non Active");
 
@@ -172,6 +181,46 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         [RelayCommand]
         private async Task SubmitAsync()
         {
+            if (SelectedDepartment == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Departemen Kosong", "Pilih departemen dari dropdown.", "OK");
+                return;
+            }
+            if (SelectedJob == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Jabatan Kosong", "Pilih jabatan karyawan dari dropdown.", "OK");
+                return;
+            }
+            if (SelectedReligion == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Agama Kosong", "Pilih agama karyawan dari dropdown.", "OK");
+                return;
+            }
+            if (SelectedEducation == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Pendidikan Kosong", "Pilih pendidikan terakhir karyawan dari dropdown.", "OK");
+                return;
+            }
+            if (SelectedEmployeeStatus == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Status Karyawan Kosong", "Pilih status karyawan dari dropdown.", "OK");
+                return;
+            }
+            if (SelectedGender == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Jenis Kelamin Kosong", "Pilih jenis kelamin karyawan dari dropdown.", "OK");
+                return;                
+            }
+            if (SelectedFactory == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Pabrik Kosong", "Pilih pabrik lokasi karyawan dari dropdown.", "OK");
+                return;
+            }
+            if (SelectedCity == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data Kota Kosong", "Pilih kota asal karyawan dari dropdown atau tambahkan data baru.", "OK");
+                return;
+            }
             var insertEmployee = new Employee
             {
                 name = NewEmployee.name,
@@ -195,13 +244,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 education_id = SelectedEducation.education_id,
                 employee_status = SelectedEmployeeStatus
             };
-
-            //TODO Bikin validasi input new city, province --> insert new object if new
-
-            //Debug.WriteLine($"City: {insertEmployee.City?.city_name}");
-            //Debug.WriteLine($"Province: {insertEmployee.City.Provinces.province_name}");
-            //Debug.WriteLine($"Education Type: {insertEmployee.Education?.education_type}");
-            //Debug.WriteLine($"Major: {insertEmployee.Education?.major}");
 
             if (SelectedFactory.name.ToLower() == "seidensticker 1" && insertEmployee.nip.Any(char.IsLetter))
             {
