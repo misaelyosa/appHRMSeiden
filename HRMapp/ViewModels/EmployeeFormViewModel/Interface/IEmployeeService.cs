@@ -8,6 +8,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task CreateEmployeeAsync(Employee employee);
         Task UpdateEmployeeAsync(Employee employee);
         Task DeleteEmployeeAsync(int id);
+        Task<string?> AutoGenerateNip(string selectedFactory);
         Task<Contract>? GetContractDetail(int contractId);
         Task UpdateContractAsync(Contract contract);
         Task CreateContractAsync(Contract contract);

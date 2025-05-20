@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,41 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
             context.Employees.Add(employee);
             await context.SaveChangesAsync();
+        }
+
+        public async Task<string?> AutoGenerateNip(string selectedFactory)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var factory = await context.Factories.FirstOrDefaultAsync(f => f.name == selectedFactory);
+
+            if (factory != null)
+            {
+                if (factory.name.ToLower() == "seidensticker 1")
+                {
+                    var maxNip = await context.Employees
+                        .Where(e => e.Factory.name.ToLower() == "seidensticker 1")
+                        .OrderByDescending(e => e.nip)
+                        .Select(e => e.nip)
+                        .FirstOrDefaultAsync();
+                    int nextNumber = string.IsNullOrEmpty(maxNip) ? 1 : int.Parse(maxNip) + 1;
+                    Debug.WriteLine(nextNumber);
+                    return nextNumber.ToString("D5");
+                }
+                else
+                {
+                    var maxNip = await context.Employees
+                        .Where(e => e.Factory.name.ToLower() == "seidensticker 2")
+                        .OrderByDescending(e => e.nip)
+                        .Select(e => e.nip)
+                        .FirstOrDefaultAsync();
+
+                    int nextNumber = string.IsNullOrEmpty(maxNip) ? 1 : int.Parse(maxNip.Substring(1)) + 1;
+                    Debug.WriteLine(nextNumber);
+                    return $"B{nextNumber:D4}";
+                }
+            }
+            return null;
         }
 
         public async Task UpdateEmployeeAsync(Employee employee)

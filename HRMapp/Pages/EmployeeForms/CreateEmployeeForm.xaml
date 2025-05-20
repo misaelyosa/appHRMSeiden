@@ -11,6 +11,18 @@
         <input:FormView Padding="20" Spacing="20"
                 SubmitCommand="{Binding SubmitCommand}">
 
+            <VerticalStackLayout>
+                <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>
+                <Frame CornerRadius="20" Padding="32,0,0,0" Margin="0,0,0,8" BackgroundColor="White">
+                    <Picker Grid.Column="0"
+                        BackgroundColor="White"
+                            TextColor="Black"
+                        ItemsSource="{Binding Factories}"
+                        ItemDisplayBinding="{Binding name}"
+                        SelectedItem="{Binding SelectedFactory}"/>
+                </Frame>
+            </VerticalStackLayout>
+
             <input:AdvancedEntry TextColor="Black" Title="Full Name"
                             Placeholder="Masukkan nama lengkap"
                             BackgroundColor="White"
@@ -32,7 +44,7 @@
                             BorderColor="Black"
                             PlaceholderColor="#808080"
                             MaxLength="6"
-                            Text="{Binding NewEmployee.nip}">
+                            Text="{Binding GeneratedNip}">
                 <input:AdvancedEntry.Validations>
                     <validation:RequiredValidation/>
                     <validation:MinLengthValidation MinLength="5"/>
@@ -264,17 +276,6 @@
                 </Frame>
             </Grid>
 
-            <VerticalStackLayout>
-                <Label Text="Lokasi Pabrik" Margin="8,0,0,0" TextColor="Black"/>
-                <Frame CornerRadius="20" Padding="32,0,0,0" Margin="0,0,0,8" BackgroundColor="White">
-                    <Picker Grid.Column="0"
-                        BackgroundColor="White"
-                            TextColor="Black"
-                        ItemsSource="{Binding Factories}"
-                        ItemDisplayBinding="{Binding name}"
-                        SelectedItem="{Binding SelectedFactory}"/>
-                </Frame>
-            </VerticalStackLayout>
 
 
                 <Grid RowDefinitions="auto, auto" ColumnDefinitions="*,auto" ColumnSpacing="16" RowSpacing="8">

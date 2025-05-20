@@ -66,6 +66,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         private string newEducationType;
         [ObservableProperty]
         private string newEducationMajor;
+        [ObservableProperty]
+        private string? generatedNip;
 
         public DateTime SelectedHireDateTime
         {
@@ -118,13 +120,29 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             }
         }
 
+        private async Task GetGeneratedNip(Factory factory)
+        {
+            if (factory != null)
+            {
+                GeneratedNip = await _employeeService.AutoGenerateNip(factory.name);
+            }
+        }
+
+        partial void OnSelectedFactoryChanged(Factory factory)
+        {
+            if(SelectedFactory != null)
+            {
+                _ = GetGeneratedNip(factory);
+            }
+        }
+
         [RelayCommand]
         private async Task SubmitAsync()
         {
             var insertEmployee = new Employee
             {
                 name = NewEmployee.name,
-                nip = NewEmployee.nip,
+                nip = GeneratedNip,
                 nik = NewEmployee.nik,
                 phone_number = NewEmployee.phone_number,
                 email = NewEmployee.email,
@@ -152,9 +170,17 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             //Debug.WriteLine($"Education Type: {insertEmployee.Education?.education_type}");
             //Debug.WriteLine($"Major: {insertEmployee.Education?.major}");
 
-            await _employeeService.CreateEmployeeAsync(insertEmployee);
-            await Shell.Current.GoToAsync("..");
-
+            if (SelectedFactory.name.ToLower() == "seidensticker 1" && insertEmployee.nip.Any(char.IsLetter))
+            {
+                await Application.Current.MainPage.DisplayAlert("NIP salah", "NIP seidensticker 1 tidak boleh berisi huruf.", "OK");
+            } else if (SelectedFactory.name.ToLower() == "seidensticker 2" && !insertEmployee.nip.Any(char.IsLetter))
+            {
+                await Application.Current.MainPage.DisplayAlert("NIP salah", "NIP seidensticker 2 tidak boleh berisi angka saja.", "OK");
+            } else
+            {
+                await _employeeService.CreateEmployeeAsync(insertEmployee);
+                await Shell.Current.GoToAsync("..");
+            }
         }
         
 
