@@ -21,5 +21,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task <Tunjangan> GetTunjanganOther(int contractId);
 
         Task AddNewCityProvince(string newCity, string newProvince);
+        Task AddNewEducation(string newEdType, string newMajor);
     }
 }

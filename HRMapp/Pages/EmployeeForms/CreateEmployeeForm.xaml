@@ -208,7 +208,7 @@
                     </Frame>
                 </VerticalStackLayout>
 
-                <Button VerticalOptions="End" Text="Tambahkan Kota dan Provinsi" Clicked="OnOpenPopupClicked" Grid.Column="2"/>
+                <Button VerticalOptions="End" BackgroundColor="DodgerBlue" TextColor="White" Text="Tambahkan Kota dan Provinsi Baru" Clicked="OnOpenPopupClicked" Grid.Column="2"/>
             </Grid>
 
             <input:AdvancedEntry TextColor="Black" Title="Status Kawin"
@@ -265,33 +265,7 @@
                 
                     <Grid RowDefinitions="*" ColumnDefinitions="*,*" ColumnSpacing="8"
                       Grid.Row="1" Grid.Column="0">
-                        <input:AdvancedEntry TextColor="Black" Title="Pilih data di atas atau tambahkan data baru" 
-                                     TitleColor="Red"
-                                     Grid.Column="0"
-                                     BackgroundColor="Transparent"
-                                     Placeholder="Masukkan tingkat edukasi"
-                                     PlaceholderColor="DimGray"
-                                     BorderColor="Black"
-                              MaxLength="10"
-                              Text="{Binding NewEducationType}">
-                            <input:AdvancedEntry.Validations>
-                                <validation:MaxLengthValidation MaxLength="10"/>
-                            </input:AdvancedEntry.Validations>
-                        </input:AdvancedEntry>
-
-                        <input:AdvancedEntry TextColor="Black" Title="*"
-                                     TitleColor="Transparent"
-                                     Grid.Column="1"
-                                     BackgroundColor="Transparent"
-                                     Placeholder="Masukkan jurusan"
-                                     PlaceholderColor="DimGray"
-                                     BorderColor="Black"
-                              MaxLength="30"
-                              Text="{Binding NewEducationMajor}">
-                            <input:AdvancedEntry.Validations>
-                                <validation:MaxLengthValidation MaxLength="30"/>
-                            </input:AdvancedEntry.Validations>
-                        </input:AdvancedEntry>
+                        <Button VerticalOptions="End" TextColor="White" BackgroundColor="DodgerBlue" Text="Tambahkan Data Pendidikan Terakhir Baru" Clicked="OnOpenPopupEduClicked"/>
                     </Grid>
                     
                     <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">

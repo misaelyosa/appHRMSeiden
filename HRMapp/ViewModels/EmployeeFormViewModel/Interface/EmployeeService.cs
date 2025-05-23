@@ -270,5 +270,53 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 }
             }
         }
+        
+        public async Task AddNewEducation(string newEdType, string newMajor)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (!string.IsNullOrEmpty(newEdType) && !string.IsNullOrEmpty(newMajor))
+            {
+                var existingEdType = await context.Educations.FirstOrDefaultAsync(e => e.education_type.ToLower().Trim() == newEdType.ToLower().Trim());
+                var existingMajor = await context.Educations.FirstOrDefaultAsync(e => e.major.ToLower().Trim()   == newMajor.ToLower().Trim());
+
+                if (existingEdType == null && existingMajor == null)
+                {
+                    var newEducation = new Education
+                    {
+                        education_type = newEdType,
+                        major = newMajor
+                    };
+
+                    context.Educations.Add(newEducation);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data tingkat pendidikan {newEdType} dengan jurusan {newMajor} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
+                } 
+                else if (existingEdType != null && existingMajor == null)
+                {
+                    var newEducation = new Education
+                    {
+                        education_type = existingEdType.education_type,
+                        major = newMajor
+                    };
+
+                    context.Educations.Add(newEducation);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data tingkat pendidikan {newEdType} dengan jurusan {newMajor} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
+                }
+            }
+            else
+            {
+                var newEducation = new Education
+                {
+                    education_type = newEdType,
+                    major = null
+                };
+
+                context.Educations.Add(newEducation);
+                await context.SaveChangesAsync();
+                await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data tingkat pendidikan {newEdType} dengan jurusan {newMajor} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
+            }
+        }
     }
 }

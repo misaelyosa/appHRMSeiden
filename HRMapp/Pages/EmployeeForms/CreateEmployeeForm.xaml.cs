@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using HRMapp.Pages.EmployeeForms.Popups;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 
 namespace HRMapp.Pages.EmployeeForms;
@@ -19,6 +20,11 @@ public partial class CreateEmployeeForm : ContentPage
         this.ShowPopup(popup);
     }
 
+    private void OnOpenPopupEduClicked(object sender, EventArgs e)
+    {
+        var popup = new NewEducation(this.BindingContext);
+        this.ShowPopup(popup);
+    }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);

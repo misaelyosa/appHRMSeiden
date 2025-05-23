@@ -173,9 +173,20 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 await _employeeService.AddNewCityProvince(NewCityName, NewProvinceName);
                 await LoadDropdown();
                 SelectedCity = Cities.FirstOrDefault(c => c.city_name.Equals(NewCityName, StringComparison.OrdinalIgnoreCase));
-                SelectedProvince = Provinces.FirstOrDefault(p => p.province_name.Equals(NewProvinceName, StringComparison.OrdinalIgnoreCase));
+                SelectedProvince = SelectedCity.Provinces;
                 return;
             }
+        }
+
+        [RelayCommand]
+        private async Task AddNewEducation()
+        {
+            await _employeeService.AddNewEducation(NewEducationType, NewEducationMajor);
+            await LoadDropdown();
+            string combinedDisplayName = string.IsNullOrWhiteSpace(NewEducationMajor)
+                                            ? NewEducationType
+                                            : $"{NewEducationType} - {NewEducationMajor}";
+            SelectedEducation = Educations.FirstOrDefault(e => e.DisplayName.Equals(combinedDisplayName, StringComparison.OrdinalIgnoreCase));
         }
 
         [RelayCommand]
