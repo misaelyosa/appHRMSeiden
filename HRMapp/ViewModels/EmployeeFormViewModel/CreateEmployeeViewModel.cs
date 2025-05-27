@@ -102,7 +102,10 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             } 
             Genders.Add("laki-laki");
             Genders.Add("perempuan");
-           
+
+            SelectedBirthdate = DateOnly.FromDateTime(DateTime.Today);
+            SelectedHireDate = DateOnly.FromDateTime(DateTime.Today);
+            selectedGraduationDate = DateOnly.FromDateTime(DateTime.Today);
 
             if (EmployeeStatus.Any())
             {
