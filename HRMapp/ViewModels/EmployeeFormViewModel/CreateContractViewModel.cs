@@ -43,7 +43,15 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         partial void OnSelectedContractDateChanged(DateOnly value)
         {
-            UpdateContractEndDate();
+            if (ContractDuration == null)
+            {
+                ContractEndDateTime = ContractDateTime;
+                OnPropertyChanged(nameof(ContractEndDateTime));
+            }
+            else
+            {
+                UpdateContractEndDate();
+            }
         }
         partial void OnContractDurationChanged(string value)
         {
@@ -61,6 +69,31 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         public CreateContractViewModel(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
+        }
+
+        public async Task InitializeAsync()
+        {
+            var contractCount = await _employeeService.GetContractCountByEmployeeIdAsync(EmployeeId);
+            var contractIndex = contractCount; //index contract mulai dari 1 
+
+            var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex, EmployeeId);
+            
+            if (latestContract != null)
+            {
+                SelectedContractDate = latestContract.end_date;
+                OnPropertyChanged(nameof(ContractDateTime));
+                ContractEndDateTime = ContractDateTime;
+                OnPropertyChanged(nameof(ContractEndDateTime));
+                Debug.WriteLine(latestContract.end_date);
+            }
+            else
+            { 
+                SelectedContractDate = DateOnly.FromDateTime(DateTime.Today);
+                OnPropertyChanged(nameof(ContractDateTime));
+                ContractEndDateTime = ContractDateTime;
+                OnPropertyChanged(nameof(ContractEndDateTime));
+                Debug.WriteLine(SelectedContractDate);
+            }
         }
 
         [RelayCommand]
@@ -95,9 +128,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 end_date = SelectedEndDate,
                 gaji_pokok = int.Parse(GajiPokok),
 
-                author = "admin", //Todo --> ganti setelah jadi session
+                author = Preferences.Get("username", "admin"),
                 created_at = DateTime.Now,
-               
+
             };
 
             SelectedEmployee = await _employeeService.GetEmployeeByIdAsync(EmployeeId);
@@ -121,33 +154,43 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     amount = int.Parse(TunjanganOther)
                 });
             }
-            
 
-            try
+            var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex-1, EmployeeId);
+            if (latestContract != null)
             {
-                await _employeeService.CreateContractAsync(newContract);
-
-                foreach(var tunjangan in tunjanganList)
+                if (latestContract.end_date > SelectedContractDate)
                 {
-                    tunjangan.contract_id = newContract.contract_id;
-                    await _employeeService.CreateTunjanganAsync(tunjangan);
+                    Application.Current.MainPage.DisplayAlert("Warning", "Tanggal Kontrak baru tidak boleh kurang dari tanggal selesai kontrak sebelumnya.", "OK");
+                    return;
                 }
-                Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Success", "Kontrak berhasil ditambahkan.", "OK");
-                    await Shell.Current.GoToAsync("..");
-                });
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Update Contract failed: {ex.Message}");
+                    try
+                    {
+                        await _employeeService.CreateContractAsync(newContract);
 
-                Application.Current.MainPage.Dispatcher.Dispatch(async () =>
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Gagal menambahkan data kontrak.", "OK");
-                });
+                        foreach(var tunjangan in tunjanganList)
+                        {
+                            tunjangan.contract_id = newContract.contract_id;
+                            await _employeeService.CreateTunjanganAsync(tunjangan);
+                        }
+                        Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                        {
+                            await Application.Current.MainPage.DisplayAlert("Success", "Kontrak berhasil ditambahkan.", "OK");
+                            await Shell.Current.GoToAsync("..");
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Update Contract failed: {ex.Message}");
+
+                        Application.Current.MainPage.Dispatcher.Dispatch(async () =>
+                        {
+                            await Application.Current.MainPage.DisplayAlert("Error", "Gagal menambahkan data kontrak.", "OK");
+                        });
+                    }
+                }
             }
         }
-
     }
 }

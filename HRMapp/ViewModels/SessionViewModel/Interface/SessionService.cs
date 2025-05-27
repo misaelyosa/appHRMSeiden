@@ -114,6 +114,7 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
                         context.Add(addSession);
                     }
 
+                    Preferences.Set("username", Username);
                     await context.SaveChangesAsync();
                     await SecureStorage.Default.SetAsync("user_token", token);
                     return true;

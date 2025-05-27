@@ -156,6 +156,21 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await context.SaveChangesAsync();
             }
         }
+        public async Task<Contract?> GetLastIndexContractDate(int contractIndex, int employeeId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (contractIndex > 0)
+            {
+                var latestContract = await context.Contracts.Where(c => c.employee_id == employeeId)
+                    .OrderByDescending(c => c.contract_date)
+                    .FirstOrDefaultAsync();
+
+                return latestContract;
+            }
+
+            return null;
+        }
 
         //Tunjangan
         public async Task<int> GetContractCountByEmployeeIdAsync(int employeeId)
