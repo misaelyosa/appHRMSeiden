@@ -246,7 +246,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                         field_name = field,
                         old_value = oldVal ?? "-",
                         new_value = newVal ?? "-",
-                        updated_by = "admin",
+                        updated_by = Preferences.Get("username", "admin"),
                         updated_at = DateTime.Now,
                         deleted_at = DateTime.MinValue
                     });

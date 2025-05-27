@@ -222,7 +222,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
             if (!confirm)
                 return;
-            
+
             var updatedContract = new Contract
             {
                 contract_id = SelectedContract.contract_id,
@@ -234,7 +234,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 contract_duration = int.TryParse(ContractDuration, out var durasi) ? durasi : 0,
 
                 updated_at = DateTime.Now,
-                author = "admin" //todo --> kalo uda ada session ganti 
+                author = Preferences.Get("username", "admin")
             };
             var tunjanganList = new List<Tunjangan>();
             if (!string.IsNullOrWhiteSpace(TunjanganMK))
@@ -253,6 +253,18 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     amount = int.Parse(TunjanganOther)
                 });
             }
+
+            var contractCount = await _employeeService.GetContractCountByEmployeeIdAsync(EmployeeId);
+            var contractIndex = contractCount; //index contract mulai dari 1 
+
+            var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex, EmployeeId);
+
+            if (latestContract != null && latestContract.end_date > SelectedContractDate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Tanggal Kontrak baru tidak boleh kurang dari tanggal selesai kontrak sebelumnya.", "OK");
+                return;
+            }
+            
             try
             {
                 await _employeeService.UpdateContractAsync(updatedContract);
@@ -279,7 +291,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     await Application.Current.MainPage.DisplayAlert("Error", "Gagal mengupdate data kontrak.", "OK");
                 });
             }
-            
         }
 
         //proxy buat convert datetime (compatible with datepicker)
