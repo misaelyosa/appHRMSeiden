@@ -235,6 +235,29 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 await Application.Current.MainPage.DisplayAlert("Data Kota Kosong", "Pilih kota asal karyawan dari dropdown atau tambahkan data baru.", "OK");
                 return;
             }
+            using var context = await _dbContextFactory.CreateDbContextAsync();
+            var existingNik = await context.Employees
+                .Include(e => e.Department)
+                .Include(e => e.Job)
+                .FirstOrDefaultAsync(e => e.nik == NewEmployee.nik);
+            if (existingNik != null)
+            {       
+                var previousContract = await context.Contracts.FirstOrDefaultAsync(c => c.employee_id == existingNik.employee_id);
+                if (previousContract != null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data NIK sama Ditemukan", $"Ditemukan data karyawan dengan NIK : {existingNik.nik} \n" +
+                        $"Bergabung pada tanggal {existingNik.hire_date} di departemen {existingNik.Department.name} menjabat sebagai {existingNik.Job.job_name}. \n" +
+                        $"Detail kontrak sebelumnya : \n" +
+                        $"Terkontrak mulai dari {previousContract.contract_date} hingga {previousContract.end_date} selama {previousContract.contract_duration} bulan.\n" +
+                        $"Status karyawan : {existingNik.employee_status.ToUpper()}.", "OK");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data NIK sama Ditemukan", $"Ditemukan data karyawan dengan NIK : {existingNik.nik} \n" +
+                       $"Bergabung pada tanggal {existingNik.hire_date} di departemen {existingNik.Department.name} menjabat sebagai {existingNik.Job.job_name}.\n" +
+                       $"Status karyawan : {existingNik.employee_status.ToUpper()}.", "OK");
+                }
+            }
             var insertEmployee = new Employee
             {
                 name = NewEmployee.name,
@@ -267,6 +290,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 await Application.Current.MainPage.DisplayAlert("NIP salah", "NIP seidensticker 2 tidak boleh berisi angka saja.", "OK");
             } else
             {
+                await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data karyawan {insertEmployee.name} berhasil ditambahkan.", "OK");
                 await _employeeService.CreateEmployeeAsync(insertEmployee);
                 await Shell.Current.GoToAsync("..");
             }
