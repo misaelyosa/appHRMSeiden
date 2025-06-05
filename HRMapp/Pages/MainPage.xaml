@@ -84,7 +84,12 @@
 
                         <Label Text="Kontrak Berakhir Bulan Ini:" FontAttributes="Bold" FontSize="14" TextColor="Black" Margin="10,10,0,0" />
 
-                        <CollectionView ItemsSource="{Binding ContractEndPerMonth}" Margin="10, 8, 10, 16">
+                        <CollectionView ItemsSource="{Binding ContractEndPerMonth}"
+                                        SelectedItem="{Binding SelectedContractEnd, Mode=TwoWay}"
+                                        SelectionMode="Single"
+                                        SelectionChangedCommand="{Binding NavigateToEmployeeDetailCommand}"
+                                        SelectionChangedCommandParameter="{Binding SelectedContractEnd}"
+                                        Margin="10, 8, 10, 16">
                             <CollectionView.EmptyView>
                                 <Label Text="Tidak ada kontrak yang akan berakhir bulan ini." 
                                    TextColor="Gray" 
@@ -99,9 +104,9 @@
                             </CollectionView.ItemsLayout>
                             
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="models:ContractEndItem">
                                     <Frame BorderColor="Black" BackgroundColor="LightBlue" CornerRadius="6" Padding="8">
-                                        <Label Text="{Binding .}" FontSize="13" TextColor="Black" />
+                                        <Label Text="{Binding DisplayText}" FontSize="13" TextColor="Black" />
                                     </Frame>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>

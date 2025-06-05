@@ -18,9 +18,11 @@ namespace HRMapp.ViewModels
         private readonly ISessionService _sessionService;
 
         public EventCollection CalendarEvents { get; set; } = new();
-        public ObservableCollection<string> ContractEndPerMonth { get; set; } = new();
+        public ObservableCollection<ContractEndItem> ContractEndPerMonth { get; set; } = new();
         public ObservableCollection<string> HariLiburNasionalPerMonth { get; set; } = new();
         public HashSet<DateTime> HolidayDates { get; set; } = new();
+        [ObservableProperty]
+        private ContractEndItem? selectedContractEnd;
 
         public MainPageViewModel(IDbContextFactory<AppDbContext> dbContextFactory, ISessionService sessionService)
         {
@@ -44,7 +46,11 @@ namespace HRMapp.ViewModels
 
             foreach (var contract in contracts)
             {
-                ContractEndPerMonth.Add($"{contract.end_date:dd MMMM yyyy} : {contract.Employee.name} ({contract.Employee.Department.name}, {contract.Employee.Job.job_name})");
+                ContractEndPerMonth.Add(new ContractEndItem
+                {
+                    DisplayText = $"{contract.end_date:dd MMMM yyyy} : {contract.Employee.name} ({contract.Employee.Department.name}, {contract.Employee.Job.job_name})",
+                    EmployeeId = contract.Employee.employee_id
+                });
             }
         }
 
@@ -211,6 +217,15 @@ namespace HRMapp.ViewModels
         {
             await Shell.Current.GoToAsync("SignupPage");
         }
-    
+
+        [RelayCommand]
+        private async Task NavigateToEmployeeDetail(ContractEndItem selected)
+        {
+            if (selected is null)
+                return;
+
+            await Shell.Current.GoToAsync($"EmployeeDetailPage?employeeId={selected.EmployeeId}");
+            SelectedContractEnd = null;
+        }
     }
 }

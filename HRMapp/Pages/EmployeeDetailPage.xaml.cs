@@ -17,7 +17,7 @@ public partial class EmployeeDetailPage : ContentPage
     {
         base.OnAppearing();
         Debug.WriteLine($"EmployeeDetailPage Appeared, EmployeeId: {_viewModel.EmployeeId}");
-
+        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
         await _viewModel.LoadEmployeeDetails();
     }
 
