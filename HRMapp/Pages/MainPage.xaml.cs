@@ -18,5 +18,7 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
 
         await _viewModel.CheckIsAdmin();
+        await _viewModel.LoadContractEndDatesAsync();
+        await _viewModel.LoadContractEndPerMonthAsync(_viewModel.CalendarCurrentDate);
     }
 }

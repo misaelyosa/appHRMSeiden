@@ -33,10 +33,36 @@
                                  Spacing="16">
                 <Label Text="Management Calendar" FontSize="Small" TextColor="Black"/>
                 <Frame CornerRadius="22" BackgroundColor="WhiteSmoke">
-                    <controls:Calendar
-                        ShownDate="2025-06-03">
-                    </controls:Calendar>
+                    <VerticalStackLayout Spacing="10">
+                        <controls:Calendar
+                            x:Name="ManagementCalendar"
+                            ShownDate="{Binding CalendarCurrentDate, Mode=TwoWay}"
+                            Events="{Binding ContractEndEvent}"
+                            EventIndicatorType="BottomDot">
+
+                            <controls:Calendar.EventTemplate>
+                                <DataTemplate>
+                                    <Frame Padding="4" Margin="2" BackgroundColor="White" HasShadow="True" BorderColor="DarkGray" CornerRadius="6">
+                                        <Label Text="{Binding .}" TextColor="Black" FontSize="12" />
+                                    </Frame>
+                                </DataTemplate>
+                            </controls:Calendar.EventTemplate>
+                        </controls:Calendar>
+
+                        <Label Text="Kontrak Berakhir Bulan Ini:" FontAttributes="Bold" FontSize="14" TextColor="Black" Margin="10,20,0,0" />
+
+                        <CollectionView ItemsSource="{Binding ContractEndPerMonth}" Margin="10">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BorderColor="LightGray" CornerRadius="6" Padding="8" Margin="4">
+                                        <Label Text="{Binding .}" FontSize="13" TextColor="White" />
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
                 </Frame>
+
             </VerticalStackLayout>
         </Grid>
     </ScrollView>
