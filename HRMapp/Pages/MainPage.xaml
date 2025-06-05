@@ -40,15 +40,15 @@
                             ShownDate="{Binding CalendarCurrentDate, Mode=TwoWay}"
                             Events="{Binding CalendarEvents}"
                             EventIndicatorType="BottomDot"
-                            EventIndicatorColor="LightBlue">
+                            EventIndicatorColor="DodgerBlue">
 
                             <controls:Calendar.EventTemplate>
                                 <DataTemplate x:DataType="models:CalendarEventItem">
                                     <Frame Padding="4" Margin="2" HasShadow="True" CornerRadius="6"
-                                           BorderColor="DarkGray" BackgroundColor="White">
+                                         BorderColor="DarkGray" BackgroundColor="White">
                                         <Frame.Triggers>
                                             <DataTrigger TargetType="Frame" Binding="{Binding IsHoliday}" Value="True">
-                                                <Setter Property="BackgroundColor" Value="Red" />
+                                                <Setter Property="BackgroundColor" Value="LightPink" />
                                                 <Setter Property="BorderColor" Value="DarkRed" />
                                             </DataTrigger>
                                         </Frame.Triggers>
@@ -57,13 +57,47 @@
                                 </DataTemplate>
                             </controls:Calendar.EventTemplate>
                         </controls:Calendar>
+                        
+                        <Label Text="Hari Libur Nasional Bulan Ini:" FontAttributes="Bold" FontSize="14" TextColor="Black" Margin="10,10,0,0" />
+                        <CollectionView ItemsSource="{Binding HariLiburNasionalPerMonth}" Margin="10, 8, 10,16">
+                            <CollectionView.EmptyView>
+                                <Label Text="Tidak ada hari libur nasional bulan ini." 
+                                   TextColor="Gray" 
+                                   FontSize="13" 
+                                   HorizontalOptions="Start" 
+                                   VerticalOptions="Center" 
+                                   Padding="10" />
+                            </CollectionView.EmptyView>
+
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                            </CollectionView.ItemsLayout>
+                            
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame BorderColor="Black" BackgroundColor="Beige" CornerRadius="6" Padding="8">
+                                        <Label Text="{Binding .}" FontSize="13" TextColor="Black" />
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
                         <Label Text="Kontrak Berakhir Bulan Ini:" FontAttributes="Bold" FontSize="14" TextColor="Black" Margin="10,10,0,0" />
 
                         <CollectionView ItemsSource="{Binding ContractEndPerMonth}" Margin="10, 8, 10, 16">
+                            <CollectionView.EmptyView>
+                                <Label Text="Tidak ada kontrak yang akan berakhir bulan ini." 
+                                   TextColor="Gray" 
+                                   FontSize="13" 
+                                   HorizontalOptions="Start" 
+                                   VerticalOptions="Center" 
+                                   Padding="10" />
+                            </CollectionView.EmptyView>
+                            
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout Orientation="Vertical" ItemSpacing="4" />
                             </CollectionView.ItemsLayout>
+                            
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Frame BorderColor="Black" BackgroundColor="LightBlue" CornerRadius="6" Padding="8">

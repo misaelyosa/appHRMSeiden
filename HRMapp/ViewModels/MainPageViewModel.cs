@@ -19,6 +19,7 @@ namespace HRMapp.ViewModels
 
         public EventCollection CalendarEvents { get; set; } = new();
         public ObservableCollection<string> ContractEndPerMonth { get; set; } = new();
+        public ObservableCollection<string> HariLiburNasionalPerMonth { get; set; } = new();
         public HashSet<DateTime> HolidayDates { get; set; } = new();
 
         public MainPageViewModel(IDbContextFactory<AppDbContext> dbContextFactory, ISessionService sessionService)
@@ -61,6 +62,8 @@ namespace HRMapp.ViewModels
                     Debug.WriteLine($"[DEBUG] CalendarCurrentDate changed to: {value}");
                     _ = LoadContractEndPerMonthAsync(value); //detect perubahan selectedmonth
                     _ = LoadHariLibur(value.Year);
+
+                    UpdateHariLiburNasionalPerMonth(value);
                 }
             }
         }
@@ -100,6 +103,7 @@ namespace HRMapp.ViewModels
                 return;
             }
 
+
             using var client = new HttpClient();
             var url = $"https://api-harilibur.vercel.app/api?year={year}";
 
@@ -125,7 +129,7 @@ namespace HRMapp.ViewModels
                     {
                         var item = new CalendarEventItem
                         {
-                            Title = $"Libur Nasional: {libur.holiday_name}",
+                            Title = $"🎉 : {libur.holiday_name}",
                             IsHoliday = true
                         };
                         HolidayDates.Add(tanggalLibur.Date);
@@ -135,15 +139,38 @@ namespace HRMapp.ViewModels
 
                         (CalendarEvents[tanggalLibur] as ObservableCollection<object>)?.Add(item);
                     }
-                }
 
-                loadedYear.Add(year);
+                    loadedYear.Add(year);
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Failed to load holidays: {ex.Message}");
             }
         }
+
+        private void UpdateHariLiburNasionalPerMonth(DateTime selectedDate)
+        {
+            HariLiburNasionalPerMonth.Clear();
+
+            foreach (var date in HolidayDates.OrderBy(d => d))
+            {
+                if (date.Month == selectedDate.Month && date.Year == selectedDate.Year)
+                {
+                    if (CalendarEvents.TryGetValue(date, out var eventList))
+                    {
+                        foreach (var item in eventList)
+                        {
+                            if (item is CalendarEventItem evt && evt.IsHoliday)
+                            {
+                                HariLiburNasionalPerMonth.Add($"{date:dd MMMM yyyy} - {evt.Title}");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         [ObservableProperty]
         private bool isAdmin;
