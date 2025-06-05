@@ -20,5 +20,6 @@ public partial class MainPage : ContentPage
         await _viewModel.CheckIsAdmin();
         await _viewModel.LoadContractEndDatesAsync();
         await _viewModel.LoadContractEndPerMonthAsync(_viewModel.CalendarCurrentDate);
+        await _viewModel.LoadHariLibur(_viewModel.CalendarCurrentDate.Year);
     }
 }
