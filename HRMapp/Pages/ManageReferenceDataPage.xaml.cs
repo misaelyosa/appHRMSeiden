@@ -37,4 +37,31 @@ public partial class ManageReferenceDataPage : ContentPage
             departmentFrame.IsVisible = true;
         }
     }
+    
+    //jobs 
+    private async void OnJobsFrameTapped(object sender, EventArgs e)
+    {
+        if (!jobsCollectionView.IsVisible)
+        {
+            jobsCollectionView.Opacity = 0;
+            await jobsCollectionView.FadeTo(1, 250);
+            jobsCollectionView.IsVisible = true;
+            hideJobsBtn.IsVisible = true;
+            jobsListTitle.IsVisible = true;
+
+            jobsFrame.IsVisible = false;
+        }
+    }
+    private async void OnHideJobsTapped(object sender, EventArgs e)
+    {
+        if (jobsCollectionView.IsVisible)
+        {
+            await jobsCollectionView.FadeTo(0, 250);
+            jobsCollectionView.IsVisible = false;
+            hideJobsBtn.IsVisible = false;
+            jobsListTitle.IsVisible = false;
+
+            jobsFrame.IsVisible = true;
+        }
+    }
 }

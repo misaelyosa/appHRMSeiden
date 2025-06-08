@@ -340,5 +340,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Departments.ToListAsync();
         }
+
+        //JOBS
+        public async Task<List<Job>> GetJob()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Jobs.ToListAsync();
+        }
     }
 }
