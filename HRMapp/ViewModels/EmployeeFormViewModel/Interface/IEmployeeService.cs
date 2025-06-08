@@ -23,6 +23,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         //Manage master, reference data
         Task<List<Department>> GetDepartment();
         Task<List<Job>> GetJob();
+        Task<List<Religion>> GetReligion();
         Task AddNewCityProvince(string newCity, string newProvince);
         Task AddNewEducation(string newEdType, string newMajor);
     }

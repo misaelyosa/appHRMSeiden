@@ -64,4 +64,31 @@ public partial class ManageReferenceDataPage : ContentPage
             jobsFrame.IsVisible = true;
         }
     }
+
+    //religion
+    private async void OnReligionFrameTapped(object sender, EventArgs e)
+    {
+        if (!religionCollectionView.IsVisible)
+        {
+            religionCollectionView.Opacity = 0;
+            await religionCollectionView.FadeTo(1, 250);
+            religionFrame.IsVisible = false;
+
+            religionCollectionView.IsVisible = true;
+            religionListTitle.IsVisible = true;
+            hideReligionBtn.IsVisible = true;
+        }
+    }
+    private async void OnHideReligionTapped(object sender, EventArgs e)
+    {
+        if (religionCollectionView.IsVisible)
+        {
+            await religionCollectionView.FadeTo(0, 250);
+            religionFrame.IsVisible = true;
+
+            religionCollectionView.IsVisible = false;
+            religionListTitle.IsVisible = false;
+            hideReligionBtn.IsVisible = false;
+        }
+    }
 }

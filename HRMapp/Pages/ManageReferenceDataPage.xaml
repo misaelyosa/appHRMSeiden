@@ -87,7 +87,7 @@
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideJobsTapped"/>
                 <Label IsVisible="False" x:Name="jobsListTitle"
-                        Text="Jobs: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                        Text="Jabatan: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
                 <CollectionView x:Name="jobsCollectionView"
                                 IsVisible="False"
                                 ItemsSource="{Binding Jobs}">
@@ -131,9 +131,66 @@
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Column="0" Grid.Row="2">
-                <Label Text="Agama : " FontAttributes="Bold" TextColor="Black" FontSize="16"/>
+                <Frame CornerRadius="16"
+                       x:Name="religionFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnReligionFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Agama" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideReligionBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideReligionTapped"/>
+                <Label IsVisible="False" x:Name="religionListTitle"
+                       Text="Religion: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <CollectionView x:Name="religionCollectionView"
+                    IsVisible="False"
+                    ItemsSource="{Binding Religions}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding religion_name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Button Grid.Row="0" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"/>
+
+                                    <Button Grid.Row="0" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
-            
+
+
             <VerticalStackLayout Grid.Column="1" Grid.Row="2">
                 <Label Text="Pabrik: " FontAttributes="Bold" TextColor="Black" FontSize="16"/>
             </VerticalStackLayout>

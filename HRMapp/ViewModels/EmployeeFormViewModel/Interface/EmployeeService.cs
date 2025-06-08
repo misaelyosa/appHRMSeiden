@@ -347,5 +347,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Jobs.ToListAsync();
         }
+
+        //Religion
+        public async Task<List<Religion>> GetReligion()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Religions.ToListAsync();
+        }
     }
 }
