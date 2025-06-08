@@ -13,13 +13,13 @@ public partial class MainPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    protected override async void OnAppearing()
+    protected override async void OnAppearing() 
     {
         base.OnAppearing();
 
         await _viewModel.CheckIsAdmin();
         await _viewModel.LoadContractEndDatesAsync();
         await _viewModel.LoadContractEndPerMonthAsync(_viewModel.CalendarCurrentDate);
-        await _viewModel.LoadHariLibur(_viewModel.CalendarCurrentDate.Year);
+        await _viewModel.RefreshHolidayDataAsync(_viewModel.CalendarCurrentDate, true);
     }
 }

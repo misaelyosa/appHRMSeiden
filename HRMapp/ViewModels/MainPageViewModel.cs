@@ -30,6 +30,12 @@ namespace HRMapp.ViewModels
             _sessionService = sessionService;
         }
 
+        public async Task RefreshHolidayDataAsync(DateTime selectedDate, bool forceReload)
+        {
+            await LoadHariLibur(selectedDate.Year, forceReload);
+            await UpdateHariLiburNasionalPerMonth(selectedDate);
+        }
+
         public async Task LoadContractEndPerMonthAsync(DateTime shownDate)
         {
             ContractEndPerMonth.Clear();
@@ -66,10 +72,8 @@ namespace HRMapp.ViewModels
                     _calendarCurrentDate = value;
                     OnPropertyChanged(nameof(CalendarCurrentDate));
                     Debug.WriteLine($"[DEBUG] CalendarCurrentDate changed to: {value}");
-                    _ = LoadContractEndPerMonthAsync(value); //detect perubahan selectedmonth
-                    _ = LoadHariLibur(value.Year);
-
-                    UpdateHariLiburNasionalPerMonth(value);
+                    _ = LoadContractEndPerMonthAsync(value);
+                    _ = RefreshHolidayDataAsync(value, false);
                 }
             }
         }
@@ -101,14 +105,29 @@ namespace HRMapp.ViewModels
         }
 
         private HashSet<int> loadedYear = new();
-        public async Task LoadHariLibur(int year)
+        public async Task LoadHariLibur(int year, bool forceReload)
         {
-            if (loadedYear.Contains(year))
+            if (loadedYear.Contains(year) && !forceReload)
             {
                 Debug.WriteLine($"[DEBUG] Holidays for {year} already loaded.");
                 return;
             }
 
+            if(loadedYear.Contains(year) && forceReload)
+            {
+                loadedYear.Clear();
+                var toRemove = HolidayDates.Where(d => d.Year == year).ToList();
+                var count = 0;
+                foreach (var d in toRemove)
+                {
+                    count++;
+                    HolidayDates.Remove(d);
+                    CalendarEvents.Remove(d);
+                }
+                HariLiburNasionalPerMonth.Clear();
+                Debug.WriteLine($"Forced Reload, removed {year}, removed {count} holidays.");
+                count = 0;
+            }
 
             using var client = new HttpClient();
             var url = $"https://api-harilibur.vercel.app/api?year={year}";
@@ -155,7 +174,7 @@ namespace HRMapp.ViewModels
             }
         }
 
-        private void UpdateHariLiburNasionalPerMonth(DateTime selectedDate)
+        public async Task UpdateHariLiburNasionalPerMonth(DateTime selectedDate)
         {
             HariLiburNasionalPerMonth.Clear();
 
