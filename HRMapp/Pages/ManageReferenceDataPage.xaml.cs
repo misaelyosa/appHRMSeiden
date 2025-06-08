@@ -146,5 +146,32 @@ public partial class ManageReferenceDataPage : ContentPage
         }
     }
 
+    //Last Education
+    private async void OnEducationFrameTapped(object sender, EventArgs e)
+    {
+        if (!educationCollectionView.IsVisible)
+        {
+            educationCollectionView.Opacity = 0;
+            await educationCollectionView.FadeTo(1, 250);
+            educationFrame.IsVisible = false;
+
+            educationCollectionView.IsVisible = true;
+            educationListTitle.IsVisible = true;
+            hideEducationBtn.IsVisible = true;
+        }
+    }
+    private async void OnHideEducationTapped(object sender, EventArgs e)
+    {
+        if (educationCollectionView.IsVisible)
+        {
+            await educationCollectionView.FadeTo(0, 250);
+            educationFrame.IsVisible = true;
+
+            educationCollectionView.IsVisible = false;
+            educationListTitle.IsVisible = false;
+            hideEducationBtn.IsVisible = false;
+        }
+    }
+
 
 }

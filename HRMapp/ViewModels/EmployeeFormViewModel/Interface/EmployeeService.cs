@@ -368,5 +368,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Cities.Include(c => c.Provinces).ToListAsync();
         }
+
+        //Education
+        public async Task<List<Education>> GetEducation()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Educations.ToListAsync();
+        }
     }
 }

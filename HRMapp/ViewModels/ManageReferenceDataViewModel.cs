@@ -25,6 +25,8 @@ namespace HRMapp.ViewModels
         private ObservableCollection<Factory> factories = new();
         [ObservableProperty]
         private ObservableCollection<City> cityProvinces = new();
+        [ObservableProperty]
+        private ObservableCollection<Education> educations = new();
 
         public ManageReferenceDataViewModel(IEmployeeService employeeService)
         {
@@ -39,6 +41,7 @@ namespace HRMapp.ViewModels
             Religions = new ObservableCollection<Religion>(await _employeeService.GetReligion());
             Factories = new ObservableCollection<Factory>(await _employeeService.GetFactory());
             CityProvinces = new ObservableCollection<City>(await _employeeService.GetCityProvince());
+            Educations = new ObservableCollection<Education>(await _employeeService.GetEducation());
          }
 
     }
