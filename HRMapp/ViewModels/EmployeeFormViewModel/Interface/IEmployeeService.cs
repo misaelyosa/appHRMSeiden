@@ -20,6 +20,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task <Tunjangan> GetTunjanganMK(int contractId);
         Task <Tunjangan> GetTunjanganOther(int contractId);
 
+        //Manage master, reference data
+        Task<List<Department>> GetDepartment();
         Task AddNewCityProvince(string newCity, string newProvince);
         Task AddNewEducation(string newEdType, string newMajor);
     }

@@ -21,6 +21,7 @@ namespace HRMapp
                 Routing.RegisterRoute(nameof(EmployeeDetailPage), typeof(EmployeeDetailPage));
                 Routing.RegisterRoute(nameof(ManageEmployee), typeof(ManageEmployee));
                 Routing.RegisterRoute("MainPage", typeof(MainPage));
+                Routing.RegisterRoute("ManageReferenceDataPage", typeof(ManageReferenceDataPage));
 
                 //Employee form
                 Routing.RegisterRoute("EmployeeForms/Edit", typeof(EditEmployeeForm));

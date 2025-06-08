@@ -1,0 +1,33 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using HRMapp.Data.Model;
+using HRMapp.ViewModels.EmployeeFormViewModel;
+using HRMapp.ViewModels.EmployeeFormViewModel.Interface;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HRMapp.ViewModels
+{
+    public partial class ManageReferenceDataViewModel : ObservableObject
+    {
+        private readonly IEmployeeService _employeeService;
+
+        [ObservableProperty]
+        private ObservableCollection<Department> departments = new();
+
+        public ManageReferenceDataViewModel(IEmployeeService employeeService)
+        {
+            _employeeService = employeeService;
+            _ = LoadAll();
+        }
+
+        private async Task LoadAll()
+        {
+            Departments = new ObservableCollection<Department>(await _employeeService.GetDepartment());
+        }
+
+    }
+}

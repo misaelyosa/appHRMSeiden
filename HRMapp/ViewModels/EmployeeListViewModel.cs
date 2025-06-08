@@ -81,7 +81,7 @@ namespace HRMapp.ViewModels
                 .OrderBy(e => e.employee_id)
                 .ToListAsync();
 
-            employees = new ObservableCollection<Employee>(employeeList);
+            Employees = new ObservableCollection<Employee>(employeeList);
             OnPropertyChanged(nameof(Employees));
 
         }

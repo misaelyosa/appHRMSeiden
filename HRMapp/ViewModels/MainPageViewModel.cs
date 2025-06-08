@@ -246,5 +246,11 @@ namespace HRMapp.ViewModels
             await Shell.Current.GoToAsync($"EmployeeDetailPage?employeeId={selected.EmployeeId}");
             SelectedContractEnd = null;
         }
+
+        [RelayCommand]
+        private async Task NavigateToManageReferenceData()
+        {
+            await Shell.Current.GoToAsync($"ManageReferenceDataPage");
+        }
     }
 }

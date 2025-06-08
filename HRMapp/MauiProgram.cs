@@ -50,6 +50,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<EmployeeListViewModel>();
         builder.Services.AddTransient<EmployeeDetailViewModel>();
 		builder.Services.AddSingleton<MainPageViewModel>();
+		builder.Services.AddTransient<ManageReferenceDataViewModel>();
 		builder.Services.AddTransient<EditEmployeeViewModel>();
 		builder.Services.AddTransient<CreateEmployeeViewModel>();
 		builder.Services.AddTransient<GeneratePKWTPageViewModel>();
@@ -63,6 +64,7 @@ public static class MauiProgram
         builder.Services.AddTransient<ManageEmployee>();
         builder.Services.AddTransient<EmployeeDetailPage>();
 		builder.Services.AddSingleton<MainPage>();
+		builder.Services.AddTransient<ManageReferenceDataPage>();
 		builder.Services.AddTransient<EditEmployeeForm>();
 		builder.Services.AddTransient<CreateEmployeeForm>();
 		builder.Services.AddTransient<GeneratePKWTPage>();

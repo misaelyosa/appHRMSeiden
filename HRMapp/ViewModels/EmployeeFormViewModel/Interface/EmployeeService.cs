@@ -333,5 +333,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data tingkat pendidikan {newEdType} dengan jurusan {newMajor} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
             }
         }
+
+        //DEPARTMENT
+        public async Task<List<Department>> GetDepartment()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Departments.ToListAsync();
+        }
     }
 }

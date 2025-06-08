@@ -25,7 +25,8 @@
                         SemanticProperties.Description="Reset password token akan menjadi kode sekali pakai yang dapat anda gunakan ketika lupa password. Jangan lupa untuk catat kode di tempat yang dapat anda akses karena kode hanya dapat digenerate 1 kali."/>
 
                 <Label Text="Manage data karyawan :" FontSize="Small" FontAttributes="Bold" TextColor="black" HorizontalTextAlignment="Start"/>
-                <Button Text="Manage Karyawan" TextColor="White" BackgroundColor="Orange" FontSize="16" FontAttributes="Bold" Command="{Binding NavigateToManageEmployeeCommand}"/>
+                <Button Text="Manage Data Karyawan" TextColor="White" BackgroundColor="Orange" FontSize="16" FontAttributes="Bold" Command="{Binding NavigateToManageEmployeeCommand}"/>
+                <Button Text="Manage Master / Reference Data" TextColor="White" BackgroundColor="LightSeaGreen" FontSize="16"  Command="{Binding NavigateToManageReferenceDataCommand}"/>
 
             </VerticalStackLayout>
 
