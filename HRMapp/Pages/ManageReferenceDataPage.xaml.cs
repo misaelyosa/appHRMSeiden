@@ -118,4 +118,33 @@ public partial class ManageReferenceDataPage : ContentPage
             hideFactoryBtn.IsVisible = false;
         }
     }
+
+    //City Province
+    private async void OnCityProvFrameTapped(object sender, EventArgs e)
+    {
+        if (!cityProvCollectionView.IsVisible)
+        {
+            cityProvCollectionView.Opacity = 0;
+            await cityProvCollectionView.FadeTo(1, 250);
+            cityProvFrame.IsVisible = false;
+
+            cityProvCollectionView.IsVisible = true;
+            cityProvListTitle.IsVisible = true;
+            hideCityProvBtn.IsVisible = true;
+        }
+    }
+    private async void OnHideCityProvTapped(object sender, EventArgs e)
+    {
+        if (cityProvCollectionView.IsVisible)
+        {
+            await cityProvCollectionView.FadeTo(0, 250);
+            cityProvFrame.IsVisible = true;
+
+            cityProvCollectionView.IsVisible = false;
+            cityProvListTitle.IsVisible = false;
+            hideCityProvBtn.IsVisible = false;
+        }
+    }
+
+
 }
