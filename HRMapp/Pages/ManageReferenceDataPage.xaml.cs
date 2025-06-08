@@ -91,4 +91,31 @@ public partial class ManageReferenceDataPage : ContentPage
             hideReligionBtn.IsVisible = false;
         }
     }
+
+    //factory
+    private async void OnFactoryFrameTapped(object sender, EventArgs e)
+    {
+        if (!factoryCollectionView.IsVisible)
+        {
+            factoryCollectionView.Opacity = 0;
+            await factoryCollectionView.FadeTo(1, 250);
+            factoryFrame.IsVisible = false;
+
+            factoryCollectionView.IsVisible = true;
+            factoryListTitle.IsVisible = true;
+            hideFactoryBtn.IsVisible = true;
+        }
+    }
+    private async void OnHideFactoryTapped(object sender, EventArgs e)
+    {
+        if (factoryCollectionView.IsVisible)
+        {
+            await factoryCollectionView.FadeTo(0, 250);
+            factoryFrame.IsVisible = true;
+
+            factoryCollectionView.IsVisible = false;
+            factoryListTitle.IsVisible = false;
+            hideFactoryBtn.IsVisible = false;
+        }
+    }
 }

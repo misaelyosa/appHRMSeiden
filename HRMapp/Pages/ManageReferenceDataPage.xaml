@@ -190,11 +190,76 @@
                 </CollectionView>
             </VerticalStackLayout>
 
-
             <VerticalStackLayout Grid.Column="1" Grid.Row="2">
-                <Label Text="Pabrik: " FontAttributes="Bold" TextColor="Black" FontSize="16"/>
+                <Frame CornerRadius="16"
+                       x:Name="factoryFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFactoryFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Pabrik" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideFactoryBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideFactoryTapped"/>
+                <Label IsVisible="False" x:Name="factoryListTitle"
+                       Text="Factory: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <CollectionView x:Name="factoryCollectionView"
+                                IsVisible="False"
+                                ItemsSource="{Binding Factories}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto, auto, auto"
+                                      RowSpacing="4"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                           FontSize="13" TextColor="Black" HorizontalOptions="Start"
+                                           Text="{Binding address}"/>
+                                    
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           FontSize="13" TextColor="Black" HorizontalOptions="Start"
+                                           Text="{Binding personnel_capacity, StringFormat='Kapasitas pegawai : {0}'}"/>
+
+                                    <Button Grid.Row="2" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"/>
+
+                                    <Button Grid.Row="2" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </VerticalStackLayout>
-            
+
+
             <VerticalStackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
                 <Label Text="Kota dan Provinsi : " FontAttributes="Bold" TextColor="Black" FontSize="16"/>
             </VerticalStackLayout>
