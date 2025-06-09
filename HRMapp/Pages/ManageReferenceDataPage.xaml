@@ -10,6 +10,7 @@
               RowDefinitions="auto, auto, auto, auto, auto"
               Margin="20, 10, 20, 10" ColumnSpacing="12" RowSpacing="12">
             <Label Grid.Row="0" Text="Manage Master dan Referential Data" TextColor="Black" FontSize="18" FontAttributes="Bold"/>
+            
             <VerticalStackLayout Grid.Column="0" Grid.Row="1">
                 <Frame CornerRadius="16"
                        x:Name="departmentFrame"
@@ -26,8 +27,10 @@
                         BackgroundColor="PaleVioletRed"
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideDepartmentTapped"/>
-                <Label IsVisible="False" x:Name="deptListTitle"
-                       Text="Department : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <Grid IsVisible="False" x:Name="deptListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Department : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                </Grid>
                 <CollectionView x:Name="departmentCollectionView"
                                 IsVisible="False"
                                 ItemsSource="{Binding Departments}">
@@ -86,8 +89,10 @@
                         BackgroundColor="PaleVioletRed"
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideJobsTapped"/>
-                <Label IsVisible="False" x:Name="jobsListTitle"
-                        Text="Jabatan: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <Grid IsVisible="False" x:Name="jobsListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                </Grid>
                 <CollectionView x:Name="jobsCollectionView"
                                 IsVisible="False"
                                 ItemsSource="{Binding Jobs}">
@@ -146,8 +151,10 @@
                         BackgroundColor="PaleVioletRed"
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideReligionTapped"/>
-                <Label IsVisible="False" x:Name="religionListTitle"
-                       Text="Religion: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <Grid IsVisible="False" x:Name="religionListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                </Grid>
                 <CollectionView x:Name="religionCollectionView"
                     IsVisible="False"
                     ItemsSource="{Binding Religions}">
@@ -206,8 +213,10 @@
                         BackgroundColor="PaleVioletRed"
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideFactoryTapped"/>
-                <Label IsVisible="False" x:Name="factoryListTitle"
-                       Text="Factory: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <Grid IsVisible="False" x:Name="factoryListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                </Grid>
                 <CollectionView x:Name="factoryCollectionView"
                                 IsVisible="False"
                                 ItemsSource="{Binding Factories}">
@@ -276,8 +285,11 @@
                         BackgroundColor="PaleVioletRed"
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideCityProvTapped"/>
-                <Label IsVisible="False" x:Name="cityProvListTitle"
-                        Text="Kota dan Provinsi: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <Grid IsVisible="False" x:Name="cityProvListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                </Grid>
+
                 <CollectionView x:Name="cityProvCollectionView"
                                 IsVisible="False"
                                 ItemsSource="{Binding CityProvinces}">
@@ -345,8 +357,11 @@
                         BackgroundColor="PaleVioletRed"
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideEducationTapped"/>
-                <Label IsVisible="False" x:Name="educationListTitle"
-                        Text="Education: " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                <Grid IsVisible="False" x:Name="educationListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddEduPopup"/>
+                </Grid>
                 <CollectionView x:Name="educationCollectionView"
                                 IsVisible="False"
                                 ItemsSource="{Binding Educations}">

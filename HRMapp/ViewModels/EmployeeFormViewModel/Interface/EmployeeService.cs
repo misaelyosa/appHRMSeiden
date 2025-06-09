@@ -223,6 +223,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             !e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
         }
 
+        //====================================== MANAGE REFERENCE / MASTER DATA ==============================
+
+        //City Province
+        public async Task<List<City>> GetCityProvince()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Cities.Include(c => c.Provinces).ToListAsync();
+        }
         //add city province 
         public async Task AddNewCityProvince(string newCity, string newProvince)
         {
@@ -285,7 +293,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 }
             }
         }
-        
+
+        //Education
+        public async Task<List<Education>> GetEducation()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Educations.ToListAsync();
+        }
+
         public async Task AddNewEducation(string newEdType, string newMajor)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
@@ -362,18 +377,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             return await context.Factories.ToListAsync();
         }
 
-        //City Province
-        public async Task<List<City>> GetCityProvince()
-        {
-            using var context = await _contextFactory.CreateDbContextAsync();
-            return await context.Cities.Include(c => c.Provinces).ToListAsync();
-        }
 
-        //Education
-        public async Task<List<Education>> GetEducation()
-        {
-            using var context = await _contextFactory.CreateDbContextAsync();
-            return await context.Educations.ToListAsync();
-        }
+
+
     }
 }

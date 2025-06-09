@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+using HRMapp.Pages.EmployeeForms.Popups;
 using HRMapp.ViewModels;
 
 namespace HRMapp.Pages;
@@ -171,6 +173,12 @@ public partial class ManageReferenceDataPage : ContentPage
             educationListTitle.IsVisible = false;
             hideEducationBtn.IsVisible = false;
         }
+    }
+
+    private async void OnOpenAddEduPopup(object sender, EventArgs e)
+    {
+        var popup = new NewEducation(this.BindingContext);
+        this.ShowPopup(popup);
     }
 
 

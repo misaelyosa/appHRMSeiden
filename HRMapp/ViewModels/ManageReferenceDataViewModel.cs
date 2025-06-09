@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Model;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 using HRMapp.ViewModels.EmployeeFormViewModel.Interface;
@@ -36,13 +37,40 @@ namespace HRMapp.ViewModels
 
         private async Task LoadAll()
         {
-            Departments = new ObservableCollection<Department>(await _employeeService.GetDepartment());
-            Jobs = new ObservableCollection<Job>(await _employeeService.GetJob());
-            Religions = new ObservableCollection<Religion>(await _employeeService.GetReligion());
-            Factories = new ObservableCollection<Factory>(await _employeeService.GetFactory());
-            CityProvinces = new ObservableCollection<City>(await _employeeService.GetCityProvince());
-            Educations = new ObservableCollection<Education>(await _employeeService.GetEducation());
-         }
+            LoadDept();
+            LoadJob();
+            LoadRelg();
+            LoadFactories();
+            LoadCityProv();
+            LoadEducation();
+        }
+
+        private async Task LoadDept() { Departments = new ObservableCollection<Department>(await _employeeService.GetDepartment()); }
+        private async Task LoadJob() { Jobs = new ObservableCollection<Job>(await _employeeService.GetJob()); }
+        private async Task LoadRelg() { Religions = new ObservableCollection<Religion>(await _employeeService.GetReligion()); }
+        private async Task LoadFactories() { Factories = new ObservableCollection<Factory>(await _employeeService.GetFactory()); }
+        private async Task LoadCityProv() { CityProvinces = new ObservableCollection<City>(await _employeeService.GetCityProvince()); }
+        private async Task LoadEducation() { Educations = new ObservableCollection<Education>(await _employeeService.GetEducation());}
+
+
+        //CRUD EDUCATION
+        [ObservableProperty]
+        private string newEducationType;
+        [ObservableProperty]
+        private string newEducationMajor;
+        [RelayCommand]
+        private async void AddNewEducation()
+        {
+            await _employeeService.AddNewEducation(NewEducationType, NewEducationMajor);
+            string combinedDisplayName = string.IsNullOrWhiteSpace(NewEducationMajor)
+                                            ? NewEducationType
+                                            : $"{NewEducationType} - {NewEducationMajor}";
+            LoadEducation();
+        }
+
+
+
+
 
     }
 }
