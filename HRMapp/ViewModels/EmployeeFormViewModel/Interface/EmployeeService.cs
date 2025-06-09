@@ -414,6 +414,31 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             }
         }
 
+        public async Task DeleteJob(int jobId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var job = await context.Jobs.FindAsync(jobId);
+            if (job != null)
+            {
+                try
+                {
+                    context.Jobs.Remove(job);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Berhasil", $"Jabatan '{job.job_name}' berhasil dihapus.", "OK");
+                }
+                catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menghapus jabatan.", $"{e.Message}", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Jabatan tidak ditemukan.", "OK");
+            }
+        }
+
+
         //Religion
         public async Task<List<Religion>> GetReligion()
         {
@@ -451,6 +476,30 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 }
             }
         }
+        public async Task DeleteReligion(int religionId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var religion = await context.Religions.FindAsync(religionId);
+            if (religion != null)
+            {
+                try
+                {
+                    context.Religions.Remove(religion);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Berhasil", $"Agama '{religion.religion_name}' berhasil dihapus.", "OK");
+                }
+                catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menghapus agama.", $"{e.Message}", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Agama tidak ditemukan.", "OK");
+            }
+        }
+
 
 
         //Factory
@@ -498,5 +547,30 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Input tidak valid", "Nama dan alamat pabrik wajib diisi.", "OK");
             }
         }
+
+        public async Task DeleteFactory(int factoryId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var factory = await context.Factories.FindAsync(factoryId);
+            if (factory != null)
+            {
+                try
+                {
+                    context.Factories.Remove(factory);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Berhasil", $"Pabrik '{factory.name}' berhasil dihapus.", "OK");
+                }
+                catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menghapus pabrik.", $"{e.Message}", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Pabrik tidak ditemukan.", "OK");
+            }
+        }
+
     }
 }

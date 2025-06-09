@@ -56,7 +56,7 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private string newDepartment;
         [RelayCommand]
-        private async void AddNewDepartment()
+        private async Task AddNewDepartment()
         {
             await _employeeService.AddNewDepartment(NewDepartment);
             LoadDept();
@@ -66,10 +66,23 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private string newJob;
         [RelayCommand]
-        private async void AddNewJob()
+        private async Task AddNewJob()
         {
             await _employeeService.AddNewJob(NewJob);
             LoadJob();
+        }
+        [RelayCommand]
+        private async Task DeleteJob(Job job)
+        {
+            if (job == null)
+                return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus jabatan '{job.job_name}'?", "Ya", "Batal");
+            if (confirm)
+            {
+                await _employeeService.DeleteJob(job.job_id);
+                LoadJob();
+            }
         }
 
         //CRUD EDUCATION
@@ -78,7 +91,7 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private string newEducationMajor;
         [RelayCommand]
-        private async void AddNewEducation()
+        private async Task AddNewEducation()
         {
             await _employeeService.AddNewEducation(NewEducationType, NewEducationMajor);
             string combinedDisplayName = string.IsNullOrWhiteSpace(NewEducationMajor)
@@ -91,10 +104,23 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private string newRelg;
         [RelayCommand]
-        private async void AddNewReligion()
+        private async Task AddNewReligion()
         {
             await _employeeService.AddNewReligion(NewRelg);
             LoadRelg();
+        }
+        [RelayCommand]
+        private async Task DeleteReligion(Religion agama)
+        {
+            if (agama == null)
+                return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus data agama '{agama.religion_name}'?", "Ya", "Batal");
+            if (confirm)
+            {
+                await _employeeService.DeleteReligion(agama.religion_id);
+                LoadRelg();
+            }
         }
 
         //CRUD CityProv
@@ -128,5 +154,19 @@ namespace HRMapp.ViewModels
                 LoadFactories();
             }
         }
+        [RelayCommand]
+        private async Task DeleteFactory(Factory factory)
+        {
+            if (factory == null)
+                return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus pabrik '{factory.name}'?", "Ya", "Batal");
+            if (confirm)
+            {
+                await _employeeService.DeleteFactory(factory.factory_id);
+                LoadFactories();
+            }
+        }
+
     }
 }

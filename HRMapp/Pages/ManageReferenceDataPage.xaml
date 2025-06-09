@@ -129,7 +129,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="Tomato"
-                                            TextColor="White"/>
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteJobCommand, Source={x:Reference jobsCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
@@ -192,7 +194,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="Tomato"
-                                            TextColor="White"/>
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteReligionCommand, Source={x:Reference religionCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
@@ -264,7 +268,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="Tomato"
-                                            TextColor="White"/>
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteFactoryCommand, Source={x:Reference factoryCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>

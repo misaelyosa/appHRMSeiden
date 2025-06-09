@@ -1,4 +1,5 @@
 ﻿using HRMapp.Data.Model;
+using System.Threading.Tasks;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel
 {
@@ -27,11 +28,16 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task<List<Factory>> GetFactory();
         Task<List<City>> GetCityProvince();
         Task<List<Education>> GetEducation();
+
         Task AddNewDepartment(string newDept);
         Task AddNewJob(string newJob);
         Task AddNewCityProvince(string newCity, string newProvince);
         Task AddNewEducation(string newEdType, string newMajor);
         Task AddNewReligion(string newReligion);
         Task AddNewFactory(string name, string address, int? personnelCapacity);
+
+        Task DeleteJob(int jobId);
+        Task DeleteFactory(int factoryId);
+        Task DeleteReligion(int religionId);
     }
 }
