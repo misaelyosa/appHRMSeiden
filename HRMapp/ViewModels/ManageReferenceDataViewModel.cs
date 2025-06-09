@@ -52,6 +52,15 @@ namespace HRMapp.ViewModels
         private async Task LoadCityProv() { CityProvinces = new ObservableCollection<City>(await _employeeService.GetCityProvince()); }
         private async Task LoadEducation() { Educations = new ObservableCollection<Education>(await _employeeService.GetEducation());}
 
+        //CRUD DEPARTMENT
+        [ObservableProperty]
+        private string newDepartment;
+        [RelayCommand]
+        private async void AddNewDepartment()
+        {
+            await _employeeService.AddNewDepartment(NewDepartment);
+            LoadDept();
+        }
 
         //CRUD EDUCATION
         [ObservableProperty]

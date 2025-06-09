@@ -39,6 +39,11 @@ public partial class ManageReferenceDataPage : ContentPage
             departmentFrame.IsVisible = true;
         }
     }
+    private async void OnOpenAddDepartmentPopup(object sender, EventArgs e)
+    {
+        var popup = new NewDepartment(this.BindingContext);
+        this.ShowPopup(popup);
+    }
     
     //jobs 
     private async void OnJobsFrameTapped(object sender, EventArgs e)

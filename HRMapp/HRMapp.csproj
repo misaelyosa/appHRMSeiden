@@ -100,6 +100,9 @@
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewCityProvince.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewDepartment.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewEducation.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

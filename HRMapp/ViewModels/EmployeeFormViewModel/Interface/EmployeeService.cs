@@ -356,6 +356,27 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             return await context.Departments.ToListAsync();
         }
 
+        public async Task AddNewDepartment(string newDept)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (!string.IsNullOrEmpty(newDept))
+            {
+                try
+                {
+                    var newDepartment = new Department
+                    {
+                        name = newDept
+                    };
+                    context.Departments.Add(newDepartment);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data departemen {newDept} berhasil ditambahkan", "OK");
+                } catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menambahkan data.",$"{e}", "OK");
+                }
+            }
+        }
         //JOBS
         public async Task<List<Job>> GetJob()
         {
