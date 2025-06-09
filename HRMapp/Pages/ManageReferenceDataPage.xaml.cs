@@ -148,6 +148,12 @@ public partial class ManageReferenceDataPage : ContentPage
         }
     }
 
+    private async void OnOpenAddCityPopup(object sender, EventArgs e)
+    {
+        var popup = new NewCityProvince(this.BindingContext);
+        this.ShowPopup(popup);
+    }
+
     //Last Education
     private async void OnEducationFrameTapped(object sender, EventArgs e)
     {

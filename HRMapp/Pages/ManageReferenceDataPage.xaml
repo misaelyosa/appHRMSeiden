@@ -287,7 +287,8 @@
                         Text="Hide" Clicked="OnHideCityProvTapped"/>
                 <Grid IsVisible="False" x:Name="cityProvListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
                     <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
-                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddCityPopup"/>
                 </Grid>
 
                 <CollectionView x:Name="cityProvCollectionView"

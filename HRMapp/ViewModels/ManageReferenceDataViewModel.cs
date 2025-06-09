@@ -68,8 +68,20 @@ namespace HRMapp.ViewModels
             LoadEducation();
         }
 
-
-
+        //CRUD CityProv
+        [ObservableProperty]
+        private string newCityName;
+        [ObservableProperty]
+        private string newProvinceName;
+        [RelayCommand]
+        private async Task AddNewCityProvince()
+        {
+            if (!string.IsNullOrEmpty(NewCityName) && !string.IsNullOrEmpty(NewProvinceName))
+            {
+                await _employeeService.AddNewCityProvince(NewCityName, NewProvinceName);
+                LoadCityProv();
+            }
+        }
 
 
     }
