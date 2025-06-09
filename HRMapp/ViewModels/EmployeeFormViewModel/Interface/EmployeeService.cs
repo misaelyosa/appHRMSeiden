@@ -420,6 +420,38 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Religions.ToListAsync();
         }
+        public async Task AddNewReligion(string newReligion)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (!string.IsNullOrEmpty(newReligion))
+            {
+                var existingReligion = await context.Religions.FirstOrDefaultAsync(r => r.religion_name.ToLower() == newReligion.ToLower());
+
+                if (existingReligion == null)
+                {
+                    try
+                    {
+                        var newReligionEntry = new Religion
+                        {
+                            religion_name = newReligion
+                        };
+                        context.Religions.Add(newReligionEntry);
+                        await context.SaveChangesAsync();
+                        await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data agama {newReligion} berhasil ditambahkan", "OK");
+                    }
+                    catch (Exception e)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Gagal menambahkan data.", $"{e.Message}", "OK");
+                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data duplikat.", "Ditemukan data agama yang sama.", "OK");
+                }
+            }
+        }
+
 
         //Factory
         public async Task<List<Factory>> GetFactory()

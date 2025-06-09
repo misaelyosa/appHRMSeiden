@@ -103,6 +103,11 @@ public partial class ManageReferenceDataPage : ContentPage
             hideReligionBtn.IsVisible = false;
         }
     }
+    private async void OnOpenAddReligionPopup(object sender, EventArgs e)
+    {
+        var popup = new NewReligion(this.BindingContext);
+        this.ShowPopup(popup);
+    }
 
     //factory
     private async void OnFactoryFrameTapped(object sender, EventArgs e)

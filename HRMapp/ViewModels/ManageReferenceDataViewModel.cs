@@ -87,6 +87,16 @@ namespace HRMapp.ViewModels
             LoadEducation();
         }
 
+        //CRUD AGAMA
+        [ObservableProperty]
+        private string newRelg;
+        [RelayCommand]
+        private async void AddNewReligion()
+        {
+            await _employeeService.AddNewReligion(NewRelg);
+            LoadRelg();
+        }
+
         //CRUD CityProv
         [ObservableProperty]
         private string newCityName;

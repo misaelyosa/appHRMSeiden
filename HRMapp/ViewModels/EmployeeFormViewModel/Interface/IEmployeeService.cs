@@ -31,5 +31,6 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task AddNewJob(string newJob);
         Task AddNewCityProvince(string newCity, string newProvince);
         Task AddNewEducation(string newEdType, string newMajor);
+        Task AddNewReligion(string newReligion);
     }
 }
