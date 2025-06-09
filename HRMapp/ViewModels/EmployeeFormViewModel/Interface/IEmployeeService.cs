@@ -39,5 +39,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task DeleteJob(int jobId);
         Task DeleteFactory(int factoryId);
         Task DeleteReligion(int religionId);
+        Task DeleteDepartment(int deptId);
+        Task DeleteEducation(int eduId);
+        Task DeleteCityProvince(int cityId);
     }
 }

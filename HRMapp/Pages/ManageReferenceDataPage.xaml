@@ -66,7 +66,9 @@
                                             WidthRequest="70"
                                             Padding="4"
                                             BackgroundColor="Tomato"
-                                            TextColor="White"/>
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteDepartmentCommand, Source={x:Reference departmentCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
@@ -343,7 +345,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="Tomato"
-                                            TextColor="White"/>
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteCityProvinceCommand, Source={x:Reference cityProvCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>
@@ -407,7 +411,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="Tomato"
-                                            TextColor="White"/>
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference educationCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
                                 </Grid>
                             </Frame>
                         </DataTemplate>

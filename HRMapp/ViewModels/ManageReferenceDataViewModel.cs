@@ -61,6 +61,20 @@ namespace HRMapp.ViewModels
             await _employeeService.AddNewDepartment(NewDepartment);
             LoadDept();
         }
+        [RelayCommand]
+        private async Task DeleteDepartment(Department department)
+        {
+            if (department == null)
+                return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus departemen '{department.name}'?", "Ya", "Batal");
+            if (confirm)
+            {
+                await _employeeService.DeleteDepartment(department.department_id);
+                LoadDept();
+            }
+        }
+
 
         //CRUD JOB
         [ObservableProperty]
@@ -99,6 +113,20 @@ namespace HRMapp.ViewModels
                                             : $"{NewEducationType} - {NewEducationMajor}";
             LoadEducation();
         }
+        [RelayCommand]
+        private async Task DeleteEducation(Education education)
+        {
+            if (education == null)
+                return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus pendidikan '{education.DisplayName}'?", "Ya", "Batal");
+            if (confirm)
+            {
+                await _employeeService.DeleteEducation(education.education_id);
+                LoadEducation();
+            }
+        }
+
 
         //CRUD AGAMA
         [ObservableProperty]
@@ -137,6 +165,20 @@ namespace HRMapp.ViewModels
                 LoadCityProv();
             }
         }
+        [RelayCommand]
+        private async Task DeleteCityProvince(City cityProvince)
+        {
+            if (cityProvince == null)
+                return;
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus kota/provinsi '{cityProvince.city_name}, {cityProvince.Provinces.province_name}'?", "Ya", "Batal");
+            if (confirm)
+            {
+                await _employeeService.DeleteCityProvince(cityProvince.city_id);
+                LoadCityProv();
+            }
+        }
+
 
         //CRUD FACTORY
         [ObservableProperty]

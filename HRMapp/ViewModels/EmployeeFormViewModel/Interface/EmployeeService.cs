@@ -293,6 +293,29 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 }
             }
         }
+        public async Task DeleteCityProvince(int cityId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var city = await context.Cities.FindAsync(cityId);
+            if (city != null)
+            {
+                try
+                {
+                    context.Cities.Remove(city);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Berhasil", $"Data kota '{city.city_name}' berhasil dihapus.", "OK");
+                }
+                catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menghapus Data kota.", $"{e.Message}", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Data kota tidak ditemukan.", "OK");
+            }
+        }
 
         //Education
         public async Task<List<Education>> GetEducation()
@@ -348,6 +371,29 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data tingkat pendidikan {newEdType} dengan jurusan {newMajor} telah berhasil ditambahkan. Silahkan pilih melalui dropdown.", "OK");
             }
         }
+        public async Task DeleteEducation(int eduId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var edu = await context.Educations.FindAsync(eduId);
+            if (edu != null)
+            {
+                try
+                {
+                    context.Educations.Remove(edu);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Berhasil", $"Data Pendidikan '{edu.DisplayName}' berhasil dihapus.", "OK");
+                }
+                catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menghapus Data Pendidikan.", $"{e.Message}", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Data pendidikan tidak ditemukan.", "OK");
+            }
+        }
 
         //DEPARTMENT
         public async Task<List<Department>> GetDepartment()
@@ -377,6 +423,30 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 }
             }
         }
+        public async Task DeleteDepartment(int deptId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var dept = await context.Departments.FindAsync(deptId);
+            if (dept != null)
+            {
+                try
+                {
+                    context.Departments.Remove(dept);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert("Berhasil", $"Department '{dept.name}' berhasil dihapus.", "OK");
+                }
+                catch (Exception e)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Gagal menghapus department.", $"{e.Message}", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Department tidak ditemukan.", "OK");
+            }
+        }
+
         //JOBS
         public async Task<List<Job>> GetJob()
         {
