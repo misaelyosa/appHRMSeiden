@@ -62,6 +62,16 @@ namespace HRMapp.ViewModels
             LoadDept();
         }
 
+        //CRUD JOB
+        [ObservableProperty]
+        private string newJob;
+        [RelayCommand]
+        private async void AddNewJob()
+        {
+            await _employeeService.AddNewJob(NewJob);
+            LoadJob();
+        }
+
         //CRUD EDUCATION
         [ObservableProperty]
         private string newEducationType;

@@ -28,6 +28,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task<List<City>> GetCityProvince();
         Task<List<Education>> GetEducation();
         Task AddNewDepartment(string newDept);
+        Task AddNewJob(string newJob);
         Task AddNewCityProvince(string newCity, string newProvince);
         Task AddNewEducation(string newEdType, string newMajor);
     }

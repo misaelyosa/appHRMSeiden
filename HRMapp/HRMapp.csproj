@@ -82,6 +82,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\EmployeeForms\Popups\NewJob.xaml.cs">
+	    <DependentUpon>NewJob.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\EmployeeDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -104,6 +110,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewEducation.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewJob.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ManageEmployee.xaml">

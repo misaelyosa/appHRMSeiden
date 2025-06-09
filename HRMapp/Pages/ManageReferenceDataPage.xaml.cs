@@ -71,6 +71,11 @@ public partial class ManageReferenceDataPage : ContentPage
             jobsFrame.IsVisible = true;
         }
     }
+    private async void OnOpenAddJobPopup(object sender, EventArgs e)
+    {
+        var popup = new NewJob(this.BindingContext);
+        this.ShowPopup(popup);
+    }
 
     //religion
     private async void OnReligionFrameTapped(object sender, EventArgs e)
