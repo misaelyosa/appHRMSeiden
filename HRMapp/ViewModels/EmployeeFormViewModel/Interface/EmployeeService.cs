@@ -459,9 +459,44 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Factories.ToListAsync();
         }
+        public async Task AddNewFactory(string name, string address, int? personnelCapacity)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
 
+            if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(address))
+            {
+                var existingFactory = await context.Factories.FirstOrDefaultAsync(f => f.name.ToLower() == name.ToLower());
 
+                if (existingFactory == null)
+                {
+                    try
+                    {
+                        var newFactoryEntry = new Factory
+                        {
+                            name = name,
+                            address = address,
+                            personnel_capacity = personnelCapacity
+                        };
 
+                        context.Factories.Add(newFactoryEntry);
+                        await context.SaveChangesAsync();
 
+                        await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Pabrik '{name}' berhasil ditambahkan.", "OK");
+                    }
+                    catch (Exception e)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Gagal menambahkan data.", $"{e.Message}", "OK");
+                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data duplikat.", $"Pabrik dengan nama '{name}' sudah ada.", "OK");
+                }
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Input tidak valid", "Nama dan alamat pabrik wajib diisi.", "OK");
+            }
+        }
     }
 }

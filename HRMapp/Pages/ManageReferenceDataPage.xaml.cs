@@ -135,6 +135,11 @@ public partial class ManageReferenceDataPage : ContentPage
             hideFactoryBtn.IsVisible = false;
         }
     }
+    private async void OnOpenAddFactoryPopup(object sender, EventArgs e)
+    {
+        var popup = new NewFactory(this.BindingContext);
+        this.ShowPopup(popup);
+    }
 
     //City Province
     private async void OnCityProvFrameTapped(object sender, EventArgs e)

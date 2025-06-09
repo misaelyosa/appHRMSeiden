@@ -81,7 +81,7 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnJobsFrameTapped"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Jobs" HorizontalOptions="Center" VerticalOptions="Center"
+                    <Label Text="Jabatan" HorizontalOptions="Center" VerticalOptions="Center"
                            FontSize="16" FontAttributes="Bold" TextColor="Black"/>
                 </Frame>
 
@@ -154,7 +154,7 @@
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideReligionTapped"/>
                 <Grid IsVisible="False" x:Name="religionListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
-                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Agama : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
                     <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
                             Clicked="OnOpenAddReligionPopup"/>
                 </Grid>
@@ -217,8 +217,9 @@
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideFactoryTapped"/>
                 <Grid IsVisible="False" x:Name="factoryListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
-                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
-                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"/>
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Pabrik : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddFactoryPopup"/>
                 </Grid>
                 <CollectionView x:Name="factoryCollectionView"
                                 IsVisible="False"
@@ -289,7 +290,7 @@
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideCityProvTapped"/>
                 <Grid IsVisible="False" x:Name="cityProvListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
-                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Kota dan Provinsi : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
                     <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
                             Clicked="OnOpenAddCityPopup"/>
                 </Grid>
@@ -352,7 +353,7 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnEducationFrameTapped"/>
                     </Frame.GestureRecognizers>
-                    <Label Text="Education" HorizontalOptions="Center" VerticalOptions="Center"
+                    <Label Text="Pendidikan Terakhir" HorizontalOptions="Center" VerticalOptions="Center"
                            FontSize="16" FontAttributes="Bold" TextColor="Black"/>
                 </Frame>
 
@@ -362,7 +363,7 @@
                         Margin="0,0,0,8"
                         Text="Hide" Clicked="OnHideEducationTapped"/>
                 <Grid IsVisible="False" x:Name="educationListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
-                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Pendidikan Terakhir : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
                     <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
                             Clicked="OnOpenAddEduPopup"/>
                 </Grid>

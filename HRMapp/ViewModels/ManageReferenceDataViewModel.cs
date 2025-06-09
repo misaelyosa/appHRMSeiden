@@ -112,6 +112,21 @@ namespace HRMapp.ViewModels
             }
         }
 
-
+        //CRUD FACTORY
+        [ObservableProperty]
+        private string factoryName;
+        [ObservableProperty]
+        private string factoryAddress;
+        [ObservableProperty]
+        private string factoryCapacity;
+        [RelayCommand]
+        private async Task AddNewFactory()
+        {
+            if (!string.IsNullOrEmpty(FactoryName) && !string.IsNullOrEmpty(FactoryAddress))
+            { 
+                await _employeeService.AddNewFactory(FactoryName, FactoryAddress, int.Parse(FactoryCapacity));
+                LoadFactories();
+            }
+        }
     }
 }
