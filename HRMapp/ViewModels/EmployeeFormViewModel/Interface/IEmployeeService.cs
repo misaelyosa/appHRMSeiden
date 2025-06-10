@@ -59,5 +59,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task<Religion?> fetchExistingReligion(int id);
         Task EditReligion(int religionId, string updatedReligion);
 
+        Task<Factory?> fetchExistingFactory(int id);
+        Task EditFactory(int factoryId, string updatedName, string updatedAddress, int? updatedPersonnelCapacity);
+
     }
 }

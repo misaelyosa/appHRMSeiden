@@ -88,6 +88,9 @@
 	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditDepartment.xaml.cs">
 	    <DependentUpon>EditDepartment.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditFactory.xaml.cs">
+	    <DependentUpon>EditFactory.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditReligion.xaml.cs">
 	    <DependentUpon>EditReligion.xaml</DependentUpon>
 	  </Compile>
@@ -122,6 +125,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditDepartment.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditFactory.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditReligion.xaml">

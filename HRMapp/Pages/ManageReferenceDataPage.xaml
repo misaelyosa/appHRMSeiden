@@ -267,7 +267,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="LightBlue"
-                                            TextColor="Black"/>
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupFactoryCommand, Source={x:Reference factoryCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
 
                                     <Button Grid.Row="2" Grid.Column="2"
                                             Text="Delete"

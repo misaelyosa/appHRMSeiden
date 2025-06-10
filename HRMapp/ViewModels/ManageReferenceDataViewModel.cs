@@ -359,6 +359,8 @@ namespace HRMapp.ViewModels
         private string factoryAddress;
         [ObservableProperty]
         private string factoryCapacity;
+        [ObservableProperty]
+        private int factoryId;
         [RelayCommand]
         private async Task AddNewFactory()
         {
@@ -381,6 +383,39 @@ namespace HRMapp.ViewModels
                 LoadFactories();
             }
         }
+        [RelayCommand]
+        private async Task OpenEditPopupFactory(Factory factory)
+        {
+            if (factory == null)
+            {
+                return;
+            }
+            ;
 
+            var fetchExisting = await _employeeService.fetchExistingFactory(factory.factory_id);
+            if (fetchExisting != null)
+            {
+                FactoryId = factory.factory_id;
+                FactoryName = fetchExisting.name;
+                FactoryAddress = fetchExisting.address;
+                FactoryCapacity = fetchExisting.personnel_capacity.ToString();
+
+                var popup = new EditFactory(this);
+
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            }
+        }
+        [RelayCommand]
+        private async Task EditFactory()
+        {
+            if (string.IsNullOrWhiteSpace(FactoryName) || string.IsNullOrWhiteSpace(FactoryAddress) || string.IsNullOrWhiteSpace(FactoryCapacity))
+            {
+                await App.Current.MainPage.DisplayAlert("Invalid Input", "Please fill in all fields", "OK");
+                return;
+            }
+
+            await _employeeService.EditFactory(FactoryId, FactoryName, FactoryAddress, int.Parse(FactoryCapacity));
+            LoadFactories();
+        }
     }
 }

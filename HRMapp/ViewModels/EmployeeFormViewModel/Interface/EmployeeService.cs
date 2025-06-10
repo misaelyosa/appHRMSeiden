@@ -916,5 +916,65 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             }
         }
 
+        //EDIT
+        public async Task<Factory?> fetchExistingFactory(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var factory = context.Factories.FirstOrDefault(c => c.factory_id == id);
+
+            return factory;
+        }
+        public async Task EditFactory(int factoryId, string updatedName, string updatedAddress, int? updatedPersonnelCapacity)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (string.IsNullOrWhiteSpace(updatedName) || string.IsNullOrWhiteSpace(updatedAddress))
+            {
+                await Application.Current.MainPage.DisplayAlert("Input tidak valid", "Nama dan alamat pabrik wajib diisi.", "OK");
+                return;
+            }
+
+            var factory = await context.Factories.FirstOrDefaultAsync(f => f.factory_id == factoryId);
+            if (factory == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Pabrik tidak ditemukan.", "OK");
+                return;
+            }
+
+            updatedName = updatedName.Trim();
+            updatedAddress = updatedAddress.Trim();
+
+            var duplicateFactory = await context.Factories
+                .FirstOrDefaultAsync(f => f.factory_id != factoryId && f.name.ToLower().Trim() == updatedName.ToLower());
+
+            if (duplicateFactory != null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data duplikat", $"Pabrik dengan nama '{updatedName}' sudah ada.", "OK");
+                return;
+            }
+
+            if (factory.name.Equals(updatedName, StringComparison.OrdinalIgnoreCase) &&
+                factory.address.Equals(updatedAddress, StringComparison.OrdinalIgnoreCase) &&
+                factory.personnel_capacity == updatedPersonnelCapacity)
+            {
+                await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Data pabrik tidak mengalami perubahan.", "OK");
+                return;
+            }
+
+            factory.name = updatedName;
+            factory.address = updatedAddress;
+            factory.personnel_capacity = updatedPersonnelCapacity;
+
+            try
+            {
+                await context.SaveChangesAsync();
+                await Application.Current.MainPage.DisplayAlert("Berhasil", $"Pabrik '{updatedName}' berhasil diperbarui.", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Gagal memperbarui data", $"{ex.Message}", "OK");
+            }
+        }
+
     }
 }
