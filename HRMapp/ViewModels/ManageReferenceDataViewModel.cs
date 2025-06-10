@@ -1,6 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Model;
+using HRMapp.Pages.EmployeeForms.Popups.EditManageReference;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 using HRMapp.ViewModels.EmployeeFormViewModel.Interface;
 using System;
@@ -156,6 +158,8 @@ namespace HRMapp.ViewModels
         private string newCityName;
         [ObservableProperty]
         private string newProvinceName;
+        [ObservableProperty] 
+        private int cityId;
         [RelayCommand]
         private async Task AddNewCityProvince()
         {
@@ -177,6 +181,40 @@ namespace HRMapp.ViewModels
                 await _employeeService.DeleteCityProvince(cityProvince.city_id);
                 LoadCityProv();
             }
+        }
+        [RelayCommand]
+        private async Task OpenEditPopupCityProvince(City cityProvince)
+        {
+            if(cityProvince == null)
+            {
+                return;
+            };
+
+            var fetchExisting = await _employeeService.fetchExistingCityClicked(cityProvince.city_id);
+            if (fetchExisting != null )
+            {
+                CityId = fetchExisting.city_id;
+                NewCityName = fetchExisting.city_name;
+                NewProvinceName = fetchExisting.Provinces.province_name;
+
+                var popup = new EditCityProvince(this);
+
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+
+                await _employeeService.EditCityProvince(cityProvince.city_id, NewCityName, NewProvinceName);
+            }
+        }
+        [RelayCommand]
+        private async Task EditCityProvince()
+        {
+            if (string.IsNullOrWhiteSpace(NewCityName) || string.IsNullOrWhiteSpace(NewProvinceName))
+            {
+                await App.Current.MainPage.DisplayAlert("Invalid Input", "Please fill in all fields", "OK");
+                return;
+            }
+
+            await _employeeService.EditCityProvince(CityId, NewCityName, NewProvinceName);
+            LoadCityProv();
         }
 
 

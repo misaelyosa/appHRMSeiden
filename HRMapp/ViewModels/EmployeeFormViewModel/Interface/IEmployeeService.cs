@@ -42,5 +42,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task DeleteDepartment(int deptId);
         Task DeleteEducation(int eduId);
         Task DeleteCityProvince(int cityId);
+
+        //edit
+        Task<City?> fetchExistingCityClicked(int id);
+        Task EditCityProvince(int cityId, string updatedCityName, string updatedProvinceName);
     }
 }

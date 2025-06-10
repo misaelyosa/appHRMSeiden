@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using UraniumUI.Extensions;
 
 namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 {
@@ -316,10 +317,79 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Data kota tidak ditemukan.", "OK");
             }
         }
+        //fetch edit
+        public async Task<City?> fetchExistingCityClicked(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var city = context.Cities.Include(c => c.Provinces).FirstOrDefault(c => c.city_id == id);
+
+            return city;
+        }
+          //Edit city province
+
+        public async Task EditCityProvince(int cityId, string updatedCityName, string updatedProvinceName)
+        {
+            try
+            {
+                using var context = await _contextFactory.CreateDbContextAsync();
+
+                var city = await context.Cities.FirstOrDefaultAsync(c => c.city_id == cityId);
+                if (city == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Kota tidak ditemukan.", "OK");
+                    return;
+                }
+
+                updatedCityName = updatedCityName.Trim();
+                updatedProvinceName = updatedProvinceName.Trim();
+
+                ////check no change
+                //var currentProvince = await context.Provinces.FirstOrDefaultAsync(p => p.province_id == city.province_id);
+                //if (city.city_name.Equals(updatedCityName, StringComparison.OrdinalIgnoreCase) &&
+                //    currentProvince?.province_name.Equals(updatedProvinceName, StringComparison.OrdinalIgnoreCase) == true)
+                //{
+                //    await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Nama kota dan provinsi tidak berubah.", "OK");
+                //    return;
+                //}
+
+                bool isDuplicate = await context.Cities
+                    .AnyAsync(c => c.city_id != cityId && c.city_name.ToLower() == updatedCityName.ToLower());
+                if (isDuplicate)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Data kota sudah ada", $"Kota {updatedCityName} sudah ada.", "OK");
+                    return;
+                }
+
+                // Find or create province
+                var province = await context.Provinces
+                    .FirstOrDefaultAsync(p => p.province_name.ToLower() == updatedProvinceName.ToLower());
+
+                if (province == null)
+                {
+                    province = new Province { province_name = updatedProvinceName };
+                    context.Provinces.Add(province);
+                    await context.SaveChangesAsync();
+                }
+
+                // Update city
+                city.city_name = updatedCityName;
+                city.province_id = province.province_id;
+
+                await context.SaveChangesAsync();
+
+                await Application.Current.MainPage.DisplayAlert("Sukses", $"Kota {updatedCityName} telah diperbarui.", "OK");
+                Debug.WriteLine($"Updated city: {updatedCityName}, Province: {province.province_name}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[ERROR] {ex}");
+                await Application.Current.MainPage.DisplayAlert("Terjadi kesalahan", "Gagal menyimpan perubahan.", "OK");
+            }
+        }
 
         //Education
         public async Task<List<Education>> GetEducation()
-        {
+            {
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Educations.ToListAsync();
         }

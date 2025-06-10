@@ -336,7 +336,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="LightBlue"
-                                            TextColor="Black"/>
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupCityProvinceCommand, Source={x:Reference cityProvCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
 
                                     <Button Grid.Row="1" Grid.Column="2"
                                             Text="Delete"

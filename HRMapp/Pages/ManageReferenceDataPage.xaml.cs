@@ -170,8 +170,15 @@ public partial class ManageReferenceDataPage : ContentPage
 
     private async void OnOpenAddCityPopup(object sender, EventArgs e)
     {
-        var popup = new NewCityProvince(this.BindingContext);
-        this.ShowPopup(popup);
+        if (BindingContext is ManageReferenceDataViewModel vm)
+        {
+            vm.NewCityName = string.Empty;
+            vm.NewProvinceName = string.Empty;
+
+            var popup = new NewCityProvince(vm);
+            this.ShowPopup(popup);
+        }
+
     }
 
     //Last Education
