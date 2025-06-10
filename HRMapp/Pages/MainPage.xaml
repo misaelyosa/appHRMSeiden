@@ -20,6 +20,9 @@
                         IsVisible="{Binding IsAdmin}"
                         TextColor="White"
                         BackgroundColor="DodgerBlue"/>
+                <Button Text="User - Session" TextColor="White"
+                        BackgroundColor="DodgerBlue"
+                        Command="{Binding NavigateToManageUserSessionCommand}"/>
 
                 <Button Text="Copy Reset Password Token" TextColor="White" BackgroundColor="MediumPurple" Command="{Binding GetResetTokenCommand}"
                         SemanticProperties.Description="Reset password token akan menjadi kode sekali pakai yang dapat anda gunakan ketika lupa password. Jangan lupa untuk catat kode di tempat yang dapat anda akses karena kode hanya dapat digenerate 1 kali."/>

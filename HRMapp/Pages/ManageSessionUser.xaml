@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HRMapp.Pages.ManageSessionUser"
+             xmlns:local="clr-namespace:HRMapp.ViewModels"
+             x:Name="RootPage"
+             BackgroundColor="White"
+             Title="ManageSessionUser">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:ActiveOnlyConverter x:Key="ActiveOnlyConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <Label Text="Daftar Pengguna dan Session" FontSize="20" HorizontalOptions="Center" TextColor="black" />
+
+            <Grid ColumnDefinitions="*, *, *" Margin="20">
+                <CollectionView Grid.Column="1" ItemsSource="{Binding UserSessions}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Gray" BackgroundColor="WhiteSmoke" CornerRadius="10" Padding="10" Margin="5">
+                                <VerticalStackLayout >
+                                    <Label Text="{Binding Username}" FontAttributes="Bold" TextColor="Black"/>
+                                    <Label Text="{Binding Authority}" FontSize="12" TextColor="Black"/>
+                                    <Label Text="{Binding SessionId, StringFormat='Session ID: {0}'}" FontSize="12" TextColor="Black"/>
+                                    <Label Text="{Binding LastLogin, StringFormat='Last Login: {0}'}" FontSize="12" TextColor="Black"/>
+                                    <Label Text="{Binding Status, StringFormat='Status: {0}'}" FontSize="12" TextColor="Black"/>
+                                    <Button 
+                                        Text="Terminate"
+                                        Grid.Column="1"
+                                        BackgroundColor="Red"
+                                        TextColor="White"
+                                        Margin="10,0,0,0"
+                                        Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.TerminateUserSessionAsyncCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IsVisible="{Binding BindingContext.IsAdmin, Source={x:Reference RootPage}}"
+                                        IsEnabled="{Binding Status, Converter={StaticResource ActiveOnlyConverter}}" />
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

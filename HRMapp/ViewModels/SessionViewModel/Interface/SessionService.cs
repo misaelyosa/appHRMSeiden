@@ -273,5 +273,44 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             }
             return null;
         }
-    }   
+
+        //manage session user page
+        public async Task<List<UserSessionDTO>> GetAllUserSessionsAsync()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var result = await context.Session
+                .Include(s => s.User)
+                .Select(s => new UserSessionDTO
+                {
+                    UserId = s.User.user_id,
+                    Username = s.User.username,
+                    Authority = s.User.authority,
+                    SessionId = s.session_id,
+                    LastLogin = s.last_login,
+                    Status = s.status.ToString()
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<bool> TerminateSessionAsync(int sessionId, bool isAdmin)
+        {
+            if (!isAdmin)
+                return false;
+
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var session = await context.Session.FirstOrDefaultAsync(s => s.session_id == sessionId);
+            if (session == null || session.status == Sessionstatus.Inactive)
+                return false;
+
+            session.status = Sessionstatus.Inactive;
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+
+    }
 }

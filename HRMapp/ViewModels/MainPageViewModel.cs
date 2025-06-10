@@ -196,6 +196,11 @@ namespace HRMapp.ViewModels
             }
         }
 
+        [RelayCommand]
+        private async Task NavigateToManageUserSession()
+        {
+            await Shell.Current.GoToAsync("ManageSessionUser");
+        }
 
         [ObservableProperty]
         private bool isAdmin;
