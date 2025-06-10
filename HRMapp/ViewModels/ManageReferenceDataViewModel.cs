@@ -106,6 +106,8 @@ namespace HRMapp.ViewModels
         private string newEducationType;
         [ObservableProperty]
         private string newEducationMajor;
+        [ObservableProperty]
+        private int eduId;
         [RelayCommand]
         private async Task AddNewEducation()
         {
@@ -127,6 +129,38 @@ namespace HRMapp.ViewModels
                 await _employeeService.DeleteEducation(education.education_id);
                 LoadEducation();
             }
+        }
+        [RelayCommand]
+        private async Task OpenEditPopupEducation(Education edu)
+        {
+            if (edu == null)
+            {
+                return;
+            };
+
+            var fetchExisting = await _employeeService.fetchExistingEducationClicked(edu.education_id);
+            if (fetchExisting != null)
+            {
+                EduId = edu.education_id;
+                NewEducationType = fetchExisting.education_type;
+                NewEducationMajor = fetchExisting.major;
+
+                var popup = new EditEducation(this);
+
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            }
+        }
+        [RelayCommand]
+        private async Task EditEducation()
+        {
+            if (string.IsNullOrWhiteSpace(NewEducationType) || string.IsNullOrWhiteSpace(NewEducationMajor))
+            {
+                await App.Current.MainPage.DisplayAlert("Invalid Input", "Please fill in all fields", "OK");
+                return;
+            }
+
+            await _employeeService.EditEducation(EduId, NewEducationType, NewEducationMajor);
+            LoadEducation();
         }
 
 
@@ -200,8 +234,6 @@ namespace HRMapp.ViewModels
                 var popup = new EditCityProvince(this);
 
                 await Shell.Current.CurrentPage.ShowPopupAsync(popup);
-
-                await _employeeService.EditCityProvince(cityProvince.city_id, NewCityName, NewProvinceName);
             }
         }
         [RelayCommand]

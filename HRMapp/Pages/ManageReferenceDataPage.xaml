@@ -404,7 +404,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="LightBlue"
-                                            TextColor="Black"/>
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupEducationCommand, Source={x:Reference educationCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
 
                                     <Button Grid.Row="0" Grid.Column="2"
                                             Text="Delete"

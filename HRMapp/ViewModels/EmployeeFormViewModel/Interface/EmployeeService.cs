@@ -343,14 +343,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 updatedCityName = updatedCityName.Trim();
                 updatedProvinceName = updatedProvinceName.Trim();
 
-                ////check no change
-                //var currentProvince = await context.Provinces.FirstOrDefaultAsync(p => p.province_id == city.province_id);
-                //if (city.city_name.Equals(updatedCityName, StringComparison.OrdinalIgnoreCase) &&
-                //    currentProvince?.province_name.Equals(updatedProvinceName, StringComparison.OrdinalIgnoreCase) == true)
-                //{
-                //    await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Nama kota dan provinsi tidak berubah.", "OK");
-                //    return;
-                //}
+                //check no change
+                var currentProvince = await context.Provinces.FirstOrDefaultAsync(p => p.province_id == city.province_id);
+                if (city.city_name.Equals(updatedCityName, StringComparison.OrdinalIgnoreCase) &&
+                    currentProvince?.province_name.Equals(updatedProvinceName, StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Nama kota dan provinsi tidak berubah.", "OK");
+                    return;
+                }
 
                 bool isDuplicate = await context.Cities
                     .AnyAsync(c => c.city_id != cityId && c.city_name.ToLower() == updatedCityName.ToLower());
@@ -377,7 +377,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
                 await context.SaveChangesAsync();
 
-                await Application.Current.MainPage.DisplayAlert("Sukses", $"Kota {updatedCityName} telah diperbarui.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Sukses", $"Data {updatedCityName} telah diperbarui.", "OK");
                 Debug.WriteLine($"Updated city: {updatedCityName}, Province: {province.province_name}");
             }
             catch (Exception ex)
@@ -464,6 +464,59 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Data pendidikan tidak ditemukan.", "OK");
             }
         }
+        //edit 
+        public async Task<Education?> fetchExistingEducationClicked(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var edu = context.Educations.FirstOrDefault(c => c.education_id == id);
+
+            return edu;
+        }
+        public async Task EditEducation(int educationId, string updatedEdType, string updatedMajor)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            if (string.IsNullOrWhiteSpace(updatedEdType))
+            {
+                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Tingkat pendidikan tidak boleh kosong.", "OK");
+                return;
+            }
+
+            updatedEdType = updatedEdType.Trim();
+            updatedMajor = updatedMajor?.Trim();
+
+            var education = await context.Educations.FirstOrDefaultAsync(e => e.education_id == educationId);
+            if (education == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Data pendidikan tidak ditemukan.", "OK");
+                return;
+            }
+
+            if (education.education_type.Equals(updatedEdType, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(education.major ?? "", updatedMajor ?? "", StringComparison.OrdinalIgnoreCase))
+            {
+                await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Tingkat pendidikan dan jurusan tidak berubah.", "OK");
+                return;
+            }
+
+            bool isDuplicate = await context.Educations.AnyAsync(e =>
+                e.education_id != educationId &&
+                e.education_type.ToLower() == updatedEdType.ToLower() &&
+                (e.major ?? "").ToLower() == (updatedMajor ?? "").ToLower());
+
+            if (isDuplicate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data duplikat", "Data pendidikan dengan jurusan tersebut sudah ada.", "OK");
+                return;
+            }
+            
+            education.education_type = updatedEdType;
+            education.major = updatedMajor;
+
+            await context.SaveChangesAsync();
+            await Application.Current.MainPage.DisplayAlert("Sukses", $"Data pendidikan telah diperbarui ke {updatedEdType} - {updatedMajor}.", "OK");
+        }
+
 
         //DEPARTMENT
         public async Task<List<Department>> GetDepartment()

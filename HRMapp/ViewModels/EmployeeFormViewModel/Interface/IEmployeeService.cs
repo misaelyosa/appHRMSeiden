@@ -46,5 +46,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         //edit
         Task<City?> fetchExistingCityClicked(int id);
         Task EditCityProvince(int cityId, string updatedCityName, string updatedProvinceName);
+
+        Task<Education?> fetchExistingEducationClicked(int id);
+        Task EditEducation(int educationId, string updatedEdType, string updatedMajor);
     }
 }

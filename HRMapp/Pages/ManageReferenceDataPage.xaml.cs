@@ -210,8 +210,14 @@ public partial class ManageReferenceDataPage : ContentPage
 
     private async void OnOpenAddEduPopup(object sender, EventArgs e)
     {
-        var popup = new NewEducation(this.BindingContext);
-        this.ShowPopup(popup);
+        if (BindingContext is ManageReferenceDataViewModel vm)
+        {
+            vm.NewEducationType = string.Empty;
+            vm.NewEducationMajor = string.Empty;
+
+            var popup = new NewEducation(vm);
+            this.ShowPopup(popup);
+        }
     }
 
 
