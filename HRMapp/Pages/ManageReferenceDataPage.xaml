@@ -43,7 +43,7 @@
                             <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
                                 <Grid RowDefinitions="Auto"
                                       ColumnSpacing="4"
-                                      ColumnDefinitions="*,auto,auto">
+                                      ColumnDefinitions ="*,auto,auto">
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Text="{Binding name}"
                                            FontSize="15"
@@ -57,7 +57,9 @@
                                             HeightRequest="15"
                                             WidthRequest="70"
                                             Padding="4"
-                                            TextColor="Black"/>
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupDepartmentCommand, Source={x:Reference departmentCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
 
                                     <Button Grid.Row="0" Grid.Column="2"
                                             Text="Delete"
@@ -122,7 +124,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="LightBlue"
-                                            TextColor="Black"/>
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupJobCommand, Source={x:Reference jobsCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
 
                                     <Button Grid.Row="0" Grid.Column="2"
                                             Text="Delete"
@@ -187,7 +191,9 @@
                                             HeightRequest="30"
                                             Padding="4"
                                             BackgroundColor="LightBlue"
-                                            TextColor="Black"/>
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupReligionCommand, Source={x:Reference religionCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
 
                                     <Button Grid.Row="0" Grid.Column="2"
                                             Text="Delete"

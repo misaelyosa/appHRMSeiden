@@ -531,18 +531,27 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
             if (!string.IsNullOrEmpty(newDept))
             {
-                try
+                var existingDept = await context.Departments.FirstOrDefaultAsync(j => j.name.ToLower() == newDept.ToLower());
+
+                if (existingDept == null)
                 {
-                    var newDepartment = new Department
+                    try
+                        {
+                        var newDepartment = new Department
+                        {
+                            name = newDept
+                        };
+                        context.Departments.Add(newDepartment);
+                        await context.SaveChangesAsync();
+                        await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data departemen {newDept} berhasil ditambahkan", "OK");
+                    } catch (Exception e)
                     {
-                        name = newDept
-                    };
-                    context.Departments.Add(newDepartment);
-                    await context.SaveChangesAsync();
-                    await Application.Current.MainPage.DisplayAlert("Data berhasil ditambahkan", $"Data departemen {newDept} berhasil ditambahkan", "OK");
-                } catch (Exception e)
+                        await Application.Current.MainPage.DisplayAlert("Gagal menambahkan data.",$"{e}", "OK");
+                    }
+                }
+                else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Gagal menambahkan data.",$"{e}", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Data duplikat.", "Ditemukan data yang sama dengan input.", "OK");
                 }
             }
         }
@@ -569,6 +578,53 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Department tidak ditemukan.", "OK");
             }
         }
+        //update
+        public async Task<Department?> fetchExistingDepartmentClicked(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var dept = context.Departments.FirstOrDefault(c => c.department_id == id);
+
+            return dept;
+        }
+        public async Task EditDepartment(int departmentId, string updatedDept)
+        {
+            if (string.IsNullOrWhiteSpace(updatedDept))
+            {
+                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Nama departemen tidak boleh kosong.", "OK");
+                return;
+            }
+
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var department = await context.Departments.FirstOrDefaultAsync(d => d.department_id == departmentId);
+            if (department == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Departemen tidak ditemukan.", "OK");
+                return;
+            }
+
+            if (department.name.Equals(updatedDept.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Nama departemen tidak berubah.", "OK");
+                return;
+            }
+
+            bool isDuplicate = await context.Departments.AnyAsync(d =>
+                d.department_id != departmentId &&
+                d.name.ToLower() == updatedDept.Trim().ToLower());
+
+            if (isDuplicate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data duplikat", "Departemen dengan nama tersebut sudah ada.", "OK");
+                return;
+            }
+
+            department.name = updatedDept.Trim();
+            await context.SaveChangesAsync();
+
+            await Application.Current.MainPage.DisplayAlert("Sukses", $"Departemen telah diperbarui menjadi {updatedDept}.", "OK");
+        }
+
 
         //JOBS
         public async Task<List<Job>> GetJob()
@@ -582,7 +638,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
             if (!string.IsNullOrEmpty(newJob))
             {
-                var existingJob = context.Jobs.FirstOrDefaultAsync(j => j.job_name.ToLower() == newJob.ToLower());
+                var existingJob = await context.Jobs.FirstOrDefaultAsync(j => j.job_name.ToLower() == newJob.ToLower());
 
                 if (existingJob == null)
                 {
@@ -600,7 +656,8 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                     {
                         await Application.Current.MainPage.DisplayAlert("Gagal menambahkan data.", $"{e}", "OK");
                     }
-                } else
+                }
+                else
                 {
                     await Application.Current.MainPage.DisplayAlert("Data duplikat.", "Ditemukan data yang sama dengan input.", "OK");
                 }
@@ -630,6 +687,53 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Jabatan tidak ditemukan.", "OK");
             }
         }
+        //edit
+        public async Task<Job?> fetchExistingJobClicked(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var job = context.Jobs.FirstOrDefault(c => c.job_id == id);
+
+            return job;
+        }
+        public async Task EditJob(int jobId, string updatedJob)
+        {
+            if (string.IsNullOrWhiteSpace(updatedJob))
+            {
+                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Nama jabatan tidak boleh kosong.", "OK");
+                return;
+            }
+
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var job = await context.Jobs.FirstOrDefaultAsync(j => j.job_id == jobId);
+            if (job == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Jabatan tidak ditemukan.", "OK");
+                return;
+            }
+
+            if (job.job_name.Equals(updatedJob.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Nama jabatan tidak berubah.", "OK");
+                return;
+            }
+
+            bool isDuplicate = await context.Jobs.AnyAsync(j =>
+                j.job_id != jobId &&
+                j.job_name.ToLower() == updatedJob.Trim().ToLower());
+
+            if (isDuplicate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data duplikat", "Jabatan dengan nama tersebut sudah ada.", "OK");
+                return;
+            }
+
+            job.job_name = updatedJob.Trim();
+            await context.SaveChangesAsync();
+
+            await Application.Current.MainPage.DisplayAlert("Sukses", $"Jabatan telah diperbarui menjadi {updatedJob}.", "OK");
+        }
+
 
 
         //Religion
@@ -692,6 +796,53 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
                 await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Agama tidak ditemukan.", "OK");
             }
         }
+        //edit
+        public async Task<Religion?> fetchExistingReligion(int id)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var relg = context.Religions.FirstOrDefault(c => c.religion_id == id);
+
+            return relg;
+        }
+        public async Task EditReligion(int religionId, string updatedReligion)
+        {
+            if (string.IsNullOrWhiteSpace(updatedReligion))
+            {
+                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Nama agama tidak boleh kosong.", "OK");
+                return;
+            }
+
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var religion = await context.Religions.FirstOrDefaultAsync(r => r.religion_id == religionId);
+            if (religion == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data tidak ditemukan", "Agama tidak ditemukan.", "OK");
+                return;
+            }
+
+            if (religion.religion_name.Equals(updatedReligion.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                await Application.Current.MainPage.DisplayAlert("Tidak ada perubahan", "Nama agama tidak berubah.", "OK");
+                return;
+            }
+
+            bool isDuplicate = await context.Religions.AnyAsync(r =>
+                r.religion_id != religionId &&
+                r.religion_name.ToLower() == updatedReligion.Trim().ToLower());
+
+            if (isDuplicate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Data duplikat", "Agama dengan nama tersebut sudah ada.", "OK");
+                return;
+            }
+
+            religion.religion_name = updatedReligion.Trim();
+            await context.SaveChangesAsync();
+
+            await Application.Current.MainPage.DisplayAlert("Sukses", $"Agama telah diperbarui menjadi {updatedReligion}.", "OK");
+        }
+
 
 
 

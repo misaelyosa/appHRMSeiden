@@ -85,6 +85,15 @@
 	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditCityProvince.xaml.cs">
 	    <DependentUpon>EditCityProvince.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditDepartment.xaml.cs">
+	    <DependentUpon>EditDepartment.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditReligion.xaml.cs">
+	    <DependentUpon>EditReligion.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditJob.xaml.cs">
+	    <DependentUpon>EditJob.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditEducation.xaml.cs">
 	    <DependentUpon>EditEducation.xaml</DependentUpon>
 	  </Compile>
@@ -110,6 +119,15 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditCityProvince.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditDepartment.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditReligion.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditJob.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditEducation.xaml">

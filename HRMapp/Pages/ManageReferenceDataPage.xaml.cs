@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using HRMapp.Pages.EmployeeForms.Popups;
+using HRMapp.Pages.EmployeeForms.Popups.EditManageReference;
 using HRMapp.ViewModels;
 
 namespace HRMapp.Pages;
@@ -41,8 +42,13 @@ public partial class ManageReferenceDataPage : ContentPage
     }
     private async void OnOpenAddDepartmentPopup(object sender, EventArgs e)
     {
-        var popup = new NewDepartment(this.BindingContext);
-        this.ShowPopup(popup);
+        if (BindingContext is ManageReferenceDataViewModel vm)
+        {
+            vm.NewDepartment = string.Empty;
+
+            var popup = new NewDepartment(vm);
+            this.ShowPopup(popup);
+        }
     }
     
     //jobs 
@@ -73,8 +79,13 @@ public partial class ManageReferenceDataPage : ContentPage
     }
     private async void OnOpenAddJobPopup(object sender, EventArgs e)
     {
-        var popup = new NewJob(this.BindingContext);
-        this.ShowPopup(popup);
+        if (BindingContext is ManageReferenceDataViewModel vm)
+        {
+            vm.NewJob = string.Empty;
+
+            var popup = new NewJob(vm);
+            this.ShowPopup(popup);
+        }
     }
 
     //religion
@@ -105,8 +116,13 @@ public partial class ManageReferenceDataPage : ContentPage
     }
     private async void OnOpenAddReligionPopup(object sender, EventArgs e)
     {
-        var popup = new NewReligion(this.BindingContext);
-        this.ShowPopup(popup);
+        if (BindingContext is ManageReferenceDataViewModel vm)
+        {
+            vm.NewRelg = string.Empty;
+
+            var popup = new NewReligion(vm);
+            this.ShowPopup(popup);
+        }
     }
 
     //factory
@@ -137,8 +153,15 @@ public partial class ManageReferenceDataPage : ContentPage
     }
     private async void OnOpenAddFactoryPopup(object sender, EventArgs e)
     {
-        var popup = new NewFactory(this.BindingContext);
-        this.ShowPopup(popup);
+        if (BindingContext is ManageReferenceDataViewModel vm)
+        {
+            vm.FactoryName = string.Empty;
+            vm.FactoryAddress = string.Empty;
+            vm.FactoryCapacity = string.Empty;
+
+            var popup = new NewFactory(vm);
+            this.ShowPopup(popup);
+        }
     }
 
     //City Province

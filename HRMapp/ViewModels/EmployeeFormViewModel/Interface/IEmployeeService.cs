@@ -49,5 +49,15 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         Task<Education?> fetchExistingEducationClicked(int id);
         Task EditEducation(int educationId, string updatedEdType, string updatedMajor);
+
+        Task<Department?> fetchExistingDepartmentClicked(int id);
+        Task EditDepartment(int departmentId, string updatedDept);
+
+        Task<Job?> fetchExistingJobClicked(int id);
+        Task EditJob(int jobId, string updatedJob);
+
+        Task<Religion?> fetchExistingReligion(int id);
+        Task EditReligion(int religionId, string updatedReligion);
+
     }
 }

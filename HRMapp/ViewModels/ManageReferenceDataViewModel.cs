@@ -5,6 +5,7 @@ using HRMapp.Data.Model;
 using HRMapp.Pages.EmployeeForms.Popups.EditManageReference;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 using HRMapp.ViewModels.EmployeeFormViewModel.Interface;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -57,6 +58,8 @@ namespace HRMapp.ViewModels
         //CRUD DEPARTMENT
         [ObservableProperty]
         private string newDepartment;
+        [ObservableProperty]
+        private int deptId;
         [RelayCommand]
         private async Task AddNewDepartment()
         {
@@ -76,11 +79,45 @@ namespace HRMapp.ViewModels
                 LoadDept();
             }
         }
+        [RelayCommand]
+        private async Task OpenEditPopupDepartment(Department dept)
+        {
+            if (dept == null)
+            {
+                return;
+            }
+            ;
+
+            var fetchExisting = await _employeeService.fetchExistingDepartmentClicked(dept.department_id);
+            if (fetchExisting != null)
+            {
+                DeptId = dept.department_id;
+                NewDepartment = dept.name;
+
+                var popup = new EditDepartment(this);
+
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            }
+        }
+        [RelayCommand]
+        private async Task EditDepartment()
+        {
+            if (string.IsNullOrWhiteSpace(NewDepartment))
+            {
+                await App.Current.MainPage.DisplayAlert("Invalid Input", "Please fill in all fields", "OK");
+                return;
+            }
+
+            await _employeeService.EditDepartment(DeptId, NewDepartment);
+            LoadDept();
+        }
 
 
         //CRUD JOB
         [ObservableProperty]
         private string newJob;
+        [ObservableProperty]
+        private int jobId;
         [RelayCommand]
         private async Task AddNewJob()
         {
@@ -99,6 +136,37 @@ namespace HRMapp.ViewModels
                 await _employeeService.DeleteJob(job.job_id);
                 LoadJob();
             }
+        }
+        [RelayCommand]
+        private async Task OpenEditPopupJob(Job job)
+        {
+            if (job == null)
+            {
+                return;
+            };
+
+            var fetchExisting = await _employeeService.fetchExistingJobClicked(job.job_id);
+            if (fetchExisting != null)
+            {
+                JobId = job.job_id;
+                NewJob = fetchExisting.job_name;
+
+                var popup = new EditJob(this);
+
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            }
+        }
+        [RelayCommand]
+        private async Task EditJob()
+        {
+            if (string.IsNullOrWhiteSpace(NewJob))
+            {
+                await App.Current.MainPage.DisplayAlert("Invalid Input", "Please fill in all fields", "OK");
+                return;
+            }
+
+            await _employeeService.EditJob(JobId, NewJob);
+            LoadJob();
         }
 
         //CRUD EDUCATION
@@ -167,6 +235,8 @@ namespace HRMapp.ViewModels
         //CRUD AGAMA
         [ObservableProperty]
         private string newRelg;
+        [ObservableProperty]
+        private int relgId;
         [RelayCommand]
         private async Task AddNewReligion()
         {
@@ -185,6 +255,38 @@ namespace HRMapp.ViewModels
                 await _employeeService.DeleteReligion(agama.religion_id);
                 LoadRelg();
             }
+        }
+        [RelayCommand]
+        private async Task OpenEditPopupReligion(Religion relg)
+        {
+            if (relg == null)
+            {
+                return;
+            }
+;
+
+            var fetchExisting = await _employeeService.fetchExistingReligion(relg.religion_id);
+            if (fetchExisting != null)
+            {
+                RelgId = relg.religion_id;
+                NewRelg = relg.religion_name;
+
+                var popup = new EditReligion(this);
+
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            }
+        }
+        [RelayCommand]
+        private async Task EditReligion()
+        {
+            if (string.IsNullOrWhiteSpace(NewRelg))
+            {
+                await App.Current.MainPage.DisplayAlert("Invalid Input", "Please fill in all fields", "OK");
+                return;
+            }
+
+            await _employeeService.EditReligion(RelgId, NewRelg);
+            LoadRelg();
         }
 
         //CRUD CityProv
