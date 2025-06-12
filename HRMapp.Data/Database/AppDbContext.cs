@@ -28,6 +28,7 @@ namespace HRMapp.Data.Database
         public DbSet<Course> Course { get; set; }
 
         public DbSet<Tunjangan> Tunjangan { get; set; }
+        public DbSet<Cuti> Cuti { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -115,6 +116,12 @@ namespace HRMapp.Data.Database
                 .Entity<Session>()
                 .Property(s => s.status)
                 .HasConversion<string>();
+
+            //1 : N emp : cuti
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.Cuti)
+                .WithOne(c => c.Employee)
+                .HasForeignKey(c => c.cuti_id);
         }
     }
 }

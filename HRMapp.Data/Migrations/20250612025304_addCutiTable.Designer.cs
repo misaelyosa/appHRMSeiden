@@ -4,6 +4,7 @@ using HRMapp.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250612025304_addCutiTable")]
+    partial class addCutiTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,21 +117,8 @@ namespace HRMapp.Data.Migrations
                     b.Property<int>("cuti_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("cuti_day_count")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("cuti_end_date")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly>("cuti_start_date")
-                        .HasColumnType("date");
-
                     b.Property<int>("employee_id")
                         .HasColumnType("int");
-
-                    b.Property<string>("reason")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.HasKey("cuti_id");
 
@@ -262,9 +252,6 @@ namespace HRMapp.Data.Migrations
                     b.Property<string>("skill")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
-
-                    b.Property<int>("yearly_cuti_left")
-                        .HasColumnType("int");
 
                     b.HasKey("employee_id");
 

@@ -60,6 +60,8 @@ namespace HRMapp.Data.Model
         [Required]
         public DateOnly hire_date { get; set; }
 
+        public int yearly_cuti_left { get; set; }
+
         [MaxLength(255)]
         public string? skill { get; set; }
 
@@ -88,5 +90,6 @@ namespace HRMapp.Data.Model
         public ICollection<Course> Courses { get; set; }
         public ICollection<Contract> Contracts { get; set; }
         public ICollection<LogEmployee> LogEmployees { get; set; }
+        public ICollection<Cuti> Cuti { get; set; }
     }
 }
