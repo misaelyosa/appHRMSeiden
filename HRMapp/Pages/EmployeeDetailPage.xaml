@@ -380,9 +380,9 @@
                         <Button Text="Tambah Cuti"
                             BackgroundColor="DodgerBlue"
                             TextColor="White"
-                            Command="{Binding OnOpenCreateCutiPopupCommand}" Grid.Column="1"/>
+                            Clicked="OnOpenCreateCutiPopup" Grid.Column="1"/>
                     </Grid>
-                    <CollectionView ItemsSource="{Binding Cuti}"
+                    <CollectionView ItemsSource="{Binding Cutis}"
                                     x:Name=" cutiCollectionView">
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout Orientation="Vertical" ItemSpacing="8"/>
@@ -390,8 +390,9 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Frame BorderColor="Gray" BackgroundColor="GhostWhite" Padding="10" Margin="10">
-                                    <Grid RowSpacing="5">
+                                    <Grid RowSpacing="5" ColumnSpacing="16">
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
@@ -400,8 +401,8 @@
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <Label Text="{Binding cuti_start_date, StringFormat='Mulai: {0:dd/MM/yyyy}'}"
@@ -409,7 +410,7 @@
                                                Grid.Row="0" Grid.Column="0"/>
                                         <Label Text="{Binding cuti_end_date, StringFormat='Selesai: {0:dd/MM/yyyy}'}"
                                                TextColor="Black" FontSize="14"
-                                               Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                               Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
 
                                         <Label Text="{Binding cuti_day_count, StringFormat='Jumlah Hari: {0}'}"
                                                TextColor="Black" FontSize="14"
@@ -417,11 +418,18 @@
 
                                         <Label Text="{Binding reason, StringFormat='Alasan: {0}'}"
                                                TextColor="Black" FontSize="14"
-                                               Grid.Row="2" Grid.ColumnSpan="3"/>
+                                               Grid.Row="3" Grid.ColumnSpan="3"/>
 
                                         <Label Text="{Binding created_by, StringFormat='Dibuat oleh: {0}'}"
                                                TextColor="DarkGray" FontSize="12"
-                                               Grid.Row="3" Grid.Column="0"/>
+                                               Grid.Row="0" Grid.Column="1"/>
+                                        <Label Text="{Binding created_at, StringFormat='Dibuat Pada: {0:g}'}"
+                                               TextColor="DarkGray" FontSize="12"
+                                               Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                        
+                                        <Label Text="{Binding updated_by, StringFormat='Diupdate oleh: {0}'}"
+                                               TextColor="DarkGray" FontSize="12"
+                                               Grid.Row="2" Grid.Column="1"/>
                                         <Label Text="{Binding updated_at, StringFormat='Update Terakhir: {0:g}'}"
                                                TextColor="DarkGray" FontSize="12"
                                                Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>

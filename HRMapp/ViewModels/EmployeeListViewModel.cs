@@ -160,7 +160,7 @@ namespace HRMapp.ViewModels
             OnPropertyChanged(nameof(FactoryName));
 
             if (string.IsNullOrEmpty(SelectedFactory))
-                SelectedDepartment = FactoryName.FirstOrDefault();
+                SelectedFactory = FactoryName.FirstOrDefault();
         }
 
         //Filter Command

@@ -121,7 +121,7 @@ namespace HRMapp.Data.Database
             modelBuilder.Entity<Employee>()
                 .HasMany(e => e.Cuti)
                 .WithOne(c => c.Employee)
-                .HasForeignKey(c => c.cuti_id);
+                .HasForeignKey(c => c.employee_id);
         }
     }
 }

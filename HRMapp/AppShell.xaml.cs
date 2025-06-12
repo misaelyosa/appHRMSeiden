@@ -1,5 +1,4 @@
 ﻿using HRMapp.Pages;
-using HRMapp.Pages.Cuti;
 using HRMapp.Pages.EmployeeForms;
 using HRMapp.Pages.Session;
 using HRMapp.ViewModels.SessionViewModel;
@@ -24,7 +23,6 @@ namespace HRMapp
                 Routing.RegisterRoute("MainPage", typeof(MainPage));
                 Routing.RegisterRoute("ManageReferenceDataPage", typeof(ManageReferenceDataPage));
                 Routing.RegisterRoute("ManageSessionUser", typeof(ManageSessionUser));
-                Routing.RegisterRoute("ManageCuti", typeof(ManageCuti));
 
                 //Employee form
                 Routing.RegisterRoute("EmployeeForms/Edit", typeof(EditEmployeeForm));

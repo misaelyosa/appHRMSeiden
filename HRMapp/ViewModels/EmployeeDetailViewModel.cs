@@ -1,11 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
+using HRMapp.Pages.EmployeeForms.Popups.CutiPopup;
 using HRMapp.ViewModels;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -56,6 +59,7 @@ public partial class EmployeeDetailViewModel : ObservableObject
             .FirstOrDefaultAsync(e => e.employee_id == EmployeeId);
 
         await LoadContracts();
+        await LoadCuti();
         await LoadLogsAsync();
     }
 
@@ -179,22 +183,54 @@ public partial class EmployeeDetailViewModel : ObservableObject
     }
 
     //CUTII
-    [RelayCommand]
+    [ObservableProperty]
+    public ObservableCollection<Cuti> cutis;
     public async Task LoadCuti()
     {
-
+        Cutis = new ObservableCollection<Cuti>(await _employeeService.GetCutiByEmpId(EmployeeId));
     }
 
-    [RelayCommand]
-    public async Task OnOpenCreateCutiPopup()
+    [ObservableProperty]
+    public string cutiDuration;
+    [ObservableProperty]
+    public DateOnly cutiStartDate;
+    [ObservableProperty]
+    public string cutiReason;
+    [ObservableProperty]
+    private string cutiEndDateDisplay; 
+    public DateTime CutiStartDateProxy
     {
-
+        get => CutiStartDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (CutiStartDate != DateOnly.FromDateTime(value))
+            {
+                CutiStartDate = DateOnly.FromDateTime(value);
+                OnPropertyChanged(nameof(CutiStartDateProxy));
+            }
+        }
     }
 
     [RelayCommand]
     public async Task CreateCuti()
     {
+        Debug.WriteLine("[DEBUG] CREATE CUTI INVOKED");
+        var cutiDur = int.Parse(CutiDuration);
+        if (cutiDur > 0 && CutiStartDate != default)
+        {
+            var newCuti = new Cuti
+            {
+                cuti_day_count = cutiDur,
+                cuti_start_date = CutiStartDate,
+                cuti_end_date = CutiStartDate.AddDays(cutiDur),
+                reason = CutiReason,
+                employee_id = EmployeeId,
+                created_by = Preferences.Get("username", "admin"),
+                created_at = DateTime.Now
+            };
 
+                await _employeeService.CreateCuti(newCuti);
+        }   
     }
 
     [RelayCommand] 

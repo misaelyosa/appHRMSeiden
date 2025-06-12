@@ -238,12 +238,33 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         }
 
         //CUTIIII
-        public async Task GetCutiByEmpId(int empId)
+        public async Task<List<Cuti>> GetCutiByEmpId(int empId)
         {
+            using var context = await _contextFactory.CreateDbContextAsync();
 
+            return await context.Cuti.Where(c => c.employee_id == empId).ToListAsync();
         }
-        public async Task CreateCuti()
+        public async Task CreateCuti(Cuti newCuti)
         {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            try
+            {
+                if (newCuti != null)
+                {
+                    context.Add(newCuti);
+                    await context.SaveChangesAsync();
+                    await Application.Current.MainPage.DisplayAlert($"Cuti berhasil ditambahkan", $"Cuti dari tanggal {newCuti.cuti_start_date} - {newCuti.cuti_end_date} berhasil ditambahkan", "OK");
+                } else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Invalid Input", $"Tidak ada data cuti yang ditambahkan", "OK");
+                }
+            }
+            catch (Exception ex)
+{
+            Debug.WriteLine($"[ERROR] Failed to create cuti: {ex}");
+            await Application.Current.MainPage.DisplayAlert("Error", $"Failed to create cuti: {ex.Message}", "OK");
+            }
 
         }
         public async Task UpdateCuti()

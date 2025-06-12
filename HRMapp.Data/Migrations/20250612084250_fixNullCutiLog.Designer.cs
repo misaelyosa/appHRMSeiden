@@ -4,6 +4,7 @@ using HRMapp.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRMapp.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250612084250_fixNullCutiLog")]
+    partial class fixNullCutiLog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,10 +115,7 @@ namespace HRMapp.Data.Migrations
             modelBuilder.Entity("HRMapp.Data.Model.Cuti", b =>
                 {
                     b.Property<int>("cuti_id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("cuti_id"));
 
                     b.Property<DateTime>("created_at")
                         .HasColumnType("datetime(6)");
@@ -145,8 +145,6 @@ namespace HRMapp.Data.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("cuti_id");
-
-                    b.HasIndex("employee_id");
 
                     b.ToTable("Cuti");
                 });
@@ -536,7 +534,7 @@ namespace HRMapp.Data.Migrations
                 {
                     b.HasOne("HRMapp.Data.Model.Employee", "Employee")
                         .WithMany("Cuti")
-                        .HasForeignKey("employee_id")
+                        .HasForeignKey("cuti_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
