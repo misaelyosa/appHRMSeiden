@@ -6,11 +6,6 @@
              x:Name="RootPage"
              BackgroundColor="White"
              Title="ManageSessionUser">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <local:ActiveOnlyConverter x:Key="ActiveOnlyConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ScrollView>
         <VerticalStackLayout Padding="10">
             <Label Text="Daftar Pengguna dan Session" FontSize="20" HorizontalOptions="Center" TextColor="black" />

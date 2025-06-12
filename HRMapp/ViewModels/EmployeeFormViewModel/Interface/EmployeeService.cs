@@ -27,6 +27,19 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        /// 
+        public async Task<List<Employee>> GetAllEmployeeAsync()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            return await context.Employees
+                .AsNoTracking()
+                .Include(e => e.Department)
+                .Include(e => e.Job)
+                .Include(e => e.Factory)
+                .OrderBy(e => e.employee_id)
+                .ToListAsync();
+        }
+
         public async Task<Employee?> GetEmployeeByIdAsync(int id)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
