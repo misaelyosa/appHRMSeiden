@@ -13,6 +13,8 @@ using HRMapp.ViewModels.SessionViewModel;
 using HRMapp.Pages.Session;
 using HRMapp.ViewModels.SessionViewModel.Interface;
 using CommunityToolkit.Maui;
+using HRMapp.Pages.Cuti;
+using HRMapp.ViewModels.Cuti;
 
 namespace HRMapp;
 

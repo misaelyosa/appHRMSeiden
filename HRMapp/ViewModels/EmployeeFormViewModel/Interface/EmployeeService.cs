@@ -237,6 +237,24 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             !e.tunjangan_name.ToLower().Contains("mk")).FirstOrDefaultAsync();
         }
 
+        //CUTIIII
+        public async Task GetCutiByEmpId(int empId)
+        {
+
+        }
+        public async Task CreateCuti()
+        {
+
+        }
+        public async Task UpdateCuti()
+        {
+
+        }
+        public async Task DeleteCuti()
+        {
+
+        }
+
         //====================================== MANAGE REFERENCE / MASTER DATA ==============================
 
         //City Province

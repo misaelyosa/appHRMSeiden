@@ -177,5 +177,36 @@ public partial class EmployeeDetailViewModel : ObservableObject
             await Shell.Current.DisplayAlert("Error", "Gagal menghapus data kontrak.", "OK");
         }
     }
+
+    //CUTII
+    [RelayCommand]
+    public async Task LoadCuti()
+    {
+
+    }
+
+    [RelayCommand]
+    public async Task OnOpenCreateCutiPopup()
+    {
+
+    }
+
+    [RelayCommand]
+    public async Task CreateCuti()
+    {
+
+    }
+
+    [RelayCommand] 
+    public async Task OnOpenEditCutiPopup()
+    {
+
+    }
+
+    [RelayCommand]
+    public async Task EditCuti()
+    {
+
+    }
 }
     
