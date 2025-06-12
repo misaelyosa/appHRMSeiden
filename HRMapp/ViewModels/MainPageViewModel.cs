@@ -36,6 +36,11 @@ namespace HRMapp.ViewModels
             await UpdateHariLiburNasionalPerMonth(selectedDate);
         }
 
+        public async Task UpdateLastLogin()
+        {
+            await _sessionService.UpdateLastLogin();
+        }
+
         public async Task LoadContractEndPerMonthAsync(DateTime shownDate)
         {
             ContractEndPerMonth.Clear();

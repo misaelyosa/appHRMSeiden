@@ -124,6 +124,27 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             return false;
         }
 
+        public async Task UpdateLastLogin()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var userToken = await SecureStorage.Default.GetAsync("user_token");
+
+            var currentSession = context.Session.FirstOrDefault(s => s.user_token == userToken);
+
+            if(currentSession != null)
+            {
+                if(currentSession.status.ToString().ToLower().Equals("active"))
+                {
+                    currentSession.last_login = DateTime.Now;
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+
         public async Task LogoutAsync()
         {
             var token = await SecureStorage.GetAsync("user_token");

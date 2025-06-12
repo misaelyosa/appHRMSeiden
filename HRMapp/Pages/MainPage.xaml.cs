@@ -18,6 +18,7 @@ public partial class MainPage : ContentPage
         base.OnAppearing();
 
         await _viewModel.CheckIsAdmin();
+        await _viewModel.UpdateLastLogin();
         await _viewModel.LoadContractEndDatesAsync();
         await _viewModel.LoadContractEndPerMonthAsync(_viewModel.CalendarCurrentDate);
         await _viewModel.RefreshHolidayDataAsync(_viewModel.CalendarCurrentDate, true);

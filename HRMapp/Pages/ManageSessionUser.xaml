@@ -29,16 +29,7 @@
                                     <Label Text="{Binding SessionId, StringFormat='Session ID: {0}'}" FontSize="12" TextColor="Black"/>
                                     <Label Text="{Binding LastLogin, StringFormat='Last Login: {0}'}" FontSize="12" TextColor="Black"/>
                                     <Label Text="{Binding Status, StringFormat='Status: {0}'}" FontSize="12" TextColor="Black"/>
-                                    <Button 
-                                        Text="Terminate"
-                                        Grid.Column="1"
-                                        BackgroundColor="Red"
-                                        TextColor="White"
-                                        Margin="10,0,0,0"
-                                        Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.TerminateUserSessionAsyncCommand}"
-                                        CommandParameter="{Binding .}"
-                                        IsVisible="{Binding BindingContext.IsAdmin, Source={x:Reference RootPage}}"
-                                        IsEnabled="{Binding Status, Converter={StaticResource ActiveOnlyConverter}}" />
+
                                 </VerticalStackLayout>
                             </Frame>
                         </DataTemplate>
