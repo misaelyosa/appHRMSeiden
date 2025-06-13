@@ -23,8 +23,12 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         Task <Tunjangan> GetTunjanganOther(int contractId);
 
         Task<List<Cuti>> GetCutiByEmpId(int empId);
+        Task<string> LoadJatahCuti(int empId);
         Task CreateCuti(Cuti newCuti);
-
+        Task ResetCutiIfNewYear();
+        Task DeleteCuti(int cutiId);
+        Task UpdateCuti(Cuti updatedCuti);
+        Task<Cuti> fetchExistingCuti(int cutiId);
         //Manage master, reference data
         Task<List<Department>> GetDepartment();
         Task<List<Job>> GetJob();

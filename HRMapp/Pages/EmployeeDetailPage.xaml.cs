@@ -41,7 +41,7 @@ public partial class EmployeeDetailPage : ContentPage
         {
             vm.CutiDuration = string.Empty;
             vm.CutiReason = string.Empty;
-            vm.CutiStartDate = default;
+            vm.CutiStartDateProxy = DateTime.Today;
 
             var popup = new NewCuti(vm);
             this.ShowPopup(popup);

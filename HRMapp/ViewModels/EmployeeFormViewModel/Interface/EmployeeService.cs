@@ -238,11 +238,44 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
         }
 
         //CUTIIII
+        
+        //reset jumlah cuti semua karyawan tiap ganti tahun
+        public async Task ResetCutiIfNewYear()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            int currentYear = DateTime.Now.Year;
+            var cutiResetKey = $"cuti_reset_{currentYear}";
+
+            if (!Preferences.ContainsKey(cutiResetKey))
+            {
+                var employeesToReset = await context.Employees
+                    .Where(e => e.yearly_cuti_left < 12)
+                    .ToListAsync();
+
+                foreach (var emp in employeesToReset)
+                {
+                    emp.yearly_cuti_left = 12;
+                }
+
+                await context.SaveChangesAsync();
+
+                Preferences.Set(cutiResetKey, true);
+            }
+        }
+
         public async Task<List<Cuti>> GetCutiByEmpId(int empId)
         {
             using var context = await _contextFactory.CreateDbContextAsync();
 
-            return await context.Cuti.Where(c => c.employee_id == empId).ToListAsync();
+            return await context.Cuti.Where(c => c.employee_id == empId).OrderBy(c => c.cuti_start_date).ToListAsync();
+        }
+        public async Task<string> LoadJatahCuti(int empId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var emp = await context.Employees.FirstOrDefaultAsync(e => e.employee_id == empId);
+
+            return emp.yearly_cuti_left.ToString();
         }
         public async Task CreateCuti(Cuti newCuti)
         {
@@ -252,9 +285,41 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             {
                 if (newCuti != null)
                 {
+                    var employee = await context.Employees.FirstOrDefaultAsync(e => e.employee_id == newCuti.employee_id);
+
+                    if (employee == null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", "Karyawan tidak ditemukan.", "OK");
+                        return;
+                    }
+
+                    if (employee.yearly_cuti_left < newCuti.cuti_day_count)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", $"Jumlah sisa cuti karyawan ({employee.yearly_cuti_left} hari) kurang.", "OK");
+                        return;
+                    }
+
+                    var overlappingCuti = await context.Cuti
+                        .Where(c => c.employee_id == newCuti.employee_id &&
+                    (
+                        (newCuti.cuti_start_date >= c.cuti_start_date && newCuti.cuti_start_date < c.cuti_end_date) ||
+                        (newCuti.cuti_end_date > c.cuti_start_date && newCuti.cuti_end_date <= c.cuti_end_date) ||
+                        (newCuti.cuti_start_date <= c.cuti_start_date && newCuti.cuti_end_date >= c.cuti_end_date)
+                    ))
+                        .FirstOrDefaultAsync();
+
+                    if (overlappingCuti != null)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error", "Tanggal cuti yang diajukan bertabrakan dengan cuti yang sudah ada.", "OK");
+                        return;
+                    }
+
+                    employee.yearly_cuti_left -= newCuti.cuti_day_count;
+
                     context.Add(newCuti);
                     await context.SaveChangesAsync();
-                    await Application.Current.MainPage.DisplayAlert($"Cuti berhasil ditambahkan", $"Cuti dari tanggal {newCuti.cuti_start_date} - {newCuti.cuti_end_date} berhasil ditambahkan", "OK");
+                    await Application.Current.MainPage.DisplayAlert($"Cuti berhasil ditambahkan", $"Cuti dari tanggal {newCuti.cuti_start_date} - {newCuti.cuti_end_date} berhasil ditambahkan\n" +
+                        $"Sisa cuti karyawan {employee.name} tahun {DateTime.Now.Year} sisa {employee.yearly_cuti_left} hari.", "OK");
                 } else
                 {
                     await Application.Current.MainPage.DisplayAlert("Invalid Input", $"Tidak ada data cuti yang ditambahkan", "OK");
@@ -267,13 +332,83 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             }
 
         }
-        public async Task UpdateCuti()
+        public async Task<Cuti> fetchExistingCuti(int cutiId)
         {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var existing = await context.Cuti.FindAsync(cutiId);
+
+            if (existing != null)
+            {
+                //var employee = await context.Employees.FirstOrDefaultAsync(e => e.employee_id == existing.employee_id);
+
+                return existing;
+            }
+            return null;
+
 
         }
-        public async Task DeleteCuti()
+        public async Task UpdateCuti(Cuti updatedCuti)
         {
+            using var context = await _contextFactory.CreateDbContextAsync();
 
+            var existing = await context.Cuti
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.cuti_id == updatedCuti.cuti_id);
+
+            if (existing == null)
+                throw new Exception("Data cuti tidak ditemukan.");
+
+            // Validate overlap
+            var overlaps = await context.Cuti
+                .Where(c => c.employee_id == updatedCuti.employee_id &&
+                            c.cuti_id != updatedCuti.cuti_id &&
+                            ((updatedCuti.cuti_start_date >= c.cuti_start_date && updatedCuti.cuti_start_date <= c.cuti_end_date) ||
+                             (updatedCuti.cuti_end_date >= c.cuti_start_date && updatedCuti.cuti_end_date <= c.cuti_end_date) ||
+                             (updatedCuti.cuti_start_date <= c.cuti_start_date && updatedCuti.cuti_end_date >= c.cuti_end_date)))
+                .AnyAsync();
+
+            if (overlaps)
+                throw new Exception("Tanggal cuti bertabrakan dengan cuti lain.");
+
+            int oldDuration = existing.cuti_day_count;
+            int newDuration = updatedCuti.cuti_day_count;
+            int difference = oldDuration - newDuration;
+
+            // Fetch employee cuti info and update yearly cuti left
+            var employee = await context.Employees.FirstOrDefaultAsync(e => e.employee_id == updatedCuti.employee_id);
+            if (employee == null)
+                throw new Exception("Karyawan tidak ditemukan.");
+
+            employee.yearly_cuti_left += difference;
+            if (employee.yearly_cuti_left < 0)
+                throw new Exception("Durasi cuti melebihi sisa jatah cuti.");
+
+            context.Cuti.Update(updatedCuti);
+            await context.SaveChangesAsync();
+        }
+
+
+        public async Task DeleteCuti(int cutiId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var cuti = await context.Cuti.FindAsync(cutiId);
+            if(cuti != null)
+            {
+                var emp = await context.Employees.FirstOrDefaultAsync(e => e.employee_id == cuti.employee_id);
+
+                emp.yearly_cuti_left += cuti.cuti_day_count;
+
+                context.Cuti.Remove(cuti);
+                await context.SaveChangesAsync();
+
+                await Application.Current.MainPage.DisplayAlert("Berhasil delete", $"Data cuti {emp.name} tanggal {cuti.cuti_start_date} - {cuti.cuti_end_date} berhasil terhapus.", "OK");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Gagal menghapus data cuti.", "OK");
+            }
         }
 
         //====================================== MANAGE REFERENCE / MASTER DATA ==============================
@@ -441,7 +576,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
 
         //Education
         public async Task<List<Education>> GetEducation()
-            {
+        {
             using var context = await _contextFactory.CreateDbContextAsync();
             return await context.Educations.ToListAsync();
         }

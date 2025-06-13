@@ -156,7 +156,7 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
             }
 
             var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex-1, EmployeeId);
-            if (latestContract != null && latestContract.end_date > SelectedContractDate)
+            if (latestContract != null && latestContract.end_date > SelectedContractDate) //fix conditional
             {
                 await Application.Current.MainPage.DisplayAlert("Warning", "Tanggal Kontrak baru tidak boleh kurang dari tanggal selesai kontrak sebelumnya.", "OK");
                 return;

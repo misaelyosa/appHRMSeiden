@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
 using HRMapp.Pages;
+using HRMapp.ViewModels.EmployeeFormViewModel;
 using HRMapp.ViewModels.SessionViewModel.Interface;
 using Microsoft.EntityFrameworkCore;
 using Plugin.Maui.Calendar.Models;
@@ -16,6 +17,7 @@ namespace HRMapp.ViewModels
     {
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly ISessionService _sessionService;
+        private readonly IEmployeeService _employeeService;
 
         public EventCollection CalendarEvents { get; set; } = new();
         public ObservableCollection<ContractEndItem> ContractEndPerMonth { get; set; } = new();
@@ -24,10 +26,16 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private ContractEndItem? selectedContractEnd;
 
-        public MainPageViewModel(IDbContextFactory<AppDbContext> dbContextFactory, ISessionService sessionService)
+        public MainPageViewModel(IDbContextFactory<AppDbContext> dbContextFactory, ISessionService sessionService, IEmployeeService employeeService)
         {
             _dbContextFactory = dbContextFactory;
             _sessionService = sessionService;
+            _employeeService = employeeService;
+        }
+
+        public async Task ResetYearlyCuti()
+        {
+            await _employeeService.ResetCutiIfNewYear();
         }
 
         public async Task RefreshHolidayDataAsync(DateTime selectedDate, bool forceReload)
