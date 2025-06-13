@@ -43,7 +43,15 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
 
         partial void OnSelectedContractDateChanged(DateOnly value)
         {
-            UpdateContractEndDate();
+            if (ContractDuration == null)
+            {
+                ContractEndDateTime = ContractDateTime;
+                OnPropertyChanged(nameof(ContractEndDateTime));
+            }
+            else
+            {
+                UpdateContractEndDate();
+            }
         }
         partial void OnContractDurationChanged(string value)
         {
@@ -61,6 +69,31 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
         public CreateContractViewModel(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
+        }
+
+        public async Task InitializeAsync()
+        {
+            var contractCount = await _employeeService.GetContractCountByEmployeeIdAsync(EmployeeId);
+            var contractIndex = contractCount; //index contract mulai dari 1 
+
+            var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex, EmployeeId);
+            
+            if (latestContract != null)
+            {
+                SelectedContractDate = latestContract.end_date;
+                OnPropertyChanged(nameof(ContractDateTime));
+                ContractEndDateTime = ContractDateTime;
+                OnPropertyChanged(nameof(ContractEndDateTime));
+                Debug.WriteLine(latestContract.end_date);
+            }
+            else
+            { 
+                SelectedContractDate = DateOnly.FromDateTime(DateTime.Today);
+                OnPropertyChanged(nameof(ContractDateTime));
+                ContractEndDateTime = ContractDateTime;
+                OnPropertyChanged(nameof(ContractEndDateTime));
+                Debug.WriteLine(SelectedContractDate);
+            }
         }
 
         [RelayCommand]
@@ -95,9 +128,9 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 end_date = SelectedEndDate,
                 gaji_pokok = int.Parse(GajiPokok),
 
-                author = "admin", //Todo --> ganti setelah jadi session
+                author = Preferences.Get("username", "admin"),
                 created_at = DateTime.Now,
-               
+
             };
 
             SelectedEmployee = await _employeeService.GetEmployeeByIdAsync(EmployeeId);
@@ -121,8 +154,14 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                     amount = int.Parse(TunjanganOther)
                 });
             }
-            
 
+            var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex-1, EmployeeId);
+            if (latestContract != null && latestContract.end_date > SelectedContractDate) //fix conditional
+            {
+                await Application.Current.MainPage.DisplayAlert("Warning", "Tanggal Kontrak baru tidak boleh kurang dari tanggal selesai kontrak sebelumnya.", "OK");
+                return;
+            }
+            
             try
             {
                 await _employeeService.CreateContractAsync(newContract);
@@ -148,6 +187,5 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 });
             }
         }
-
     }
 }

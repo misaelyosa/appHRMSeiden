@@ -8,7 +8,7 @@
                 BackgroundColor="Beige"
                 Title="EditEmployeeForm">
     <ScrollView>
-        <input:FormView Padding="20" Spacing="20"
+        <input:FormView Padding="20" Margin="30, 0, 30, 0" Spacing="20"
                         SubmitCommand="{Binding SaveCommand}">
 
             <input:AdvancedEntry Title="Full Name"                                 

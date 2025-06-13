@@ -7,33 +7,38 @@
              x:Class="HRMapp.Pages.Session.LoginPage"
              BackgroundColor="White">
 
-    <ScrollView VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="15" Spacing="10" VerticalOptions="Center">
+
+    <Grid ColumnDefinitions="Auto, *">
+        
+        <Image Aspect="AspectFill" Source="bg_pabrik.jpg" Grid.Column="0"/>
+
+
+        <VerticalStackLayout Padding="15" Spacing="10" VerticalOptions="Center" Grid.Column="1">
             <Label Text="Seidensticker HRM App"
-                   FontSize="24"
-                   HorizontalOptions="Center"
-                   TextColor="Black"
-                   FontAttributes="Bold" />
+                    FontSize="24"
+                    HorizontalOptions="Center"
+                    TextColor="Black"
+                    FontAttributes="Bold" />
 
             <Label Text="Log In"
-                   FontSize="20"
-                   HorizontalOptions="Center"
-                   TextColor="MediumPurple"/>
+                    FontSize="20"
+                    HorizontalOptions="Center"
+                    TextColor="MediumPurple"/>
 
             <Label Text="Hello, welcome back"
-                   FontSize="14"
-                   HorizontalOptions="Center"
-                   TextColor="Gray" />
+                    FontSize="14"
+                    HorizontalOptions="Center"
+                    TextColor="Gray" />
 
             <input:FormView Padding="10" Spacing="20"
                 SubmitCommand="{Binding LoginCommand}">
 
                 <!-- Username -->
                 <input:AdvancedEntry Title="Username"
-                         TitleColor="Black"
-                         Placeholder="Enter your username"
-                                     PlaceholderColor="Gray"
-                         Text="{Binding Username}">
+                            TitleColor="Black"
+                            Placeholder="Enter your username"
+                                        PlaceholderColor="Gray"
+                            Text="{Binding Username}">
                     <input:AdvancedEntry.Validations>
                         <validation:RequiredValidation />
                     </input:AdvancedEntry.Validations>
@@ -41,11 +46,11 @@
 
                 <!-- Password -->
                 <input:AdvancedEntry Title="Password"
-                         TitleColor="Black"
-                         Placeholder="Enter your password"
-                                     PlaceholderColor="Gray"
-                         IsPassword="True"
-                         Text="{Binding Password}">
+                            TitleColor="Black"
+                            Placeholder="Enter your password"
+                                        PlaceholderColor="Gray"
+                            IsPassword="True"
+                            Text="{Binding Password}">
                     <input:AdvancedEntry.Validations>
                         <validation:RequiredValidation />
                     </input:AdvancedEntry.Validations>
@@ -59,17 +64,17 @@
                     FontAttributes="Bold"
                     CornerRadius="8"
                     HeightRequest="48" />
-                </input:FormView>
+            </input:FormView>
 
 
             <!-- Remember me and forgot password -->
             <Grid ColumnDefinitions="*, Auto">
                 <Label Text=""
-                       VerticalOptions="Center"
-                       FontSize="14"
-                       TextColor="Gray"
-                       Grid.Column="0"
-                       Margin="30,0,0,0" />
+                        VerticalOptions="Center"
+                        FontSize="14"
+                        TextColor="Gray"
+                        Grid.Column="0"
+                        Margin="30,0,0,0" />
                 <Button Text="FORGOT PASSWORD?"
                         FontSize="12"
                         BackgroundColor="Transparent"
@@ -87,8 +92,9 @@
                         TextColor="Blue"
                         FontAttributes="Bold"
                         Command="{Binding NavigateToRegisterPageCommand}"
-                       />
+                        />
             </VerticalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
+
 </ContentPage>

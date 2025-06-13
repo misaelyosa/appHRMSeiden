@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HRMapp.Data.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
         public string Username { get; }
         Task<bool> LoginAsync(string username, string password);
         Task LogoutAsync();
+        Task UpdateLastLogin();
 
         //register
         Task<string?> RegisterAsync(string username, string password, string authority);
@@ -21,5 +23,9 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
         Task<string?> ValidateForgotPasswordToken(string username, string token);
         Task<string?> ResetPassword(string userId, string newPassword);
         Task<string?> GetResetToken();
+
+        //manage user session page
+        Task<List<UserSessionDTO>> GetAllUserSessionsAsync();
+        Task<bool> TerminateSessionAsync(int sessionId, bool isAdmin);
     }
 }

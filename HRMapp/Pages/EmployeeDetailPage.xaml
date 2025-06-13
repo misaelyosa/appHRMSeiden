@@ -347,12 +347,12 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        
-                                        <Label TextColor="Black" Text="{Binding author, StringFormat='Created by : {0}'}" FontSize="14" Grid.Row="0" Grid.Column="2"/>
+
+                                        <Label TextColor="DarkGray" Text="{Binding author, StringFormat='Created by : {0}'}" FontSize="14" Grid.Row="0" Grid.Column="2"/>
                                         <Label TextColor="Black" Text="{Binding contract_date, Converter={StaticResource DateToStringConverter} ,StringFormat='Tanggal Kontrak : {0}'}" FontSize="16" Grid.Row="0" Grid.ColumnSpan="2"/>
-                                        <Label TextColor="Black" Text="{Binding created_at, StringFormat='Created at : {0}'}" FontSize="14" Grid.Row="1" Grid.Column="2"/>
-                                       
-                                        <Label TextColor="Black" Text="{Binding updated_at, StringFormat='Updated at : {0}'}" FontSize="14" Grid.Row="2" Grid.Column="2"/>
+                                        <Label TextColor="DarkGray" Text="{Binding created_at, StringFormat='Created at : {0}'}" FontSize="14" Grid.Row="1" Grid.Column="2"/>
+
+                                        <Label TextColor="DarkGray" Text="{Binding updated_at, StringFormat='Updated at : {0}'}" FontSize="14" Grid.Row="2" Grid.Column="2"/>
                                         <Label TextColor="Black" Text="{Binding contract_duration, StringFormat='Durasi Kontrak : {0} Bulan'}" FontSize="14" Grid.Row="1" Grid.ColumnSpan="3"/>
                                         <Label TextColor="Black" Text="{Binding end_date, Converter={StaticResource DateToStringConverter},StringFormat='Tanggal Kontrak Berakhir : {0}'}" FontSize="16" Grid.Row="2" Grid.ColumnSpan="3"/>
                                         <Label TextColor="Black" Text="{Binding gaji_pokok, StringFormat='Gaji Pokok : Rp. {0}'}" FontSize="Micro" Grid.Row="4" Grid.ColumnSpan="3" FontAttributes="Bold" />
@@ -372,6 +372,89 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
+
+                <!-- CUTI -->
+                <VerticalStackLayout Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="5" Margin="16,0,16,0">
+                    <Grid ColumnDefinitions="*, auto" ColumnSpacing="16">
+                        <Label Text="Cuti" TextColor="Black" FontSize="Medium" FontAttributes="Bold" Margin="0,5,0,0"/>
+                        <Button Text="Tambah Cuti"
+                            BackgroundColor="DodgerBlue"
+                            TextColor="White"
+                            Clicked="OnOpenCreateCutiPopup" Grid.Column="1"/>
+                    </Grid>
+                    <Label Text="{Binding JatahCuti, StringFormat='Sisa cuti tahun ini : {0} hari'}" TextColor="Red" FontSize="Small" Margin="0,0,0,3"/>
+                    <CollectionView ItemsSource="{Binding Cutis}"
+                                    x:Name="cutiCollectionView">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="8"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame BorderColor="Gray" BackgroundColor="GhostWhite" Padding="10" Margin="10">
+                                    <Grid RowSpacing="5" ColumnSpacing="16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Text="{Binding cuti_start_date, StringFormat='Mulai: {0:dd/MM/yyyy}'}"
+                                               TextColor="Black" FontSize="14"
+                                               Grid.Row="0" Grid.Column="0"/>
+                                        <Label Text="{Binding cuti_end_date, StringFormat='Selesai: {0:dd/MM/yyyy}'}"
+                                               TextColor="Black" FontSize="14"
+                                               Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
+
+                                        <Label Text="{Binding cuti_day_count, StringFormat='Jumlah Hari: {0}'}"
+                                               TextColor="Black" FontSize="14"
+                                               Grid.Row="1" Grid.ColumnSpan="3"/>
+
+                                        <Label Text="{Binding reason, StringFormat='Alasan: {0}'}"
+                                               TextColor="Black" FontSize="14"
+                                               Grid.Row="3" Grid.ColumnSpan="3"/>
+
+                                        <Label Text="{Binding created_by, StringFormat='Dibuat oleh: {0}'}"
+                                               TextColor="DarkGray" FontSize="12"
+                                               Grid.Row="0" Grid.Column="1"/>
+                                        <Label Text="{Binding created_at, StringFormat='Dibuat Pada: {0:g}'}"
+                                               TextColor="DarkGray" FontSize="12"
+                                               Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                        
+                                        <Label Text="{Binding updated_by, StringFormat='Diupdate oleh: {0}'}"
+                                               TextColor="DarkGray" FontSize="12"
+                                               Grid.Row="2" Grid.Column="1"/>
+                                        <Label Text="{Binding updated_at, StringFormat='Update Terakhir: {0:g}'}"
+                                               TextColor="DarkGray" FontSize="12"
+                                               Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+
+                                        <Button Text="Edit"
+                                                BackgroundColor="LightBlue"
+                                                TextColor="Black"
+                                                Grid.Row="4" Grid.Column="1"
+                                                Command="{Binding BindingContext.OpenEditCutiPopupCommand, Source={x:Reference cutiCollectionView}}"
+                                                CommandParameter="{Binding .}"/>
+
+                                        <Button Text="Hapus"
+                                                BackgroundColor="OrangeRed"
+                                                TextColor="White"
+                                                Grid.Row="4" Grid.Column="2"
+                                                Command="{Binding BindingContext.DeleteCutiCommand, Source={x:Reference cutiCollectionView}}"
+                                                CommandParameter="{Binding}"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
 
                 <!-- Logs Section -->
                 

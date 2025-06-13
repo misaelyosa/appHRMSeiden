@@ -1,3 +1,4 @@
+using HRMapp.Data.Model;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 
 namespace HRMapp.Pages.EmployeeForms;
@@ -12,6 +13,15 @@ public partial class CreateContractForm : ContentPage
         BindingContext = _viewModel;
 	}
 
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if(BindingContext is CreateContractViewModel _viewModel)
+        {
+            await _viewModel.InitializeAsync();
+        }
+    }
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);

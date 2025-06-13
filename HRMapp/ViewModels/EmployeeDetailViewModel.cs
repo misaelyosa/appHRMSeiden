@@ -1,11 +1,14 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HRMapp.Data.Database;
 using HRMapp.Data.Model;
+using HRMapp.Pages.EmployeeForms.Popups.CutiPopup;
 using HRMapp.ViewModels;
 using HRMapp.ViewModels.EmployeeFormViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -56,6 +59,7 @@ public partial class EmployeeDetailViewModel : ObservableObject
             .FirstOrDefaultAsync(e => e.employee_id == EmployeeId);
 
         await LoadContracts();
+        await LoadCuti();
         await LoadLogsAsync();
     }
 
@@ -176,6 +180,132 @@ public partial class EmployeeDetailViewModel : ObservableObject
             Debug.WriteLine($"Error deleting employee: {ex.Message}");
             await Shell.Current.DisplayAlert("Error", "Gagal menghapus data kontrak.", "OK");
         }
+    }
+
+    //CUTII
+    [ObservableProperty]
+    public ObservableCollection<Cuti> cutis;
+    [ObservableProperty]
+    private string jatahCuti; 
+    public async Task LoadCuti()
+    {
+        Cutis = new ObservableCollection<Cuti>(await _employeeService.GetCutiByEmpId(EmployeeId));
+        JatahCuti = await _employeeService.LoadJatahCuti(EmployeeId);
+    }
+
+    [ObservableProperty]
+    public string cutiDuration;
+    [ObservableProperty]
+    public DateOnly cutiStartDate;
+    [ObservableProperty]
+    public string cutiReason;
+    [ObservableProperty]
+    private string cutiEndDateDisplay;
+    [ObservableProperty]
+    public Cuti selectedCuti;
+    public DateTime CutiStartDateProxy
+    {
+        get => CutiStartDate.ToDateTime(TimeOnly.MinValue);
+        set
+        {
+            if (CutiStartDate != DateOnly.FromDateTime(value))
+            {
+                CutiStartDate = DateOnly.FromDateTime(value);
+                OnPropertyChanged(nameof(CutiStartDateProxy));
+            }
+        }
+    }
+
+    [RelayCommand]
+    public async Task CreateCuti()
+    {
+        Debug.WriteLine("[DEBUG] CREATE CUTI INVOKED");
+        var cutiDur = int.Parse(CutiDuration);
+        if (cutiDur > 0 && CutiStartDate != default)
+        {
+            var newCuti = new Cuti
+            {
+                cuti_day_count = cutiDur,
+                cuti_start_date = CutiStartDate,
+                cuti_end_date = CutiStartDate.AddDays(cutiDur-1),
+                reason = CutiReason,
+                employee_id = EmployeeId,
+                created_by = Preferences.Get("username", "admin"),
+                created_at = DateTime.Now
+            };
+
+            await _employeeService.CreateCuti(newCuti);
+            await LoadCuti();
+        }   
+    }
+
+    [RelayCommand]
+    public async Task DeleteCuti(Cuti cuti)
+    {
+        if (cuti == null)
+            return;
+
+        bool confirm = await Application.Current.MainPage.DisplayAlert("Konfirmasi", $"Hapus cuti '{cuti.cuti_start_date}'?", "Ya", "Batal");
+        if (confirm)
+        {
+            await _employeeService.DeleteCuti(cuti.cuti_id);
+            await LoadCuti();
+        }
+    }
+
+
+    [RelayCommand] 
+    public async Task OnOpenEditCutiPopup(Cuti cuti)
+    {
+        if (cuti == null)
+        {
+            return;
+        }
+
+        var existing = await _employeeService.fetchExistingCuti(cuti.cuti_id);
+        if (existing != null)
+        {
+            SelectedCuti = existing;
+            CutiDuration = existing.cuti_day_count.ToString();
+            CutiStartDateProxy =  existing.cuti_start_date.ToDateTime(TimeOnly.MinValue);
+            CutiReason = existing.reason;
+        }
+
+        var popup = new EditCuti(this);
+        Shell.Current.ShowPopup(popup);
+    }
+
+    [RelayCommand]
+    public async Task EditCuti()
+    {
+        if (string.IsNullOrWhiteSpace(CutiDuration) || !int.TryParse(CutiDuration, out int cutiDur) || cutiDur <= 0)
+        {
+            await Application.Current.MainPage.DisplayAlert("Invalid Input", "Masukkan jumlah hari cuti yang valid.", "OK");
+            return;
+        }
+
+        var updateCuti = new Cuti
+        {
+            cuti_id = SelectedCuti.cuti_id,
+            employee_id = SelectedCuti.employee_id,
+            cuti_day_count = cutiDur,
+            cuti_start_date = DateOnly.FromDateTime(CutiStartDateProxy),
+            cuti_end_date = DateOnly.FromDateTime(CutiStartDateProxy.AddDays(cutiDur-1)),
+            updated_at = DateTime.Now,
+            updated_by = Preferences.Get("username", "admin")
+        };
+
+        try
+        {
+            await _employeeService.UpdateCuti(updateCuti);
+            await LoadCuti();
+            await Shell.Current.DisplayAlert("Berhasil", "Data cuti berhasil diperbarui.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Gagal", ex.Message, "OK");
+        }
+        ;
     }
 }
     

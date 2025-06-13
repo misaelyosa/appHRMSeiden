@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+               xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+             x:Class="HRMapp.Pages.EmployeeForms.Popups.CutiPopup.EditCuti">
+
+    <VerticalStackLayout WidthRequest="500"
+                        HeightRequest="550"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                         BackgroundColor="DarkGrey">
+
+        <Label Text="Edit data Cuti" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center" TextColor="Black" Padding="0,20,0,0" />
+
+        <input:FormView SubmitCommand="{Binding EditCutiCommand}" Spacing="15" Padding="20">
+
+            <input:AdvancedEntry Title="Alasan Cuti"
+                                 Placeholder="Masukkan alasan cuti"
+                                 Text="{Binding CutiReason}"
+                                 TitleColor="Black"
+                                 BorderColor="Gray">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation/>
+                    <validation:MaxLengthValidation MaxLength="100" />
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <input:AdvancedEntry Title="Durasi (hari)"
+                                 TitleColor="Black"
+                                 Placeholder="Jumlah hari cuti"
+                                 Keyboard="Numeric"
+                                 Text="{Binding CutiDuration}"
+                                 BorderColor="Gray">
+                <input:AdvancedEntry.Validations>
+                    <validation:RequiredValidation />
+                    <validation:NumericValidation />
+                </input:AdvancedEntry.Validations>
+            </input:AdvancedEntry>
+
+            <Grid ColumnDefinitions="*, *" RowDefinitions="Auto" ColumnSpacing="16">
+                <Frame CornerRadius="20" BackgroundColor="Black" Grid.Column="0" Grid.Row="0" >
+                    <VerticalStackLayout>
+                        <Label Text="Tanggal Mulai Cuti" TextColor="White"/>
+                        <DatePicker Date="{Binding CutiStartDateProxy}"
+                                    MinimumDate="01/01/2020"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Grid.Column="0"
+                        Text="Simpan"
+                        BackgroundColor="ForestGreen"
+                        TextColor="White"
+                        input:FormView.IsSubmitButton="True"
+                        HorizontalOptions="FillAndExpand" />
+                <Button Grid.Column="1"
+                        Text="Reset"
+                        BackgroundColor="DarkOrange"
+                        input:FormView.IsResetButton="True"
+                        HorizontalOptions="FillAndExpand" />
+            </Grid>
+        </input:FormView>
+    </VerticalStackLayout>
+</toolkit:Popup>

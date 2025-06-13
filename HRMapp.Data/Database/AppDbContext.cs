@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace HRMapp.Data.Database
@@ -28,12 +29,24 @@ namespace HRMapp.Data.Database
         public DbSet<Course> Course { get; set; }
 
         public DbSet<Tunjangan> Tunjangan { get; set; }
+        public DbSet<Cuti> Cuti { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var connectionString = "server=localhost;user=root;password=;database=hrmseiden;AllowZeroDateTime=True;ConvertZeroDateTime=True";
-            var serverVersion = new MySqlServerVersion(new Version(10, 4, 28));
-            optionsBuilder.UseMySql(connectionString, serverVersion);
+            if (!optionsBuilder.IsConfigured)
+            {
+                var configPath = Path.Combine(AppContext.BaseDirectory, "config.json");
+                if (!File.Exists(configPath))
+                    throw new FileNotFoundException("Database configuration file not found.", configPath);
+
+                var configJson = File.ReadAllText(configPath);
+                var config = JsonSerializer.Deserialize<DbConfig>(configJson);
+
+                var connectionString = config.ConnectionStrings.DefaultConnection;
+                var serverVersion = new MySqlServerVersion(new Version(10, 4, 28)); // Adjust if needed
+
+                optionsBuilder.UseMySql(connectionString, serverVersion);
+            }
         }
 
         //Define table relationship
@@ -115,6 +128,12 @@ namespace HRMapp.Data.Database
                 .Entity<Session>()
                 .Property(s => s.status)
                 .HasConversion<string>();
+
+            //1 : N emp : cuti
+            modelBuilder.Entity<Employee>()
+                .HasMany(e => e.Cuti)
+                .WithOne(c => c.Employee)
+                .HasForeignKey(c => c.employee_id);
         }
     }
 }

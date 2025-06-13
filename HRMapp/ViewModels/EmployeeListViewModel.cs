@@ -49,27 +49,26 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private bool isFilterVisible;
 
+        public bool IsEmployeeListEmpty => Employees.Count == 0;
+
         public string FilterToggleText => IsFilterVisible ? "▲ Hide" : "▼ Show";
 
 
         public EmployeeListViewModel(IDbContextFactory<AppDbContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
-            LoadDepartmentAsync();
-            LoadJobsAsync();
-            LoadEmployeeAsync();
-            LoadFactoryAsync();
-            SearchFilter();
             OnSelectedEmployeeChanged(SelectedEmployee);
-            RefreshData();
 
             IsFilterVisible = true; 
             ToggleFilter();
-            ApplyFilter();
+        }
+        private void UpdateListState()
+        {
+            OnPropertyChanged(nameof(IsEmployeeListEmpty));
         }
 
         [RelayCommand]
-        private async Task LoadEmployeeAsync()
+        public async Task LoadEmployeeAsync()
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -81,16 +80,17 @@ namespace HRMapp.ViewModels
                 .OrderBy(e => e.employee_id)
                 .ToListAsync();
 
-            employees = new ObservableCollection<Employee>(employeeList);
+            Employees = new ObservableCollection<Employee>(employeeList);
             OnPropertyChanged(nameof(Employees));
+            UpdateListState();
 
         }
 
         [RelayCommand]
-        private async Task RefreshData()
+        public async Task RefreshData()
         {
             IsRefreshing = true;
-            await LoadEmployeeAsync();
+            await ResetFilter();
             await Task.Delay(100);
             IsRefreshing = false;
         }
@@ -132,11 +132,12 @@ namespace HRMapp.ViewModels
             DepartmentsName = new ObservableCollection<string>(departments);
             OnPropertyChanged(nameof(DepartmentsName));
 
-            SelectedDepartment = DepartmentsName.FirstOrDefault();
+            if (string.IsNullOrEmpty(SelectedDepartment))
+                SelectedDepartment = DepartmentsName.FirstOrDefault();
         }
 
         [RelayCommand]
-        private async Task LoadJobsAsync()
+        public async Task LoadJobsAsync()
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -148,11 +149,12 @@ namespace HRMapp.ViewModels
             JobsName = new ObservableCollection<string>(jobsName);
             OnPropertyChanged(nameof(JobsName));
 
-            SelectedJob = JobsName.FirstOrDefault();
+            if (string.IsNullOrEmpty(SelectedJob))
+                SelectedJob = JobsName.FirstOrDefault();
         }        
         
         [RelayCommand]
-        private async Task LoadFactoryAsync()
+        public async Task LoadFactoryAsync()
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -164,12 +166,13 @@ namespace HRMapp.ViewModels
             FactoryName = new ObservableCollection<string>(factoryName);
             OnPropertyChanged(nameof(FactoryName));
 
-            SelectedFactory = FactoryName.FirstOrDefault();
+            if (string.IsNullOrEmpty(SelectedFactory))
+                SelectedFactory = FactoryName.FirstOrDefault();
         }
 
         //Filter Command
         [RelayCommand]
-        private async Task SearchFilter()
+        public async Task SearchFilter()
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
 
@@ -179,6 +182,10 @@ namespace HRMapp.ViewModels
             }
             else
             {
+                SelectedDepartment = "none";
+                SelectedJob = "none";
+                SelectedFactory = "none";
+
                 var lowerText = SearchText.ToLower();
 
                 var filteredEmployeeList = await dbContext.Employees
@@ -197,12 +204,14 @@ namespace HRMapp.ViewModels
 
                 Employees = new ObservableCollection<Employee>(filteredEmployeeList);
                 OnPropertyChanged(nameof(Employees));
+                UpdateListState();
             }
         }
 
         [RelayCommand]
-        private async Task ApplyFilter()
+        public async Task ApplyFilter()
         {
+            SearchText = string.Empty;
             using var dbContext = _dbContextFactory.CreateDbContext();
 
             var query = dbContext.Employees
@@ -239,7 +248,7 @@ namespace HRMapp.ViewModels
             SelectedDepartment = "none";
             SelectedJob = "none";
             SelectedFactory = "none";
-            SearchText = null;
+            SearchText = string.Empty;
 
             await LoadEmployeeAsync();
         } 

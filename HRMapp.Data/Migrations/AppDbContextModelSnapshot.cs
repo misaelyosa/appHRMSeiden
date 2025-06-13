@@ -109,6 +109,48 @@ namespace HRMapp.Data.Migrations
                     b.ToTable("Course");
                 });
 
+            modelBuilder.Entity("HRMapp.Data.Model.Cuti", b =>
+                {
+                    b.Property<int>("cuti_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("cuti_id"));
+
+                    b.Property<DateTime>("created_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("created_by")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("cuti_day_count")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("cuti_end_date")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("cuti_start_date")
+                        .HasColumnType("date");
+
+                    b.Property<int>("employee_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("reason")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("updated_at")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("updated_by")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("cuti_id");
+
+                    b.HasIndex("employee_id");
+
+                    b.ToTable("Cuti");
+                });
+
             modelBuilder.Entity("HRMapp.Data.Model.Department", b =>
                 {
                     b.Property<int>("department_id")
@@ -236,6 +278,9 @@ namespace HRMapp.Data.Migrations
                     b.Property<string>("skill")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<int>("yearly_cuti_left")
+                        .HasColumnType("int");
 
                     b.HasKey("employee_id");
 
@@ -487,6 +532,17 @@ namespace HRMapp.Data.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("HRMapp.Data.Model.Cuti", b =>
+                {
+                    b.HasOne("HRMapp.Data.Model.Employee", "Employee")
+                        .WithMany("Cuti")
+                        .HasForeignKey("employee_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("HRMapp.Data.Model.Employee", b =>
                 {
                     b.HasOne("HRMapp.Data.Model.City", "City")
@@ -576,6 +632,8 @@ namespace HRMapp.Data.Migrations
                     b.Navigation("Contracts");
 
                     b.Navigation("Courses");
+
+                    b.Navigation("Cuti");
 
                     b.Navigation("LogEmployees");
                 });

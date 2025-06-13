@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HRMapp.Pages.ManageReferenceDataPage"
+             xmlns:dg="clr-namespace:Maui.DataGrid;assembly=Maui.DataGrid"
+             BackgroundColor="White"
+             Title="ManageReferenceDataPage">
+    <ScrollView>
+        <Grid ColumnDefinitions="*, *" 
+              RowDefinitions="auto, auto, auto, auto, auto"
+              Margin="20, 10, 20, 10" ColumnSpacing="12" RowSpacing="12">
+            <Label Grid.Row="0" Text="Manage Master dan Referential Data" TextColor="Black" FontSize="18" FontAttributes="Bold"/>
+            
+            <VerticalStackLayout Grid.Column="0" Grid.Row="1">
+                <Frame CornerRadius="16"
+                       x:Name="departmentFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnDepartmentFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Department" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideDeptBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideDepartmentTapped"/>
+                <Grid IsVisible="False" x:Name="deptListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Department : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddDepartmentPopup"/>
+                </Grid>
+                <CollectionView x:Name="departmentCollectionView"
+                                IsVisible="False"
+                                ItemsSource="{Binding Departments}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/> 
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions ="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Button Grid.Row="0" Grid.Column="1"
+                                            Text="Edit"
+                                            HorizontalOptions="End"
+                                            BackgroundColor="LightBlue"
+                                            HeightRequest="15"
+                                            WidthRequest="70"
+                                            Padding="4"
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupDepartmentCommand, Source={x:Reference departmentCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Grid.Row="0" Grid.Column="2"
+                                            Text="Delete"
+                                            HorizontalOptions="End"
+                                            HeightRequest="15"
+                                            WidthRequest="70"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteDepartmentCommand, Source={x:Reference departmentCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Grid.Row="1">
+                <Frame CornerRadius="16"
+                       x:Name="jobsFrame"
+                       BackgroundColor="LightSteelBlue">            
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnJobsFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Jabatan" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideJobsBtn"
+                        IsVisible="False"   
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideJobsTapped"/>
+                <Grid IsVisible="False" x:Name="jobsListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Jabatan : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddJobPopup"/>
+                </Grid>
+                <CollectionView x:Name="jobsCollectionView"
+                                IsVisible="False"
+                                ItemsSource="{Binding Jobs}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding job_name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Button Grid.Row="0" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupJobCommand, Source={x:Reference jobsCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Grid.Row="0" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteJobCommand, Source={x:Reference jobsCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="0" Grid.Row="2">
+                <Frame CornerRadius="16"
+                       x:Name="religionFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnReligionFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Agama" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideReligionBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideReligionTapped"/>
+                <Grid IsVisible="False" x:Name="religionListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Agama : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddReligionPopup"/>
+                </Grid>
+                <CollectionView x:Name="religionCollectionView"
+                    IsVisible="False"
+                    ItemsSource="{Binding Religions}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding religion_name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Button Grid.Row="0" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupReligionCommand, Source={x:Reference religionCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Grid.Row="0" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteReligionCommand, Source={x:Reference religionCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Grid.Column="1" Grid.Row="2">
+                <Frame CornerRadius="16"
+                       x:Name="factoryFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFactoryFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Pabrik" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideFactoryBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideFactoryTapped"/>
+                <Grid IsVisible="False" x:Name="factoryListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Pabrik : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddFactoryPopup"/>
+                </Grid>
+                <CollectionView x:Name="factoryCollectionView"
+                                IsVisible="False"
+                                ItemsSource="{Binding Factories}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto, auto, auto"
+                                      RowSpacing="4"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                           FontSize="13" TextColor="Black" HorizontalOptions="Start"
+                                           Text="{Binding address}"/>
+                                    
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           FontSize="13" TextColor="Black" HorizontalOptions="Start"
+                                           Text="{Binding personnel_capacity, StringFormat='Kapasitas pegawai : {0}'}"/>
+
+                                    <Button Grid.Row="2" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupFactoryCommand, Source={x:Reference factoryCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Grid.Row="2" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteFactoryCommand, Source={x:Reference factoryCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+
+            <VerticalStackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+                <Frame CornerRadius="16"
+                       x:Name="cityProvFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCityProvFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Kota dan Provinsi" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideCityProvBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideCityProvTapped"/>
+                <Grid IsVisible="False" x:Name="cityProvListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Kota dan Provinsi : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddCityPopup"/>
+                </Grid>
+
+                <CollectionView x:Name="cityProvCollectionView"
+                                IsVisible="False"
+                                ItemsSource="{Binding CityProvinces}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto, auto"
+                                      RowSpacing="4"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding city_name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           FontAttributes="Bold"
+                                           HorizontalOptions="Start"/>
+                                    
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding Provinces.province_name}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Button Grid.Row="1" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupCityProvinceCommand, Source={x:Reference cityProvCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Grid.Row="1" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteCityProvinceCommand, Source={x:Reference cityProvCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+
+
+            <VerticalStackLayout Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4">
+                <Frame CornerRadius="16"
+                       x:Name="educationFrame"
+                       BackgroundColor="LightSteelBlue">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnEducationFrameTapped"/>
+                    </Frame.GestureRecognizers>
+                    <Label Text="Pendidikan Terakhir" HorizontalOptions="Center" VerticalOptions="Center"
+                           FontSize="16" FontAttributes="Bold" TextColor="Black"/>
+                </Frame>
+
+                <Button x:Name="hideEducationBtn"
+                        IsVisible="False"
+                        BackgroundColor="PaleVioletRed"
+                        Margin="0,0,0,8"
+                        Text="Hide" Clicked="OnHideEducationTapped"/>
+                <Grid IsVisible="False" x:Name="educationListTitle" ColumnDefinitions="*, auto" Margin="0,0,0,4">
+                    <Label Grid.Column="0" VerticalOptions="Center" Text="Pendidikan Terakhir : " FontAttributes="Bold" TextColor="Black" FontSize="16" Margin="0,0,0,6"/>
+                    <Button Grid.Column="1" TextColor="White" Text="Add New" BackgroundColor="DodgerBlue" HorizontalOptions="End"
+                            Clicked="OnOpenAddEduPopup"/>
+                </Grid>
+                <CollectionView x:Name="educationCollectionView"
+                                IsVisible="False"
+                                ItemsSource="{Binding Educations}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame BorderColor="Black" BackgroundColor="WhiteSmoke" Margin="0,0,0,10" Padding="10">
+                                <Grid RowDefinitions="Auto"
+                                      ColumnSpacing="4"
+                                      ColumnDefinitions="*,auto,auto">
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding DisplayName}"
+                                           FontSize="15"
+                                           TextColor="Black"
+                                           HorizontalOptions="Start"/>
+
+                                    <Button Grid.Row="0" Grid.Column="1"
+                                            Text="Edit"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="LightBlue"
+                                            TextColor="Black"
+                                            Command="{Binding BindingContext.OpenEditPopupEducationCommand, Source={x:Reference educationCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Grid.Row="0" Grid.Column="2"
+                                            Text="Delete"
+                                            FontSize="12"
+                                            WidthRequest="70"
+                                            HeightRequest="30"
+                                            Padding="4"
+                                            BackgroundColor="Tomato"
+                                            TextColor="White"
+                                            Command="{Binding BindingContext.DeleteEducationCommand, Source={x:Reference educationCollectionView}}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

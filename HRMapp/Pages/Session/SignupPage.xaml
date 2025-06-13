@@ -7,9 +7,11 @@
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="White"
              Title="SignupPage">
-    
-    <ScrollView VerticalScrollBarVisibility="Never">
-        <VerticalStackLayout Padding="15" Spacing="10" VerticalOptions="Center">
+
+    <Grid ColumnDefinitions="*,*">
+        <Image Aspect="AspectFill" Source="bg_pabrik.jpg" Grid.Column="0"/>
+        
+        <VerticalStackLayout Padding="15" Spacing="10" VerticalOptions="Center" Grid.Column="1">
             <Label Text="Seidensticker HRM App"
                 FontSize="24"
                 HorizontalOptions="Center"
@@ -82,5 +84,5 @@
                     />
             </VerticalStackLayout>
         </VerticalStackLayout>
-    </ScrollView>
+    </Grid>
 </ContentPage>

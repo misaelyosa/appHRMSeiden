@@ -114,6 +114,7 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
                         context.Add(addSession);
                     }
 
+                    Preferences.Set("username", Username);
                     await context.SaveChangesAsync();
                     await SecureStorage.Default.SetAsync("user_token", token);
                     return true;
@@ -121,6 +122,27 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
                 return false;
             }
             return false;
+        }
+
+        public async Task UpdateLastLogin()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+            var userToken = await SecureStorage.Default.GetAsync("user_token");
+
+            var currentSession = context.Session.FirstOrDefault(s => s.user_token == userToken);
+
+            if(currentSession != null)
+            {
+                if(currentSession.status.ToString().ToLower().Equals("active"))
+                {
+                    currentSession.last_login = DateTime.Now;
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    return;
+                }
+            }
         }
 
         public async Task LogoutAsync()
@@ -272,5 +294,44 @@ namespace HRMapp.ViewModels.SessionViewModel.Interface
             }
             return null;
         }
-    }   
+
+        //manage session user page
+        public async Task<List<UserSessionDTO>> GetAllUserSessionsAsync()
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var result = await context.Session
+                .Include(s => s.User)
+                .Select(s => new UserSessionDTO
+                {
+                    UserId = s.User.user_id,
+                    Username = s.User.username,
+                    Authority = s.User.authority,
+                    SessionId = s.session_id,
+                    LastLogin = s.last_login,
+                    Status = s.status.ToString()
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<bool> TerminateSessionAsync(int sessionId, bool isAdmin)
+        {
+            if (!isAdmin)
+                return false;
+
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            var session = await context.Session.FirstOrDefaultAsync(s => s.session_id == sessionId);
+            if (session == null || session.status == Sessionstatus.Inactive)
+                return false;
+
+            session.status = Sessionstatus.Inactive;
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+
+    }
 }

@@ -61,6 +61,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="akgul.Maui.DataGrid" Version="4.0.6" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="11.2.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="InputKit.Maui" Version="4.5.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.13" />
@@ -68,8 +69,9 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+		<PackageReference Include="Plugin.Maui.Calendar" Version="2.0.6" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.3" />
 		<PackageReference Include="QuestPDF" Version="2025.4.0" />
 		<PackageReference Include="UraniumUI.Material" Version="2.11.0" />
@@ -80,6 +82,36 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\EmployeeForms\Popups\CutiPopup\NewCuti.xaml.cs">
+	    <DependentUpon>NewCuti.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditCityProvince.xaml.cs">
+	    <DependentUpon>EditCityProvince.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditDepartment.xaml.cs">
+	    <DependentUpon>EditDepartment.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditFactory.xaml.cs">
+	    <DependentUpon>EditFactory.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditReligion.xaml.cs">
+	    <DependentUpon>EditReligion.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditJob.xaml.cs">
+	    <DependentUpon>EditJob.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\EditManageReference\EditEducation.xaml.cs">
+	    <DependentUpon>EditEducation.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\EmployeeForms\Popups\NewJob.xaml.cs">
+	    <DependentUpon>NewJob.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Pages\Cuti\ManageCuti.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\EmployeeDetailPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -95,7 +127,55 @@
 	  <MauiXaml Update="Pages\EmployeeForms\GeneratePKWTPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\CutiPopup\EditCuti.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\CutiPopup\NewCuti.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditCityProvince.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditDepartment.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditFactory.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditReligion.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditJob.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\EditManageReference\EditEducation.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewCityProvince.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewDepartment.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewEducation.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewFactory.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewJob.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmployeeForms\Popups\NewReligion.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\ManageEmployee.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ManageReferenceDataPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ManageSessionUser.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Session\LoginPage.xaml">

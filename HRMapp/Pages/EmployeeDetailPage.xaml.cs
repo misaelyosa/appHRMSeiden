@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Views;
+using HRMapp.Pages.EmployeeForms.Popups.CutiPopup;
 using System.Diagnostics;
 
 namespace HRMapp.Pages;
@@ -17,7 +19,7 @@ public partial class EmployeeDetailPage : ContentPage
     {
         base.OnAppearing();
         Debug.WriteLine($"EmployeeDetailPage Appeared, EmployeeId: {_viewModel.EmployeeId}");
-
+        Shell.SetFlyoutBehavior(this, FlyoutBehavior.Disabled);
         await _viewModel.LoadEmployeeDetails();
     }
 
@@ -32,4 +34,17 @@ public partial class EmployeeDetailPage : ContentPage
         base.OnNavigatedFrom(args);
         Shell.SetNavBarIsVisible(this, true);
     }
+
+    private async void OnOpenCreateCutiPopup(object sender, EventArgs e)
+    {
+        if (BindingContext is EmployeeDetailViewModel vm)
+        {
+            vm.CutiDuration = string.Empty;
+            vm.CutiReason = string.Empty;
+            vm.CutiStartDateProxy = DateTime.Today;
+
+            var popup = new NewCuti(vm);
+            this.ShowPopup(popup);
+        }
+    } 
 }
