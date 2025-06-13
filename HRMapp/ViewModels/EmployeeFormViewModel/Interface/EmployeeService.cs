@@ -136,6 +136,15 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel.Interface
             }
         }
 
+        public async Task<List<Contract>> GetContractsByEmployeeIdAsync(int employeeId)
+        {
+            using var context = await _contextFactory.CreateDbContextAsync();
+
+            return await context.Contracts
+                .Where(c => c.employee_id == employeeId)
+                .OrderBy(c => c.contract_date) 
+                .ToListAsync();
+        }
         public async Task<Contract>? GetContractDetail(int contractId)
         {
             using var context = await _contextFactory.CreateDbContextAsync();

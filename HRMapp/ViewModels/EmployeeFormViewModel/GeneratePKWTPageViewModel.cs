@@ -254,17 +254,27 @@ namespace HRMapp.ViewModels.EmployeeFormViewModel
                 });
             }
 
-            var contractCount = await _employeeService.GetContractCountByEmployeeIdAsync(EmployeeId);
-            var contractIndex = contractCount; //index contract mulai dari 1 
+            var otherContracts = await _employeeService.GetContractsByEmployeeIdAsync(EmployeeId);
 
-            var latestContract = await _employeeService.GetLastIndexContractDate(contractIndex, EmployeeId);
-
-            if (latestContract != null && latestContract.end_date > SelectedContractDate)
+            foreach (var other in otherContracts)
             {
-                await Application.Current.MainPage.DisplayAlert("Warning", "Tanggal Kontrak baru tidak boleh kurang dari tanggal selesai kontrak sebelumnya.", "OK");
-                return;
+                if (other.contract_id == updatedContract.contract_id)
+                    continue;
+
+                // If date ranges overlap
+                bool isOverlapping =
+                    SelectedContractDate < other.end_date &&
+                    SelectedEndDate > other.contract_date;
+
+                if (isOverlapping)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Warning",
+                        "Tanggal kontrak ini bertabrakan dengan kontrak lain.\nPastikan tidak ada overlap antar kontrak.",
+                        "OK");
+                    return;
+                }
             }
-            
+
             try
             {
                 await _employeeService.UpdateContractAsync(updatedContract);

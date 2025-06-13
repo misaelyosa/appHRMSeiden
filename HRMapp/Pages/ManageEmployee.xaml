@@ -86,28 +86,39 @@
                 </Grid>
             </VerticalStackLayout>
 
-            <dg:DataGrid x:Name="employeeListDg"
-                            Grid.Row="3"
-                            ItemsSource="{Binding Employees}"
-                            HeaderBackground="LightGray"
-                            BorderColor="Black"
-                            BorderThickness="1"
-                            RowHeight="40"
-                            SelectionEnabled="True"
-                            SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single" 
-                            PullToRefreshCommand="{Binding RefreshDataCommand}"
-                            IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
+            <Grid Grid.Row="3">
+                
+                <dg:DataGrid x:Name="employeeListDg"
+                                ItemsSource="{Binding Employees}"
+                                HeaderBackground="LightGray"
+                                BorderColor="Black"
+                                BorderThickness="1"
+                                RowHeight="40"
+                                SelectionEnabled="True"
+                                SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}" SelectionMode="Single" 
+                                PullToRefreshCommand="{Binding RefreshDataCommand}"
+                                IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}">
 
-                <dg:DataGrid.Columns>
-                    <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
-                    <dg:DataGridColumn Title="Nama" PropertyName="name"/>
-                    <dg:DataGridColumn Title="NIK" PropertyName="nik"/>
-                    <dg:DataGridColumn Title="Department" PropertyName="Department.name"/>
-                    <dg:DataGridColumn Title="Job Title" PropertyName="Job.job_name"/>
-                    <dg:DataGridColumn Title="Factory" PropertyName="Factory.name"/>
-                    <dg:DataGridColumn Title="Status" PropertyName="employee_status"/>
-                </dg:DataGrid.Columns>
-            </dg:DataGrid>
+                    <dg:DataGrid.Columns>
+                        <dg:DataGridColumn Title="NIP" PropertyName="nip"/>
+                        <dg:DataGridColumn Title="Nama" PropertyName="name"/>
+                        <dg:DataGridColumn Title="NIK" PropertyName="nik"/>
+                        <dg:DataGridColumn Title="Department" PropertyName="Department.name"/>
+                        <dg:DataGridColumn Title="Job Title" PropertyName="Job.job_name"/>
+                        <dg:DataGridColumn Title="Factory" PropertyName="Factory.name"/>
+                        <dg:DataGridColumn Title="Status" PropertyName="employee_status"/>
+                    </dg:DataGrid.Columns>
+                </dg:DataGrid>
+
+                <!-- No data message -->
+                <Label Text="No Data Found!"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="LightGray"
+                       FontSize="Medium"
+                       FontAttributes="Italic"
+                       IsVisible="{Binding IsEmployeeListEmpty}" />
+            </Grid>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

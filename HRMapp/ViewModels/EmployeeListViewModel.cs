@@ -49,6 +49,8 @@ namespace HRMapp.ViewModels
         [ObservableProperty]
         private bool isFilterVisible;
 
+        public bool IsEmployeeListEmpty => Employees.Count == 0;
+
         public string FilterToggleText => IsFilterVisible ? "▲ Hide" : "▼ Show";
 
 
@@ -59,6 +61,10 @@ namespace HRMapp.ViewModels
 
             IsFilterVisible = true; 
             ToggleFilter();
+        }
+        private void UpdateListState()
+        {
+            OnPropertyChanged(nameof(IsEmployeeListEmpty));
         }
 
         [RelayCommand]
@@ -76,6 +82,7 @@ namespace HRMapp.ViewModels
 
             Employees = new ObservableCollection<Employee>(employeeList);
             OnPropertyChanged(nameof(Employees));
+            UpdateListState();
 
         }
 
@@ -197,6 +204,7 @@ namespace HRMapp.ViewModels
 
                 Employees = new ObservableCollection<Employee>(filteredEmployeeList);
                 OnPropertyChanged(nameof(Employees));
+                UpdateListState();
             }
         }
 
